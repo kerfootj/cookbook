@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
-import CookBook from "./Apps/CookBook";
+import Landing from "./Apps/Landing";
 
-ReactDOM.render(<CookBook />, document.getElementById("root"));
+ReactDOM.render(<Landing />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
