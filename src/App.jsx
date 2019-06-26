@@ -1,4 +1,4 @@
-import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Link, Redirect, Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import React, { Component } from 'react';
 import { indigo, purple } from '@material-ui/core/colors';
 
@@ -28,7 +28,7 @@ class App extends Component {
 						<nav>
 							<ul>
 								<li>
-									<Link to='/' component={CookBook}>
+									<Link to='/cookbook' component={CookBook}>
 										Home
 									</Link>
 								</li>
@@ -38,7 +38,8 @@ class App extends Component {
 							</ul>
 						</nav>
 						<Switch>
-							<Route exact path='/' component={CookBook} />
+							<Redirect exact from='/' to='/cookbook' />
+							<Route exact path='/cookbook' component={CookBook} />
 							<Route path='/login' component={login} />
 						</Switch>
 					</div>

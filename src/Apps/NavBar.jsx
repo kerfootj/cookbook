@@ -35,7 +35,7 @@ class NavBar extends Component {
 				<Toolbar>
 					<div className={classes.title}>
 						<Button color='primary'>
-							<Link to='/' component={CookBook} className={classes.link}>
+							<Link to='/cookbook' component={CookBook} className={classes.link}>
 								My Cook Book
 							</Link>
 						</Button>
