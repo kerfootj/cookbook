@@ -1,13 +1,24 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { response } from "../fakeData";
-import Card from "../Components/ImageCard";
-import { Grid } from "@material-ui/core";
+import Card from '../Components/ImageCard';
+import { Grid } from '@material-ui/core';
+import axios from 'axios';
 
 class CookBook extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { recipes: response.recipes };
+		this.state = { loading: true };
+	}
+
+	componentDidMount() {
+		axios
+			.get('https://joel-cookbook-server.herokuapp.com/api/recipes')
+			.then(response => {
+				this.setState({ recipes: response.data.recipes, loading: false });
+			})
+			.catch(error => {
+				this.setState({ error: true });
+			});
 	}
 
 	renderCards() {
@@ -24,10 +35,20 @@ class CookBook extends Component {
 	}
 
 	render() {
+		const { loading } = this.state;
+		if (loading) {
+			return <div>loading...</div>;
+		}
 		return (
-			<Grid container spacing={2}>
-				{this.renderCards()}
-			</Grid>
+			<>
+				<Grid container>
+					<Grid item xl={1} />
+					<Grid container item xl={10} spacing={2}>
+						{this.renderCards()}
+					</Grid>
+					<Grid item xl={1} />
+				</Grid>
+			</>
 		);
 	}
 }
