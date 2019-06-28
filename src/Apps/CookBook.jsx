@@ -14,7 +14,7 @@ class CookBook extends Component {
 		axios
 			.get('https://joel-cookbook-server.herokuapp.com/recipe')
 			.then(response => {
-				this.setState({ recipes: response.data.recipes, loading: false });
+				this.setState({ recipes: response.data, loading: false });
 			})
 			.catch(error => {
 				this.setState({ error: true });
@@ -23,6 +23,7 @@ class CookBook extends Component {
 
 	renderCards() {
 		const { recipes } = this.state;
+		console.log(recipes);
 		return recipes.map(recipe => (
 			<Grid item>
 				<Card
