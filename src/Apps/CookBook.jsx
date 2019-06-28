@@ -12,7 +12,7 @@ class CookBook extends Component {
 
 	componentDidMount() {
 		axios
-			.get('https://joel-cookbook-server.herokuapp.com/api/recipes')
+			.get('https://joel-cookbook-server.herokuapp.com/recipe')
 			.then(response => {
 				this.setState({ recipes: response.data.recipes, loading: false });
 			})
