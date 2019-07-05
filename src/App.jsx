@@ -4,9 +4,11 @@ import { indigo, purple } from '@material-ui/core/colors';
 
 import CookBook from './Apps/CookBook';
 import NavBar from './Apps/NavBar';
+import NewRecipe from './Apps/NewRecipe';
+import PrivateRoute from './Components/PrivateRoute';
+import SignIn from './Apps/SignIn';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
-import login from './Apps/LogIn';
 
 const theme = createMuiTheme({
 	palette: {
@@ -18,8 +20,16 @@ const theme = createMuiTheme({
 		}
 	}
 });
+
 class App extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			authed: false
+		};
+	}
 	render() {
+		const { authed } = this.state;
 		return (
 			<ThemeProvider theme={theme}>
 				<Router>
@@ -39,7 +49,8 @@ class App extends Component {
 						</nav>
 						<Switch>
 							<Route exact path='/' component={CookBook} />
-							<Route path='/login' component={login} />
+							<Route path='/login' component={SignIn} />
+							<PrivateRoute authed={authed} path='/recipe' component={NewRecipe} />
 						</Switch>
 					</div>
 				</Router>

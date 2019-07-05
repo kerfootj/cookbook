@@ -4,7 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CookBook from './CookBook';
 import { Link } from 'react-router-dom';
-import LogIn from './LogIn';
+import SignIn from './SignIn';
 import Toolbar from '@material-ui/core/Toolbar';
 import { withStyles } from '@material-ui/core';
 
@@ -15,7 +15,7 @@ const styles = {
 	title: {
 		flexGrow: 1
 	},
-	login: {
+	user: {
 		position: 'relative',
 		marginLeft: 0
 	},
@@ -35,14 +35,14 @@ class NavBar extends Component {
 				<Toolbar>
 					<div className={classes.title}>
 						<Button color='primary'>
-							<Link to='/' component={CookBook} className={classes.link}>
+							<Link to='/z' component={CookBook} className={classes.link}>
 								My Cook Book
 							</Link>
 						</Button>
 					</div>
 
-					<Button variant='contained' color='secondary' className={classes.login}>
-						<Link to='/login' component={LogIn} className={classes.link}>
+					<Button variant='contained' color='secondary' className={classes.user}>
+						<Link to='/login' component={SignIn} className={classes.link}>
 							Login
 						</Link>
 					</Button>

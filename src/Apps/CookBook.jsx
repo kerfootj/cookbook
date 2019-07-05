@@ -1,8 +1,18 @@
+import { Button, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import Card from '../Components/ImageCard';
-import { Grid } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import NewRecipe from './NewRecipe';
 import axios from 'axios';
+import { withStyles } from '@material-ui/styles';
+
+const styles = {
+	link: {
+		textDecoration: 'none',
+		all: 'inherit'
+	}
+};
 
 class CookBook extends Component {
 	constructor(props) {
@@ -37,6 +47,7 @@ class CookBook extends Component {
 
 	render() {
 		const { loading } = this.state;
+		const { classes } = this.props;
 		if (loading) {
 			return <div>loading...</div>;
 		}
@@ -49,9 +60,15 @@ class CookBook extends Component {
 					</Grid>
 					<Grid item xl={1} />
 				</Grid>
+
+				<Button variant='contained' color='secondary'>
+					<Link to='/recipe' component={NewRecipe} className={classes.link}>
+						Add Recipe
+					</Link>
+				</Button>
 			</>
 		);
 	}
 }
 
-export default CookBook;
+export default withStyles(styles)(CookBook);

@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 
-import firebase from 'firebase';
+import { Redirect } from 'react-router-dom';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import CookBook from './CookBook';
+import firebase from 'firebase';
 
 firebase.initializeApp({
 	apiKey: 'AIzaSyCrE4LCvnWtIr_EfCSuRjTWrgQYV3vF8ow',
 	authDomain: 'cookbook-530b0.firebaseapp.com'
 });
 
-class Landing extends Component {
+class signInFlow extends Component {
 	state = { isSignedIn: false };
 
 	uiConfig = {
@@ -51,4 +50,4 @@ class Landing extends Component {
 	}
 }
 
-export default Landing;
+export default signInFlow;
