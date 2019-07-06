@@ -1,6 +1,6 @@
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import React, { Component } from 'react';
-import { indigo, purple } from '@material-ui/core/colors';
+import { blue, indigo } from '@material-ui/core/colors';
 
 import CookBook from './Apps/CookBook';
 import NavBar from './Apps/NavBar';
@@ -18,7 +18,7 @@ const theme = createMuiTheme({
 			main: indigo[500]
 		},
 		secondary: {
-			main: purple[500]
+			main: blue[700]
 		}
 	}
 });
