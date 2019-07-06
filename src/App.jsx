@@ -20,6 +20,13 @@ const theme = createMuiTheme({
 		secondary: {
 			main: blue[700]
 		}
+	},
+	overrides: {
+		MuiButton: {
+			root: {
+				textTransform: 'none'
+			}
+		}
 	}
 });
 
