@@ -29,7 +29,6 @@ class SignIn extends Component {
 		firebase
 			.doSignInWithEmailAndPassword(email, password)
 			.then(authUser => {
-				console.log(authUser);
 				this.setState({ ...INITIAL_STATE });
 				history.push('/');
 			})

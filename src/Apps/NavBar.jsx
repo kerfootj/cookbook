@@ -5,9 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CookBook from './CookBook';
 import { Link } from 'react-router-dom';
-import SignIn from './Authentication/SignIn';
 import SignOut from './Authentication/SignOut';
-import SignUp from './Authentication/SignUp';
 import Toolbar from '@material-ui/core/Toolbar';
 
 const styles = {
@@ -37,14 +35,14 @@ class NavBar extends Component {
 					<Grid container spacing={1}>
 						<Grid item>
 							<Button variant='contained' color='secondary'>
-								<Link to='/signup' component={SignUp} className={classes.link}>
+								<Link to='/signup' className={classes.link}>
 									Sign Up
 								</Link>
 							</Button>
 						</Grid>
 						<Grid item>
 							<Button variant='contained' color='secondary'>
-								<Link to='/login' component={SignIn} className={classes.link}>
+								<Link to='/login' className={classes.link}>
 									Log In
 								</Link>
 							</Button>

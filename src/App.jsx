@@ -72,11 +72,7 @@ class App extends Component {
 							<Route exact path='/' component={CookBook} />
 							<Route path='/signup' component={SignUp} />
 							<Route path='/login' component={SignIn} />
-							<PrivateRoute
-								authUser={authUser}
-								path='/recipe'
-								component={NewRecipe}
-							/>
+							<PrivateRoute authUser={authUser} path='/new' component={NewRecipe} />
 						</Switch>
 					</div>
 				</Router>

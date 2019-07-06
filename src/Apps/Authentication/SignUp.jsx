@@ -30,7 +30,6 @@ class SignUp extends Component {
 		firebase
 			.doCreateUserWithEmailAndPassword(email, passwordOne)
 			.then(authUser => {
-				console.log(authUser);
 				this.setState({ ...INITIAL_STATE });
 				history.push('/');
 			})

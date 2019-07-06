@@ -171,7 +171,6 @@ class NewRecipe extends Component {
 							/>
 							<label htmlFor='raised-button-file'>
 								<Button
-									raised
 									component='span'
 									variant='contained'
 									className={classes.button}

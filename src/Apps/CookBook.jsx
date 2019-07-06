@@ -34,7 +34,7 @@ class CookBook extends Component {
 	renderCards() {
 		const { recipes } = this.state;
 		return recipes.map(recipe => (
-			<Grid item>
+			<Grid item key={recipe.image.id}>
 				<Card
 					imageUrl={`https://i.imgur.com/${recipe.image.id}.jpg`}
 					title={recipe.title}
@@ -62,7 +62,7 @@ class CookBook extends Component {
 				</Grid>
 
 				<Button variant='contained' color='secondary'>
-					<Link to='/recipe' component={NewRecipe} className={classes.link}>
+					<Link to='/new' component={NewRecipe} className={classes.link}>
 						Add Recipe
 					</Link>
 				</Button>
