@@ -6,9 +6,11 @@ import CookBook from './Apps/CookBook';
 import NavBar from './Apps/NavBar';
 import NewRecipe from './Apps/NewRecipe';
 import PrivateRoute from './Components/PrivateRoute';
-import SignIn from './Apps/SignIn';
+import SignIn from './Apps/Authentication/SignIn';
+import SignUp from './Apps/Authentication/SignUp';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
+import { withFirebase } from './Components/Firebase';
 
 const theme = createMuiTheme({
 	palette: {
@@ -25,15 +27,27 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			authed: false
+			authUser: null
 		};
 	}
+
+	componentDidMount() {
+		const { firebase } = this.props;
+		this.listener = firebase.auth.onAuthStateChanged(authUser => {
+			authUser ? this.setState({ authUser }) : this.setState({ authUser: null });
+		});
+	}
+
+	componentWillUnmount() {
+		this.listener();
+	}
+
 	render() {
-		const { authed } = this.state;
+		const { authUser } = this.state;
 		return (
 			<ThemeProvider theme={theme}>
 				<Router>
-					<NavBar />
+					<NavBar authUser={authUser} />
 					<div>
 						<nav>
 							<ul>
@@ -49,8 +63,13 @@ class App extends Component {
 						</nav>
 						<Switch>
 							<Route exact path='/' component={CookBook} />
+							<Route path='/signup' component={SignUp} />
 							<Route path='/login' component={SignIn} />
-							<PrivateRoute authed={authed} path='/recipe' component={NewRecipe} />
+							<PrivateRoute
+								authUser={authUser}
+								path='/recipe'
+								component={NewRecipe}
+							/>
 						</Switch>
 					</div>
 				</Router>
@@ -59,4 +78,4 @@ class App extends Component {
 	}
 }
 
-export default App;
+export default withFirebase(App);

@@ -1,12 +1,14 @@
+import { Grid, withStyles } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CookBook from './CookBook';
 import { Link } from 'react-router-dom';
-import SignIn from './SignIn';
+import SignIn from './Authentication/SignIn';
+import SignOut from './Authentication/SignOut';
+import SignUp from './Authentication/SignUp';
 import Toolbar from '@material-ui/core/Toolbar';
-import { withStyles } from '@material-ui/core';
 
 const styles = {
 	nav: {
@@ -26,7 +28,34 @@ const styles = {
 };
 
 class NavBar extends Component {
-	state = {};
+	renderButtons() {
+		const { authUser, classes } = this.props;
+
+		if (!authUser) {
+			return (
+				<div className={classes.user}>
+					<Grid container spacing={1}>
+						<Grid item>
+							<Button variant='contained' color='secondary'>
+								<Link to='/signup' component={SignUp} className={classes.link}>
+									Sign Up
+								</Link>
+							</Button>
+						</Grid>
+						<Grid item>
+							<Button variant='contained' color='secondary'>
+								<Link to='/login' component={SignIn} className={classes.link}>
+									Log In
+								</Link>
+							</Button>
+						</Grid>
+					</Grid>
+				</div>
+			);
+		}
+
+		return <SignOut />;
+	}
 
 	render() {
 		const { classes } = this.props;
@@ -35,17 +64,12 @@ class NavBar extends Component {
 				<Toolbar>
 					<div className={classes.title}>
 						<Button color='primary'>
-							<Link to='/z' component={CookBook} className={classes.link}>
+							<Link to='/' component={CookBook} className={classes.link}>
 								My Cook Book
 							</Link>
 						</Button>
 					</div>
-
-					<Button variant='contained' color='secondary' className={classes.user}>
-						<Link to='/login' component={SignIn} className={classes.link}>
-							Login
-						</Link>
-					</Button>
+					{this.renderButtons()}
 				</Toolbar>
 			</AppBar>
 		);
