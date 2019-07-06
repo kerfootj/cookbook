@@ -33,11 +33,10 @@ class CookBook extends Component {
 
 	renderCards() {
 		const { recipes } = this.state;
-		console.log(recipes);
 		return recipes.map(recipe => (
 			<Grid item>
 				<Card
-					imageUrl={recipe.imageUrl}
+					imageUrl={`https://i.imgur.com/${recipe.image.id}.jpg`}
 					title={recipe.title}
 					description={recipe.description}
 				/>
@@ -46,8 +45,9 @@ class CookBook extends Component {
 	}
 
 	render() {
-		const { loading } = this.state;
 		const { classes } = this.props;
+		const { loading } = this.state;
+
 		if (loading) {
 			return <div>loading...</div>;
 		}
