@@ -3,12 +3,13 @@ import 'firebase/auth';
 import app from 'firebase/app';
 
 const config = {
-	apiKey: 'AIzaSyCrE4LCvnWtIr_EfCSuRjTWrgQYV3vF8ow',
-	authDomain: 'cookbook-530b0.firebaseapp.com'
+	apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+	authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN
 };
 
 class Firebase {
 	constructor() {
+		console.log(config);
 		app.initializeApp(config);
 		this.auth = app.auth();
 	}
