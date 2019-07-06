@@ -1,6 +1,7 @@
-import { Button, Grid, Link, TextField, Typography } from '@material-ui/core';
+import { Button, Grid, TextField, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 
+import { Link } from 'react-router-dom';
 import { withFirebase } from '../../Components/Firebase';
 import { withRouter } from 'react-router-dom';
 
@@ -81,7 +82,7 @@ class SignIn extends Component {
 					{error && <p>{error.message}</p>}
 				</form>
 				<Typography variant='body2'>
-					New to mycookbook? <Link href='/signup'>SIGN UP</Link>
+					New to mycookbook? <Link to='/signup'>SIGN UP</Link>
 				</Typography>
 			</>
 		);
