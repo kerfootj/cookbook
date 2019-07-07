@@ -1,7 +1,7 @@
 import { Button, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
-import Card from '../Components/ImageCard';
+import Card from '../CompositeComponents/ImageCard';
 import { Link } from 'react-router-dom';
 import NewRecipe from './NewRecipe';
 import axios from 'axios';
@@ -20,10 +20,12 @@ class CookBook extends Component {
 		this.state = { loading: true };
 	}
 
+	// https://joel-cookbook-server.herokuapp.com
 	componentDidMount() {
 		axios
-			.get('https://joel-cookbook-server.herokuapp.com/recipe')
+			.get('http://localhost:8080/recipe')
 			.then(response => {
+				console.log(response);
 				this.setState({ recipes: response.data, loading: false });
 			})
 			.catch(error => {
@@ -34,9 +36,13 @@ class CookBook extends Component {
 	renderCards() {
 		const { recipes } = this.state;
 		return recipes.map(recipe => (
-			<Grid item key={recipe.image.id}>
+			<Grid item key={recipe._id}>
 				<Card
-					imageUrl={`https://i.imgur.com/${recipe.image.id}.jpg`}
+					imageUrl={
+						recipe.image
+							? `https://i.imgur.com/${recipe.image.id}.jpg`
+							: 'https://i.imgur.com/6MEHGTJ.jpg'
+					}
 					title={recipe.title}
 					description={recipe.description}
 				/>
