@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CookBook from './CookBook';
 import { Link } from 'react-router-dom';
-import SignOut from './Authentication/SignOut';
+import SignOut from '../CompositeComponents/Authentication/SignOut';
 import Toolbar from '@material-ui/core/Toolbar';
 
 const styles = {
