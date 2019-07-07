@@ -20,10 +20,9 @@ class CookBook extends Component {
 		this.state = { loading: true };
 	}
 
-	// https://joel-cookbook-server.herokuapp.com
 	componentDidMount() {
 		axios
-			.get('http://localhost:8080/recipe')
+			.get('http://api.mycookbook.xyz/recipe')
 			.then(response => {
 				console.log(response);
 				this.setState({ recipes: response.data, loading: false });

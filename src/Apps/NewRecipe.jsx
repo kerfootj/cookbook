@@ -99,9 +99,8 @@ class NewRecipe extends Component {
 			this.setState({ waiting: true });
 		}
 
-		//http://api.mycookbook.xyz/recipe
 		axios
-			.post('http://localhost:8080/recipe', {
+			.post('http://api.mycookbook.xyz/recipe', {
 				title: recipe,
 				description: description,
 				ingredients: ingredients,
