@@ -1,4 +1,4 @@
-import { Button, Grid, TextField } from '@material-ui/core';
+import { Button, Grid, TextField, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import CloudUpload from '@material-ui/icons/CloudUploadOutlined';
@@ -19,6 +19,8 @@ class NewRecipe extends Component {
 		this.state = {
 			recipe: '',
 			description: '',
+			ingredients: [],
+			instructions: [],
 			image: undefined,
 			uploading: false,
 			waiting: false,
@@ -30,6 +32,10 @@ class NewRecipe extends Component {
 
 	handleInputChange = event => {
 		this.setState({ [event.target.name]: event.target.value });
+	};
+
+	handleMultiLineInputChange = event => {
+		this.setState({ [event.target.name]: event.target.value.split(/\r?\n/) });
 	};
 
 	/**
@@ -87,7 +93,7 @@ class NewRecipe extends Component {
 	};
 
 	addRecipe = event => {
-		const { recipe, description, image, uploading } = this.state;
+		const { recipe, description, ingredients, instructions, image, uploading } = this.state;
 
 		if (uploading) {
 			this.setState({ waiting: true });
@@ -98,6 +104,8 @@ class NewRecipe extends Component {
 			.post('http://localhost:8080/recipe', {
 				title: recipe,
 				description: description,
+				ingredients: ingredients,
+				instructions: instructions,
 				image: image
 			})
 			.then(() => {
@@ -146,19 +154,48 @@ class NewRecipe extends Component {
 				<form onSubmit={this.addRecipe}>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
+							<Typography variant='body2'>Recipe Title</Typography>
 							<TextField
-								helperText='Recipe Name'
+								required
 								variant='outlined'
 								name='recipe'
 								onChange={this.handleInputChange}
 							/>
 						</Grid>
 						<Grid item xs={12}>
+							<Typography variant='body2'>Description</Typography>
 							<TextField
-								helperText='Description'
+								multiline
+								rows={2}
 								variant='outlined'
 								name='description'
 								onChange={this.handleInputChange}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant='body2'>Ingredients</Typography>
+							<TextField
+								required
+								fullWidth
+								multiline
+								rows={4}
+								variant='outlined'
+								placeholder='Put each ingredient on its own line'
+								name='ingredients'
+								onChange={this.handleMultiLineInputChange}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Typography variant='body2'>Instructions</Typography>
+							<TextField
+								required
+								fullWidth
+								multiline
+								rows={4}
+								variant='outlined'
+								placeholder='Put each step on its own line'
+								name='instructions'
+								onChange={this.handleMultiLineInputChange}
 							/>
 						</Grid>
 						<Grid item xs={12}>
