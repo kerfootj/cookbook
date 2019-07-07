@@ -100,7 +100,7 @@ class NewRecipe extends Component {
 		}
 
 		axios
-			.post('http://api.mycookbook.xyz/recipe', {
+			.post('https://joel-cookbook-server.herokuapp.com/recipe', {
 				title: recipe,
 				description: description,
 				ingredients: ingredients,
