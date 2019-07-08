@@ -11,6 +11,9 @@ const styles = {
 	link: {
 		textDecoration: 'none',
 		all: 'inherit'
+	},
+	card: {
+		cursor: 'pointer'
 	}
 };
 
@@ -24,29 +27,32 @@ class CookBook extends Component {
 
 	componentDidMount() {
 		axios
-			.get('https://joel-cookbook-server.herokuapp.com/recipe')
+			.get('http://localhost:8080/recipe')
 			.then(response => {
-				console.log(response);
 				this.setState({ recipes: response.data, loading: false });
 			})
 			.catch(error => {
-				this.setState({ error: true });
+				this.setState({ error: error });
 			});
 	}
 
 	renderCards() {
+		const { classes } = this.props;
 		const { recipes } = this.state;
+
 		return recipes.map(recipe => (
-			<Grid item key={recipe._id}>
-				<Card
-					imageUrl={
-						recipe.image
-							? `https://i.imgur.com/${recipe.image.id}.jpg`
-							: 'https://i.imgur.com/6MEHGTJ.jpg'
-					}
-					title={recipe.title}
-					description={recipe.description}
-				/>
+			<Grid item key={recipe._id} className={classes.card}>
+				<Link to={`/recipe/${recipe._id}`} className={classes.link}>
+					<Card
+						imageUrl={
+							recipe.image
+								? `https://i.imgur.com/${recipe.image.id}.jpg`
+								: 'https://i.imgur.com/6MEHGTJ.jpg'
+						}
+						title={recipe.title}
+						description={recipe.description}
+					/>
+				</Link>
 			</Grid>
 		));
 	}
@@ -62,7 +68,7 @@ class CookBook extends Component {
 			<>
 				<Grid container>
 					<Grid item xl={1} />
-					<Grid container item xl={10} spacing={2}>
+					<Grid container item xl={10} spacing={1} alignItems='center' justify='center'>
 						{this.renderCards()}
 					</Grid>
 					<Grid item xl={1} />
