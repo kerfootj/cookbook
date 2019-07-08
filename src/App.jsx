@@ -3,9 +3,11 @@ import React, { Component } from 'react';
 import { blue, indigo } from '@material-ui/core/colors';
 
 import CookBook from './Apps/CookBook';
+import Helmet from 'react-helmet';
 import NavBar from './Apps/NavBar';
 import NewRecipe from './Apps/NewRecipe';
 import PrivateRoute from './Components/PrivateRoute';
+import Recipe from './Apps/Recipe';
 import SignIn from './CompositeComponents/Authentication/SignIn';
 import SignUp from './CompositeComponents/Authentication/SignUp';
 import { ThemeProvider } from '@material-ui/styles';
@@ -53,6 +55,7 @@ class App extends Component {
 		const { authUser } = this.state;
 		return (
 			<ThemeProvider theme={theme}>
+				<Helmet bodyAttributes={{ style: 'background-color : #f0f0f0' }} />
 				<Router>
 					<NavBar authUser={authUser} />
 					<div>
@@ -72,6 +75,7 @@ class App extends Component {
 							<Route exact path='/' component={CookBook} />
 							<Route path='/signup' component={SignUp} />
 							<Route path='/login' component={SignIn} />
+							<Route path='/recipe/:recipeId' component={Recipe} />
 							<PrivateRoute authUser={authUser} path='/new' component={NewRecipe} />
 						</Switch>
 					</div>
