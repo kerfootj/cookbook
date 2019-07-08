@@ -41,8 +41,9 @@ class Recipe extends Component {
 			match: { params }
 		} = this.props;
 
+		// http://localhost:8080/recipe/${params.recipeId}
 		axios
-			.get(`http://localhost:8080/recipe/${params.recipeId}`)
+			.get(`https://joel-cookbook-server.herokuapp.com/recipe/${params.recipeId}`)
 			.then(response => {
 				this.setState({
 					...response.data
