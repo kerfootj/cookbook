@@ -1,5 +1,6 @@
 import {
 	Button,
+	CircularProgress,
 	FormControlLabel,
 	Grid,
 	Radio,
@@ -23,7 +24,7 @@ const styles = {
 	image: {
 		marginTop: 16,
 		display: 'block',
-		maxWidth: 280,
+		maxWidth: 300,
 		width: '100%',
 		height: 'auto'
 	},
@@ -242,24 +243,32 @@ class NewRecipe extends Component {
 
 	renderSideInput() {
 		const { classes } = this.props;
-		const { image } = this.state;
+		const { image, uploading } = this.state;
 
 		return (
 			<Grid container spacing={2} style={{ padding: 30 }}>
 				<Grid item xs={12}>
-					<img
-						src={
-							image
-								? `https://i.imgur.com/${image.id}.jpg`
-								: 'https://i.imgur.com/6MEHGTJ.jpg'
-						}
-						alt='upload'
-						className={
-							image
-								? `${classes.image} ${classes.boarderSolid}`
-								: `${classes.image} ${classes.boarderDashed}`
-						}
-					/>
+					<div style={{ position: 'relative' }}>
+						<img
+							src={
+								image
+									? `https://i.imgur.com/${image.id}.jpg`
+									: 'https://i.imgur.com/6MEHGTJ.jpg'
+							}
+							alt='upload'
+							className={
+								image
+									? `${classes.image} ${classes.boarderSolid}`
+									: `${classes.image} ${classes.boarderDashed}`
+							}
+						/>
+						{uploading && (
+							<CircularProgress
+								color='primary'
+								style={{ position: 'absolute', left: '37%', top: '43%' }}
+							/>
+						)}
+					</div>
 				</Grid>
 				<Grid item xs={12}>
 					<input
