@@ -1,40 +1,13 @@
-import {
-	Button,
-	CircularProgress,
-	FormControlLabel,
-	Grid,
-	Radio,
-	RadioGroup,
-	TextField,
-	Typography
-} from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
-import CloudUpload from '@material-ui/icons/CloudUploadOutlined';
 import Compress from 'compress.js';
+import ImageUpload from '../CompositeComponents/ImageUpload';
+import RecipeDetails from '../CompositeComponents/RecipeDetails';
+import RecipeOptions from '../CompositeComponents/RecipeOptions';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { withFirebase } from '../Components/Firebase';
-import { withStyles } from '@material-ui/styles';
-
-const styles = {
-	rightIcon: {
-		marginLeft: 4
-	},
-	image: {
-		marginTop: 16,
-		display: 'block',
-		maxWidth: 300,
-		width: '100%',
-		height: 'auto'
-	},
-	boarderDashed: {
-		border: '1px dashed #021a40'
-	},
-	boarderSolid: {
-		border: '1px solid #021a40'
-	}
-};
 
 class NewRecipe extends Component {
 	constructor(props) {
@@ -135,7 +108,6 @@ class NewRecipe extends Component {
 			this.setState({ waiting: true });
 		}
 
-		// https://joel-cookbook-server.herokuapp.com
 		axios
 			.post('https://joel-cookbook-server.herokuapp.com/recipe', {
 				title: recipe,
@@ -160,14 +132,6 @@ class NewRecipe extends Component {
 		event.preventDefault();
 	};
 
-	renderUploading() {
-		const { uploading } = this.state;
-		if (uploading) {
-			return <p>Uploading image...</p>;
-		}
-		return null;
-	}
-
 	renderWaiting() {
 		const { waiting } = this.state;
 		if (waiting) {
@@ -187,171 +151,8 @@ class NewRecipe extends Component {
 		return null;
 	}
 
-	renderMainInput() {
-		return (
-			<Grid container spacing={2} style={{ padding: 30 }}>
-				<Grid item xs={12}>
-					<Typography variant='body2'>Recipe Title</Typography>
-					<TextField
-						fullWidth
-						required
-						variant='outlined'
-						name='recipe'
-						onChange={this.handleInputChange}
-					/>
-				</Grid>
-				<Grid item xs={12}>
-					<Typography variant='body2'>Description</Typography>
-					<TextField
-						fullWidth
-						multiline
-						rows={3}
-						variant='outlined'
-						name='description'
-						onChange={this.handleInputChange}
-					/>
-				</Grid>
-				<Grid item xs={12}>
-					<Typography variant='body2'>Ingredients</Typography>
-					<TextField
-						required
-						fullWidth
-						multiline
-						rows={8}
-						variant='outlined'
-						placeholder='Put each ingredient on its own line'
-						name='ingredients'
-						onChange={this.handleMultiLineInputChange}
-					/>
-				</Grid>
-				<Grid item xs={12}>
-					<Typography variant='body2'>Instructions</Typography>
-					<TextField
-						required
-						fullWidth
-						multiline
-						rows={8}
-						variant='outlined'
-						placeholder='Put each step on its own line'
-						name='instructions'
-						onChange={this.handleMultiLineInputChange}
-					/>
-				</Grid>
-			</Grid>
-		);
-	}
-
-	renderSideInput() {
-		const { classes } = this.props;
-		const { image, uploading } = this.state;
-
-		return (
-			<Grid container spacing={2} style={{ padding: 30 }}>
-				<Grid item xs={12}>
-					<div style={{ position: 'relative' }}>
-						<img
-							src={
-								image
-									? `https://i.imgur.com/${image.id}.jpg`
-									: 'https://i.imgur.com/6MEHGTJ.jpg'
-							}
-							alt='upload'
-							className={
-								image
-									? `${classes.image} ${classes.boarderSolid}`
-									: `${classes.image} ${classes.boarderDashed}`
-							}
-						/>
-						{uploading && (
-							<CircularProgress
-								color='primary'
-								style={{ position: 'absolute', left: '37%', top: '43%' }}
-							/>
-						)}
-					</div>
-				</Grid>
-				<Grid item xs={12}>
-					<input
-						style={{ display: 'none' }}
-						accept='image/*'
-						id='raised-button-file'
-						type='file'
-						onChange={this.imageUploadHandler}
-					/>
-					<label htmlFor='raised-button-file'>
-						<Button component='span' variant='contained'>
-							Add Image
-							<CloudUpload className={classes.rightIcon} />
-						</Button>
-					</label>
-				</Grid>
-				<Grid item xs={4}>
-					<Typography variant='body2'>Prep Time</Typography>
-					<TextField
-						required
-						fullWidth
-						variant='outlined'
-						placeholder='15m'
-						name='prep'
-						onChange={this.handleInputChange}
-					/>
-				</Grid>
-				<Grid item xs={4}>
-					<Typography variant='body2'>Cook Time</Typography>
-					<TextField
-						required
-						fullWidth
-						variant='outlined'
-						placeholder='1h 30m'
-						name='cook'
-						onChange={this.handleInputChange}
-					/>
-				</Grid>
-				<Grid item xs={4}>
-					<Typography variant='body2'>Ready In</Typography>
-					<TextField
-						fullWidth
-						variant='outlined'
-						placeholder='Optional'
-						name='ready'
-						onChange={this.handleInputChange}
-					/>
-				</Grid>
-				<Grid item xs={4}>
-					<Typography variant='body2'>Servings</Typography>
-					<TextField
-						required
-						fullWidth
-						variant='outlined'
-						name='servings'
-						onChange={this.handleInputChange}
-					/>
-				</Grid>
-				<Grid item xs={8} />
-				<Grid item xs={12}>
-					<RadioGroup
-						name='private'
-						defaultValue='public'
-						onChange={this.handleButtonChange}
-					>
-						<FormControlLabel
-							value='private'
-							control={<Radio />}
-							label='Private - Only I can see this'
-						/>
-						<FormControlLabel
-							value='public'
-							control={<Radio />}
-							label='Public - Anyone can see this'
-						/>
-					</RadioGroup>
-				</Grid>
-			</Grid>
-		);
-	}
-
 	render() {
-		const { added, cancel } = this.state;
+		const { added, cancel, image, uploading } = this.state;
 
 		return (
 			<>
@@ -367,10 +168,22 @@ class NewRecipe extends Component {
 							style={{ backgroundColor: '#FFFFFF' }}
 						>
 							<Grid item xs={12} md={4}>
-								{this.renderSideInput()}
+								<Grid container spacing={2} style={{ padding: 30 }}>
+									<Grid item xs={12}>
+										<ImageUpload image={image} uploading={uploading} />
+									</Grid>
+									<RecipeOptions
+										handleButtonChange={this.handleButtonChange}
+										handleInputChange={this.handleInputChange}
+										imageUploadHandler={this.imageUploadHandler}
+									/>
+								</Grid>
 							</Grid>
 							<Grid item xs={12} md={8} spacing={2}>
-								{this.renderMainInput()}
+								<RecipeDetails
+									handleInputChange={this.handleInputChange}
+									handleMultiLineInputChange={this.handleMultiLineInputChange}
+								/>
 							</Grid>
 							<Grid item xs={12} />
 							<Grid item style={{ padding: 30 }}>
@@ -399,7 +212,6 @@ class NewRecipe extends Component {
 						<Grid item lg={1} xl={2} />
 					</Grid>
 				</form>
-				{this.renderUploading()}
 				{this.renderWaiting()}
 				{this.renderError()}
 				{(added || cancel) && <Redirect to='/' />}
@@ -408,4 +220,4 @@ class NewRecipe extends Component {
 	}
 }
 
-export default withStyles(styles)(withFirebase(NewRecipe));
+export default withFirebase(NewRecipe);
