@@ -132,6 +132,26 @@ class NewRecipe extends Component {
 		event.preventDefault();
 	};
 
+	cancelRecipe = () => {
+		const { image } = this.state;
+
+		if (image.deleteHash) {
+			const key = process.env.REACT_APP_IMGUR_CLIENT_ID;
+			axios
+				.delete(`https://api.imgur.com/3/image/${image.deleteHash}`, {
+					headers: { Authorization: `Client-ID ${key}` }
+				})
+				.then(response => {
+					console.log(response);
+					this.setState({ cancel: true });
+				})
+				.catch(error => {
+					console.log(error);
+					this.setState({ cancel: true });
+				});
+		}
+	};
+
 	renderWaiting() {
 		const { waiting } = this.state;
 		if (waiting) {
@@ -201,9 +221,7 @@ class NewRecipe extends Component {
 									variant='contained'
 									color='secondary'
 									style={{ paddingLeft: 38, paddingRight: 38 }}
-									onClick={() => {
-										this.setState({ cancel: true });
-									}}
+									onClick={this.cancelRecipe}
 								>
 									Cancel
 								</Button>
