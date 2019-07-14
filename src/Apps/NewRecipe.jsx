@@ -48,6 +48,14 @@ class NewRecipe extends Component {
 		this.setState({ shared: value });
 	};
 
+	validate = () => {
+		const { prep } = this.state;
+		const timeRe = /(^\d+h( +[0-5]?\dm)?$|^[0-5]?\dm$)/;
+		if (!timeRe.test(prep)) {
+			this.setState({ valid: { prep: false } });
+		}
+	};
+
 	/**
 	 * Takes an image file from an input field. The image is then compressed
 	 * to be smaller than 10mb and uploaded to imgur.
@@ -232,7 +240,7 @@ class NewRecipe extends Component {
 									/>
 								</Grid>
 							</Grid>
-							<Grid item xs={12} md={8} spacing={2}>
+							<Grid item xs={12} md={8}>
 								<RecipeDetails
 									handleInputChange={this.handleInputChange}
 									handleMultiLineInputChange={this.handleMultiLineInputChange}
