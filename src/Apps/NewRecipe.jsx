@@ -21,7 +21,7 @@ class NewRecipe extends Component {
 			prep: undefined,
 			cook: undefined,
 			ready: undefined,
-			private: false,
+			shared: false,
 			status: {
 				uploading: false,
 				waiting: false,
@@ -45,7 +45,7 @@ class NewRecipe extends Component {
 
 	handleButtonChange = event => {
 		const value = event.target.value === 'private' ? true : false;
-		this.setState({ private: value });
+		this.setState({ shared: value });
 	};
 
 	/**
