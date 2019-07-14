@@ -55,12 +55,28 @@ class NewRecipe extends Component {
 		this.setState({ shared: value });
 	};
 
-	validate = () => {
-		const { prep } = this.state;
+	validateField = () => {
+		const { cook, prep, ready } = this.state;
+		let valid = {};
+
 		const timeRe = /(^\d+h( +[0-5]?\dm)?$|^[0-5]?\dm$)/;
-		if (!timeRe.test(prep)) {
-			this.setState({ valid: { prep: false } });
+
+		// Prep Time
+		if (prep && !timeRe.test(prep)) {
+			valid.prep = false;
 		}
+
+		// Cook Time
+		if (cook && !timeRe.test(cook)) {
+			valid.cook = false;
+		}
+
+		// Ready time
+		if (ready && !timeRe.test(ready)) {
+			valid.ready = false;
+		}
+
+		this.setState({ valid: valid });
 	};
 
 	/**
@@ -220,8 +236,8 @@ class NewRecipe extends Component {
 	}
 
 	render() {
-		const { image, status } = this.state;
 		const { classes } = this.props;
+		const { image, status, valid } = this.state;
 
 		return (
 			<>
@@ -235,9 +251,11 @@ class NewRecipe extends Component {
 										<ImageUpload image={image} uploading={status.uploading} />
 									</Grid>
 									<RecipeOptions
+										valid={valid}
 										handleButtonChange={this.handleButtonChange}
 										handleInputChange={this.handleInputChange}
 										imageUploadHandler={this.imageUploadHandler}
+										validate={this.validateField}
 									/>
 								</Grid>
 							</Grid>
