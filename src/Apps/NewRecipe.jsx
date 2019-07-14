@@ -8,6 +8,13 @@ import RecipeOptions from '../CompositeComponents/RecipeOptions';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { withFirebase } from '../Components/Firebase';
+import { withStyles } from '@material-ui/styles';
+
+const styles = {
+	container: {
+		backgroundColor: '#FFFFFF'
+	}
+};
 
 class NewRecipe extends Component {
 	constructor(props) {
@@ -214,20 +221,14 @@ class NewRecipe extends Component {
 
 	render() {
 		const { image, status } = this.state;
+		const { classes } = this.props;
 
 		return (
 			<>
 				<form onSubmit={this.addRecipe}>
 					<Grid container>
 						<Grid item lg={1} xl={2} />
-						<Grid
-							container
-							item
-							xs={12}
-							lg={10}
-							xl={8}
-							style={{ backgroundColor: '#FFFFFF' }}
-						>
+						<Grid container item xs={12} lg={10} xl={8} className={classes.container}>
 							<Grid item xs={12} md={4}>
 								<Grid container spacing={2} style={{ padding: 30 }}>
 									<Grid item xs={12}>
@@ -279,4 +280,4 @@ class NewRecipe extends Component {
 	}
 }
 
-export default withFirebase(NewRecipe);
+export default withStyles(styles)(withFirebase(NewRecipe));
