@@ -74,7 +74,7 @@ class Recipe extends Component {
 
 	renderSummary() {
 		const { classes } = this.props;
-		const { title, description, image, ready, servings } = this.state;
+		const { title, description, image, prep, cook, ready, servings } = this.state;
 
 		return (
 			<Paper square className={classes.paper}>
@@ -140,6 +140,42 @@ class Recipe extends Component {
 					<Grid item xs={12}>
 						<Typography variant='h6'>Directions</Typography>
 						<hr />
+						<Grid container alignItems='center' spacing={2}>
+							<Grid item>
+								<Clock />
+							</Grid>
+							<Grid item>
+								<Typography
+									variant='body1'
+									style={{
+										borderRight: '0.05em solid black',
+										paddingRight: '0.8em'
+									}}
+								>
+									Prep <br />
+									<Typography variant='caption'>{prep}</Typography>
+								</Typography>
+							</Grid>
+							<Grid item>
+								<Typography
+									variant='body1'
+									style={{
+										borderRight: '0.05em solid black',
+										paddingRight: '0.8em'
+									}}
+								>
+									Cook <br />
+									<Typography variant='caption'>{cook}</Typography>
+								</Typography>
+							</Grid>
+							<Grid item>
+								<Typography variant='body1'>
+									Ready In <br />
+									<Typography variant='caption'>{ready}</Typography>
+								</Typography>
+							</Grid>
+						</Grid>
+
 						<ol>{this.renderInstructions()}</ol>
 					</Grid>
 				</Grid>
