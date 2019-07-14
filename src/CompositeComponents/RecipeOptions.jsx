@@ -17,8 +17,14 @@ const styles = {
 		marginLeft: 4
 	}
 };
-
-const RecipeOptions = ({ classes, handleButtonChange, handleInputChange, imageUploadHandler }) => {
+const RecipeOptions = ({
+	classes,
+	handleButtonChange,
+	handleInputChange,
+	imageUploadHandler,
+	validate,
+	valid
+}) => {
 	return (
 		<>
 			<Grid item xs={12}>
@@ -37,35 +43,55 @@ const RecipeOptions = ({ classes, handleButtonChange, handleInputChange, imageUp
 				</label>
 			</Grid>
 			<Grid item xs={4}>
-				<Typography variant='body2'>Prep Time</Typography>
+				<Typography
+					variant='body2'
+					color={valid && valid.prep !== undefined && !valid.prep ? 'error' : 'inherit'}
+				>
+					Prep Time
+				</Typography>
 				<TextField
 					required
 					fullWidth
+					input
 					variant='outlined'
 					placeholder='15m'
 					name='prep'
 					onChange={handleInputChange}
+					onBlur={validate}
 				/>
 			</Grid>
 			<Grid item xs={4}>
-				<Typography variant='body2'>Cook Time</Typography>
+				<Typography
+					variant='body2'
+					color={valid && valid.cook !== undefined && !valid.cook ? 'error' : 'inherit'}
+				>
+					Cook Time
+				</Typography>
 				<TextField
 					required
 					fullWidth
 					variant='outlined'
-					placeholder='1h 30m'
+					placeholder='1h 45m'
 					name='cook'
 					onChange={handleInputChange}
+					onBlur={validate}
 				/>
 			</Grid>
 			<Grid item xs={4}>
-				<Typography variant='body2'>Ready In</Typography>
+				<Typography
+					variant='body2'
+					color={valid && valid.ready !== undefined && !valid.ready ? 'error' : 'inherit'}
+				>
+					Ready In
+				</Typography>
 				<TextField
+					required
 					fullWidth
 					variant='outlined'
-					placeholder='Optional'
+					placeholder='2h'
 					name='ready'
 					onChange={handleInputChange}
+					onBlur={validate}
 				/>
 			</Grid>
 			<Grid item xs={4}>
@@ -73,6 +99,8 @@ const RecipeOptions = ({ classes, handleButtonChange, handleInputChange, imageUp
 				<TextField
 					required
 					fullWidth
+					inputProps={{ min: '1' }}
+					type='number'
 					variant='outlined'
 					name='servings'
 					onChange={handleInputChange}
