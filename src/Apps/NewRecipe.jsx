@@ -18,12 +18,20 @@ class NewRecipe extends Component {
 			ingredients: [],
 			instructions: [],
 			image: undefined,
+			prep: undefined,
+			cook: undefined,
+			ready: undefined,
 			private: false,
-			uploading: false,
-			waiting: false,
-			added: false,
-			errorSave: undefined,
-			errorUpload: undefined
+			status: {
+				uploading: false,
+				waiting: false,
+				added: false,
+				cancel: false
+			},
+			errors: {
+				save: false,
+				upload: false
+			}
 		};
 	}
 
@@ -46,7 +54,7 @@ class NewRecipe extends Component {
 	 */
 	imageUploadHandler = event => {
 		this.setState({
-			uploading: true
+			status: { uploading: true }
 		});
 
 		const files = [...event.target.files];
@@ -77,19 +85,33 @@ class NewRecipe extends Component {
 									id: response.data.id,
 									deleteHash: response.data.deletehash
 								},
-								uploading: false,
-								waiting: false
+								status: {
+									uploading: false,
+									waiting: false
+								}
 							});
 						} else {
 							this.setState({
-								errorUpload: response.data.error,
-								uploading: false,
-								waiting: false
+								errors: {
+									upload: true
+								},
+								status: {
+									uploading: false,
+									waiting: false
+								}
 							});
 						}
 					})
 					.catch(error => {
-						this.setState({ errorUpload: error, uploading: false, waiting: false });
+						this.setState({
+							errors: {
+								upload: true
+							},
+							status: {
+								uploading: false,
+								waiting: false
+							}
+						});
 					});
 			});
 	};
@@ -102,10 +124,22 @@ class NewRecipe extends Component {
 				}
 			}
 		} = this.props;
-		const { recipe, description, ingredients, instructions, image, uploading } = this.state;
+		const {
+			recipe,
+			description,
+			ingredients,
+			instructions,
+			image,
+			status,
+			prep,
+			cook,
+			ready,
+			servings,
+			shared
+		} = this.state;
 
-		if (uploading) {
-			this.setState({ waiting: true });
+		if (status.uploading) {
+			this.setState({ status: { waiting: true } });
 		}
 
 		axios
@@ -115,18 +149,18 @@ class NewRecipe extends Component {
 				description: description,
 				ingredients: ingredients,
 				instructions: instructions,
-				prep: 10,
-				cook: 15,
-				ready: 0,
-				servings: 1,
-				private: false,
+				prep: prep,
+				cook: cook,
+				ready: ready,
+				servings: servings,
+				private: shared,
 				uid: uid
 			})
 			.then(() => {
-				this.setState({ added: true });
+				this.setState({ status: { added: true } });
 			})
 			.catch(error => {
-				this.setState({ error: error });
+				this.setState({ errors: { save: error } });
 			});
 
 		event.preventDefault();
@@ -135,7 +169,7 @@ class NewRecipe extends Component {
 	cancelRecipe = () => {
 		const { image } = this.state;
 
-		if (image.deleteHash) {
+		if (image && image.deleteHash) {
 			const key = process.env.REACT_APP_IMGUR_CLIENT_ID;
 			axios
 				.delete(`https://api.imgur.com/3/image/${image.deleteHash}`, {
@@ -143,36 +177,35 @@ class NewRecipe extends Component {
 				})
 				.then(response => {
 					console.log(response);
-					this.setState({ cancel: true });
 				})
 				.catch(error => {
 					console.log(error);
-					this.setState({ cancel: true });
 				});
 		}
+		this.setState({ status: { cancel: true } });
 	};
 
 	renderWaiting() {
-		const { waiting } = this.state;
-		if (waiting) {
+		const { status } = this.state;
+		if (status.waiting) {
 			return <p>Please wait for your image to finish uploading</p>;
 		}
 		return null;
 	}
 
 	renderError() {
-		const { errorSave, errorUpload } = this.state;
-		if (errorUpload) {
-			return <p>{errorUpload}</p>;
+		const { errors } = this.state;
+		if (errors.upload) {
+			return <p>{errors.upload}</p>;
 		}
-		if (errorSave) {
+		if (errors.save) {
 			return <p>Error saving your recipe</p>;
 		}
 		return null;
 	}
 
 	render() {
-		const { added, cancel, image, uploading } = this.state;
+		const { image, status } = this.state;
 
 		return (
 			<>
@@ -190,7 +223,7 @@ class NewRecipe extends Component {
 							<Grid item xs={12} md={4}>
 								<Grid container spacing={2} style={{ padding: 30 }}>
 									<Grid item xs={12}>
-										<ImageUpload image={image} uploading={uploading} />
+										<ImageUpload image={image} uploading={status.uploading} />
 									</Grid>
 									<RecipeOptions
 										handleButtonChange={this.handleButtonChange}
@@ -232,7 +265,7 @@ class NewRecipe extends Component {
 				</form>
 				{this.renderWaiting()}
 				{this.renderError()}
-				{(added || cancel) && <Redirect to='/' />}
+				{(status.added || status.cancel) && <Redirect to='/' />}
 			</>
 		);
 	}

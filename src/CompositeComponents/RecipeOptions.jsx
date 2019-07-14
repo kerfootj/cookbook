@@ -80,7 +80,7 @@ const RecipeOptions = ({ classes, handleButtonChange, handleInputChange, imageUp
 			</Grid>
 			<Grid item xs={8} />
 			<Grid item xs={12}>
-				<RadioGroup name='private' defaultValue='public' onChange={handleButtonChange}>
+				<RadioGroup name='shared' defaultValue='public' onChange={handleButtonChange}>
 					<FormControlLabel
 						value='private'
 						control={<Radio />}
