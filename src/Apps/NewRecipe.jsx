@@ -93,7 +93,7 @@ class NewRecipe extends Component {
 		compress
 			.compress(files, {
 				size: 10,
-				quality: 0.75
+				quality: 0.8
 			})
 			.then(compressedFiles => {
 				const data = new FormData();
