@@ -5,6 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CookBook from './CookBook';
 import { Link } from 'react-router-dom';
+import SignIn from './SignIn';
 import SignOut from '../CompositeComponents/Authentication/SignOut';
 import Toolbar from '@material-ui/core/Toolbar';
 
@@ -41,11 +42,7 @@ class NavBar extends Component {
 							</Button>
 						</Grid>
 						<Grid item>
-							<Button variant='contained' color='secondary'>
-								<Link to='/login' className={classes.link}>
-									Log In
-								</Link>
-							</Button>
+							<SignIn />
 						</Grid>
 					</Grid>
 				</div>
