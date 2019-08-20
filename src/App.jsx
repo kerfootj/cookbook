@@ -8,7 +8,6 @@ import NavBar from './Apps/NavBar';
 import NewRecipe from './Apps/NewRecipe';
 import PrivateRoute from './Components/PrivateRoute';
 import Recipe from './Apps/Recipe';
-import SignIn from './Apps/SignIn';
 import SignUp from './CompositeComponents/Authentication/SignUp';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
