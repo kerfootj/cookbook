@@ -8,7 +8,7 @@ import NavBar from './Apps/NavBar';
 import NewRecipe from './Apps/NewRecipe';
 import PrivateRoute from './Components/PrivateRoute';
 import Recipe from './Apps/Recipe';
-import SignIn from './CompositeComponents/Authentication/SignIn';
+import SignIn from './Apps/SignIn';
 import SignUp from './CompositeComponents/Authentication/SignUp';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -72,11 +72,17 @@ class App extends Component {
 							</ul>
 						</nav>
 						<Switch>
-							<Route exact path='/' component={CookBook} />
-							<Route path='/signup' component={SignUp} />
-							<Route path='/login' component={SignIn} />
-							<Route path='/recipe/:recipeId' component={Recipe} />
-							<PrivateRoute authUser={authUser} path='/new' component={NewRecipe} />
+							<Route exact path={process.env.PUBLIC_URL + '/'} component={CookBook} />
+							<Route path={process.env.PUBLIC_URL + '/signup'} component={SignUp} />
+							<Route
+								path={process.env.PUBLIC_URL + '/recipe/:recipeId'}
+								component={Recipe}
+							/>
+							<PrivateRoute
+								authUser={authUser}
+								path={process.env.PUBLIC_URL + '/new'}
+								component={NewRecipe}
+							/>
 						</Switch>
 					</div>
 				</Router>
