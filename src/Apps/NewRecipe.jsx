@@ -43,15 +43,26 @@ class NewRecipe extends Component {
 	}
 
 	handleInputChange = event => {
-		this.setState({ [event.target.name]: event.target.value });
+		this.setState({
+			[event.target.name]: event.target.value
+				.replace(/\s\s+/g, ' ')
+				.replace(/\n\s*\n/g, ' ')
+				.trim()
+		});
 	};
 
 	handleMultiLineInputChange = event => {
-		this.setState({ [event.target.name]: event.target.value.split(/\r?\n/) });
+		this.setState({
+			[event.target.name]: event.target.value
+				.replace(/\n\s*\n/g, '\n')
+				.replace(/\s\s+/g, ' ')
+				.trim()
+				.split(/\r?\n/)
+		});
 	};
 
 	handleButtonChange = event => {
-		const value = event.target.value === 'private' ? true : false;
+		const value = event.target.value === 'private';
 		this.setState({ shared: value });
 	};
 
@@ -193,7 +204,6 @@ class NewRecipe extends Component {
 			.catch(error => {
 				this.setState({ errors: { save: error } });
 			});
-
 		event.preventDefault();
 	};
 
