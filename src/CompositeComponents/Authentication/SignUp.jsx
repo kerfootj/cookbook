@@ -24,12 +24,16 @@ class SignUp extends Component {
 	}
 
 	onSubmit(e) {
-		const { email, passwordOne } = this.state;
+		const { email, passwordOne, username } = this.state;
 		const { firebase, history } = this.props;
 
 		firebase
 			.doCreateUserWithEmailAndPassword(email, passwordOne)
-			.then(authUser => {
+			.then(() => {
+				let authUser = firebase.auth.currentUser;
+				authUser.updateProfile({
+					displayName: username
+				});
 				this.setState({ ...INITIAL_STATE });
 				history.push('/');
 			})
