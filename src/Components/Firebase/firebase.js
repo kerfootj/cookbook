@@ -11,7 +11,11 @@ class Firebase {
 	constructor() {
 		app.initializeApp(config);
 		this.auth = app.auth();
+		this.googleProvider = new app.auth.GoogleAuthProvider();
 	}
+
+	doSignInWithGoogle = () =>
+		this.auth.signInWithPopup(this.googleProvider);
 
 	doCreateUserWithEmailAndPassword = (email, password) =>
 		this.auth.createUserWithEmailAndPassword(email, password);

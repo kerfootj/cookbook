@@ -22,7 +22,7 @@ class SignIn extends Component {
 		return password === '' || email === '';
 	}
 
-	onSubmit(e) {
+	onSubmitEmail(e) {
 		const { email, password } = this.state;
 		const { firebase, history } = this.props;
 
@@ -40,6 +40,20 @@ class SignIn extends Component {
 		e.preventDefault();
 	}
 
+	onSubmitGoogle(e) {
+		const { firebase, history } = this.props;
+		firebase
+			.doSignInWithGoogle()
+			.then(authUser => {
+				this.setState({ ...INITIAL_STATE });
+				history.push('/');
+			})
+			.catch(error => {
+				console.log(error);
+				this.setState({ error });
+			});
+	}
+
 	handleInputChange(e) {
 		this.setState({ [e.target.name]: e.target.value });
 	}
@@ -48,7 +62,7 @@ class SignIn extends Component {
 		const { error } = this.state;
 		return (
 			<>
-				<form onSubmit={e => this.onSubmit(e)}>
+				<form onSubmit={e => this.onSubmitEmail(e)}>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
 							<TextField
@@ -80,6 +94,7 @@ class SignIn extends Component {
 					</Grid>
 					{error && <p>{error.message}</p>}
 				</form>
+				<Button onClick={e => this.onSubmitGoogle(e)}>Sign In With Google</Button>
 				<Typography variant='body2'>
 					New to mycookbook? <Link to='/signup'>SIGN UP</Link>
 				</Typography>
