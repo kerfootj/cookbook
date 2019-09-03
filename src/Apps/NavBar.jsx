@@ -42,7 +42,7 @@ class NavBar extends Component {
 							</Button>
 						</Grid>
 						<Grid item>
-							<SignIn />
+							<SignIn buttonText='Log In' />
 						</Grid>
 					</Grid>
 				</div>

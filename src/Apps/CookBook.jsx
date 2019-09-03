@@ -4,7 +4,9 @@ import React, { Component } from 'react';
 import Card from '../CompositeComponents/ImageCard';
 import { Link } from 'react-router-dom';
 import NewRecipe from './NewRecipe';
+import SignIn from './SignIn';
 import axios from 'axios';
+import { withFirebase } from '../Components/Firebase';
 import { withStyles } from '@material-ui/styles';
 
 const styles = {
@@ -36,6 +38,20 @@ class CookBook extends Component {
 			});
 	}
 
+	renderAddRecipe() {
+		const { firebase, classes } = this.props;
+		if (firebase.auth.currentUser) {
+			return (
+				<Button variant='contained' color='secondary'>
+					<Link to='/new' component={NewRecipe} className={classes.link}>
+						Add Recipe
+					</Link>
+				</Button>
+			);
+		}
+		return <SignIn buttonText='Add Recipe' />;
+	}
+
 	renderCards() {
 		const { classes } = this.props;
 		const { recipes } = this.state;
@@ -58,7 +74,6 @@ class CookBook extends Component {
 	}
 
 	render() {
-		const { classes } = this.props;
 		const { loading } = this.state;
 
 		if (loading) {
@@ -73,15 +88,10 @@ class CookBook extends Component {
 					</Grid>
 					<Grid item xl={1} />
 				</Grid>
-
-				<Button variant='contained' color='secondary'>
-					<Link to='/new' component={NewRecipe} className={classes.link}>
-						Add Recipe
-					</Link>
-				</Button>
+				{this.renderAddRecipe()}
 			</>
 		);
 	}
 }
 
-export default withStyles(styles)(CookBook);
+export default withStyles(styles)(withFirebase(CookBook));

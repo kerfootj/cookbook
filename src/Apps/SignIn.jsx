@@ -15,7 +15,7 @@ const styles = {
 	}
 };
 
-const SignIn = ({ classes }) => {
+const SignIn = ({ classes, buttonText }) => {
 	const [open, setOpen] = React.useState(false);
 
 	const handleOpen = () => {
@@ -29,7 +29,7 @@ const SignIn = ({ classes }) => {
 	return (
 		<>
 			<Button variant='contained' color='secondary' onClick={handleOpen}>
-				Log In
+				{buttonText}
 			</Button>
 			<Modal open={open} onClose={handleClose}>
 				<Paper className={classes.modal}>
