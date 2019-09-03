@@ -52,7 +52,6 @@ const RecipeOptions = ({
 				<TextField
 					required
 					fullWidth
-					input
 					variant='outlined'
 					placeholder='15m'
 					name='prep'
