@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import CookBook from './CookBook';
+import Cookbook from './Cookbook';
 import { Link } from 'react-router-dom';
 import SignIn from './SignIn';
 import SignOut from '../CompositeComponents/Authentication/SignOut';
@@ -59,8 +59,8 @@ class NavBar extends Component {
 				<Toolbar>
 					<div className={classes.title}>
 						<Button color='primary'>
-							<Link to='/' component={CookBook} className={classes.link}>
-								My Cook Book
+							<Link to='/' component={Cookbook} className={classes.link}>
+								My Cookbook
 							</Link>
 						</Button>
 					</div>

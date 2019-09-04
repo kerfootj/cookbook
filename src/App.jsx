@@ -2,7 +2,7 @@ import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import React, { Component } from 'react';
 import { blue, indigo } from '@material-ui/core/colors';
 
-import CookBook from './Apps/CookBook';
+import Cookbook from './Apps/Cookbook';
 import Helmet from 'react-helmet';
 import NavBar from './Apps/NavBar';
 import NewRecipe from './Apps/NewRecipe';
@@ -61,7 +61,7 @@ class App extends Component {
 						<nav>
 							<ul>
 								<li>
-									<Link to='/' component={CookBook}>
+									<Link to='/' component={Cookbook}>
 										Home
 									</Link>
 								</li>
@@ -71,7 +71,7 @@ class App extends Component {
 							</ul>
 						</nav>
 						<Switch>
-							<Route exact path={process.env.PUBLIC_URL + '/'} component={CookBook} />
+							<Route exact path={process.env.PUBLIC_URL + '/'} component={Cookbook} />
 							<Route path={process.env.PUBLIC_URL + '/signup'} component={SignUp} />
 							<Route
 								path={process.env.PUBLIC_URL + '/recipe/:recipeId'}

@@ -19,7 +19,7 @@ const styles = {
 	}
 };
 
-class CookBook extends Component {
+class Cookbook extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { loading: true };
@@ -94,4 +94,4 @@ class CookBook extends Component {
 	}
 }
 
-export default withStyles(styles)(withFirebase(CookBook));
+export default withStyles(styles)(withFirebase(Cookbook));
