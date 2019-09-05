@@ -135,7 +135,7 @@ class SignIn extends Component {
 						fullWidth
 						type='submit'
 						variant='contained'
-						color='primary'
+						color='secondary'
 						onClick={changeForm}
 					>
 						Sign Up

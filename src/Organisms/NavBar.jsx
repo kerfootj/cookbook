@@ -19,7 +19,13 @@ const styles = {
 	},
 	link: {
 		textDecoration: 'none',
-		all: 'inherit'
+		all: 'inherit',
+		color: '#202020'
+	},
+	logo: {
+		width: '28px',
+		height: 'auto',
+		paddingRight: '9px'
 	}
 };
 
@@ -51,9 +57,14 @@ class NavBar extends Component {
 			<AppBar color='default' className={classes.nav}>
 				<Toolbar>
 					<div className={classes.title}>
-						<Button color='primary'>
+						<Button color='secondary'>
 							<Link to='/' component={Cookbook} className={classes.link}>
-								My Cookbook
+								<img
+									src={`${process.env.PUBLIC_URL}/favicon.ico`}
+									alt='logo'
+									className={classes.logo}
+								/>
+								<b>My Cookbook</b>
 							</Link>
 						</Button>
 					</div>

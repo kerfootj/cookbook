@@ -1,6 +1,5 @@
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import React, { Component } from 'react';
-import { blue, indigo } from '@material-ui/core/colors';
 
 import Cookbook from './Pages/Cookbook';
 import Helmet from 'react-helmet';
@@ -15,10 +14,10 @@ import { withFirebase } from './Atoms/Firebase/index';
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: indigo[500]
+			main: '#1565c0'
 		},
 		secondary: {
-			main: blue[700]
+			main: '#37474f'
 		}
 	},
 	overrides: {

@@ -13,6 +13,13 @@ import { withStyles } from '@material-ui/styles';
 const styles = {
 	container: {
 		backgroundColor: '#FFFFFF'
+	},
+	cancel: {
+		color: '#fff',
+		backgroundColor: '#b71c1c',
+		'&:hover': {
+			backgroundColor: '#d50000'
+		}
 	}
 };
 
@@ -289,7 +296,7 @@ class NewRecipe extends Component {
 							<Grid item style={{ paddingTop: 30 }}>
 								<Button
 									variant='contained'
-									color='secondary'
+									className={classes.cancel}
 									style={{ paddingLeft: 38, paddingRight: 38 }}
 									onClick={this.cancelRecipe}
 								>

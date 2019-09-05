@@ -57,7 +57,7 @@ class Auth extends Component {
 			<>
 				<Button
 					variant='contained'
-					color='secondary'
+					color='primary'
 					onClick={() => {
 						this.setState({ open: true });
 					}}
