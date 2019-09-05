@@ -1,10 +1,10 @@
 import { Button, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
+import Auth from '../CompositeComponents/Authentication/Auth';
 import Card from '../CompositeComponents/ImageCard';
 import { Link } from 'react-router-dom';
 import NewRecipe from './NewRecipe';
-import SignIn from './SignIn';
 import axios from 'axios';
 import { withFirebase } from '../Components/Firebase';
 import { withStyles } from '@material-ui/styles';
@@ -49,7 +49,7 @@ class Cookbook extends Component {
 				</Button>
 			);
 		}
-		return <SignIn buttonText='Add Recipe' />;
+		return <Auth buttonText='Add Recipe' create={false} />;
 	}
 
 	renderCards() {

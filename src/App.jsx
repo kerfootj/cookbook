@@ -8,7 +8,6 @@ import NavBar from './Apps/NavBar';
 import NewRecipe from './Apps/NewRecipe';
 import PrivateRoute from './Components/PrivateRoute';
 import Recipe from './Apps/Recipe';
-import SignUp from './CompositeComponents/Authentication/SignUp';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { withFirebase } from './Components/Firebase';
@@ -72,7 +71,6 @@ class App extends Component {
 						</nav>
 						<Switch>
 							<Route exact path={process.env.PUBLIC_URL + '/'} component={Cookbook} />
-							<Route path={process.env.PUBLIC_URL + '/signup'} component={SignUp} />
 							<Route
 								path={process.env.PUBLIC_URL + '/recipe/:recipeId'}
 								component={Recipe}

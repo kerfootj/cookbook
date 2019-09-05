@@ -2,10 +2,10 @@ import { Grid, withStyles } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
+import Auth from '../CompositeComponents/Authentication/Auth';
 import Button from '@material-ui/core/Button';
 import Cookbook from './Cookbook';
 import { Link } from 'react-router-dom';
-import SignIn from './SignIn';
 import SignOut from '../CompositeComponents/Authentication/SignOut';
 import Toolbar from '@material-ui/core/Toolbar';
 
@@ -35,14 +35,10 @@ class NavBar extends Component {
 				<div className={classes.user}>
 					<Grid container spacing={1}>
 						<Grid item>
-							<Button variant='contained' color='secondary'>
-								<Link to='/signup' className={classes.link}>
-									Sign Up
-								</Link>
-							</Button>
+							<Auth buttonText='Sign Up' create={true} />
 						</Grid>
 						<Grid item>
-							<SignIn buttonText='Log In' />
+							<Auth buttonText='Log In' create={false} />
 						</Grid>
 					</Grid>
 				</div>
