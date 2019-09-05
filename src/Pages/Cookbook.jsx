@@ -1,12 +1,12 @@
 import { Button, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
-import Auth from '../CompositeComponents/Authentication/Auth';
-import Card from '../CompositeComponents/ImageCard';
+import Auth from '../Organisms/Auth';
+import Card from '../Molecules/ImageCard';
 import { Link } from 'react-router-dom';
 import NewRecipe from './NewRecipe';
 import axios from 'axios';
-import { withFirebase } from '../Components/Firebase';
+import { withFirebase } from '../Atoms/Firebase';
 import { withStyles } from '@material-ui/styles';
 
 const styles = {

@@ -2,15 +2,15 @@ import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import React, { Component } from 'react';
 import { blue, indigo } from '@material-ui/core/colors';
 
-import Cookbook from './Apps/Cookbook';
+import Cookbook from './Pages/Cookbook';
 import Helmet from 'react-helmet';
-import NavBar from './Apps/NavBar';
-import NewRecipe from './Apps/NewRecipe';
-import PrivateRoute from './Components/PrivateRoute';
-import Recipe from './Apps/Recipe';
+import NavBar from './Organisms/NavBar';
+import NewRecipe from './Pages/NewRecipe';
+import PrivateRoute from './Atoms/PrivateRoute';
+import Recipe from './Pages/Recipe';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
-import { withFirebase } from './Components/Firebase';
+import { withFirebase } from './Atoms/Firebase/index';
 
 const theme = createMuiTheme({
 	palette: {

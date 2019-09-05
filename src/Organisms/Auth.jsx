@@ -1,8 +1,8 @@
 import { Button, Modal, Paper, withStyles } from '@material-ui/core';
 import React, { Component } from 'react';
 
-import SignInForm from './SignInForm';
-import SignUpForum from './SignUpForum';
+import SignInForm from '../Molecules/Authentication/SignInForm';
+import SignUpForum from '../Molecules/Authentication/SignUpForum';
 
 const styles = theme => ({
 	modal: {

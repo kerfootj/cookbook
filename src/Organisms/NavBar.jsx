@@ -1,13 +1,10 @@
-import { Grid, withStyles } from '@material-ui/core';
+import { AppBar, Button, Grid, Toolbar, withStyles } from '@material-ui/core';
 import React, { Component } from 'react';
 
-import AppBar from '@material-ui/core/AppBar';
-import Auth from '../CompositeComponents/Authentication/Auth';
-import Button from '@material-ui/core/Button';
-import Cookbook from './Cookbook';
+import Auth from './Auth';
+import Cookbook from '../Pages/Cookbook';
 import { Link } from 'react-router-dom';
-import SignOut from '../CompositeComponents/Authentication/SignOut';
-import Toolbar from '@material-ui/core/Toolbar';
+import SignOut from '../Molecules/Authentication/SignOut';
 
 const styles = {
 	nav: {

@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Typography } from '@material-ui/core';
+import { Button, Grid, TextField, Typography, withStyles } from '@material-ui/core';
 import {
 	FacebookLoginButton,
 	GoogleLoginButton,
@@ -6,39 +6,39 @@ import {
 } from 'react-social-login-buttons';
 import React, { Component } from 'react';
 
-import { withFirebase } from '../../Components/Firebase';
+import { withFirebase } from '../../Atoms/Firebase';
 import { withRouter } from 'react-router-dom';
 
+const styles = {
+	signUp: {
+		paddingTop: '1em'
+	}
+};
+
 const INITIAL_STATE = {
-	username: '',
 	email: '',
-	passwordOne: '',
-	passwordTwo: '',
+	password: '',
 	error: null
 };
 
-class SignUpForm extends Component {
+class SignIn extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { ...INITIAL_STATE };
 	}
 
 	isInvalid() {
-		const { username, email, passwordOne, passwordTwo } = this.state;
-		return passwordOne !== passwordTwo || passwordOne === '' || email === '' || username === '';
+		const { email, password } = this.state;
+		return password === '' || email === '';
 	}
 
 	onSubmitEmail(e) {
-		const { email, passwordOne, username } = this.state;
+		const { email, password } = this.state;
 		const { firebase, history } = this.props;
 
 		firebase
-			.doCreateUserWithEmailAndPassword(email, passwordOne)
+			.doSignInWithEmailAndPassword(email, password)
 			.then(() => {
-				let authUser = firebase.auth.currentUser;
-				authUser.updateProfile({
-					displayName: username
-				});
 				this.setState({ ...INITIAL_STATE });
 				history.push('/');
 			})
@@ -68,7 +68,7 @@ class SignUpForm extends Component {
 	}
 
 	render() {
-		const { changeForm } = this.props;
+		const { classes, changeForm } = this.props;
 		const { error } = this.state;
 		return (
 			<>
@@ -76,37 +76,27 @@ class SignUpForm extends Component {
 					<FacebookLoginButton
 						align='center'
 						onClick={() => alert("Sorry Facebook isn't supported yet")}
-					>
-						<span>Sign up with Facebook</span>
-					</FacebookLoginButton>
+					></FacebookLoginButton>
 					<TwitterLoginButton
 						align='center'
 						onClick={() => alert("Sorry Twitter isn't supported yet")}
-					>
-						<span>Sign up with Twitter</span>
-					</TwitterLoginButton>
-					<GoogleLoginButton align='center' onClick={e => this.onSubmitGoogle(e)}>
-						<span>Sign up with Google</span>
-					</GoogleLoginButton>
+					/>
+					<GoogleLoginButton
+						align='center'
+						onClick={e => this.onSubmitGoogle(e)}
+					></GoogleLoginButton>
 				</div>
 
 				<br />
 				<hr />
 				<br />
 
-				<form onSubmit={e => this.onSubmit(e)}>
+				<form onSubmit={e => this.onSubmitEmail(e)}>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
 							<TextField
-								fullWidth
-								variant='outlined'
-								name='username'
-								placeholder='Username'
-								onChange={e => this.handleInputChange(e)}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
+								autoComplete
+								autoFocus
 								fullWidth
 								variant='outlined'
 								name='email'
@@ -116,21 +106,12 @@ class SignUpForm extends Component {
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
+								autoComplete
 								fullWidth
 								variant='outlined'
 								type='password'
-								name='passwordOne'
+								name='password'
 								placeholder='Password'
-								onChange={e => this.handleInputChange(e)}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								fullWidth
-								variant='outlined'
-								type='password'
-								name='passwordTwo'
-								placeholder='Confirm Password'
 								onChange={e => this.handleInputChange(e)}
 							/>
 						</Grid>
@@ -142,26 +123,27 @@ class SignUpForm extends Component {
 								variant='contained'
 								color='primary'
 							>
-								Create Account
-							</Button>
-						</Grid>
-						<Grid item xs={12}>
-							<Typography variant='body1'>Already have an account?</Typography>
-							<Button
-								fullWidth
-								variant='contained'
-								color='primary'
-								onClick={changeForm}
-							>
-								Sign In
+								Login
 							</Button>
 						</Grid>
 					</Grid>
 					{error && <p>{error.message}</p>}
 				</form>
+				<div className={classes.signUp}>
+					<Typography variant='body1'>New to mycookbook?</Typography>
+					<Button
+						fullWidth
+						type='submit'
+						variant='contained'
+						color='primary'
+						onClick={changeForm}
+					>
+						Sign Up
+					</Button>
+				</div>
 			</>
 		);
 	}
 }
 
-export default withRouter(withFirebase(SignUpForm));
+export default withStyles(styles)(withRouter(withFirebase(SignIn)));

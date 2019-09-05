@@ -2,12 +2,12 @@ import { Button, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import Compress from 'compress.js';
-import ImageUpload from '../CompositeComponents/ImageUpload';
-import RecipeDetails from '../CompositeComponents/RecipeDetails';
-import RecipeOptions from '../CompositeComponents/RecipeOptions';
+import ImageUpload from '../Molecules/ImageUpload';
+import RecipeDetails from '../Molecules/RecipeDetails';
+import RecipeOptions from '../Molecules/RecipeOptions';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
-import { withFirebase } from '../Components/Firebase';
+import { withFirebase } from '../Atoms/Firebase';
 import { withStyles } from '@material-ui/styles';
 
 const styles = {
