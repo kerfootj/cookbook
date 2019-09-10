@@ -3,13 +3,14 @@ import React, { Component } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import TextTruncate from 'react-text-truncate';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/styles';
 
 const styles = {
 	card: {
 		maxWidth: 345,
-		height: '100%'
+		height: 430
 	},
 	media: {
 		height: 300,
@@ -28,7 +29,7 @@ class ImageCard extends Component {
 						{title}
 					</Typography>
 					<Typography variant='body2' color='textSecondary' component='p'>
-						{description}
+						<TextTruncate line={3} truncateText='…' text={description}></TextTruncate>
 					</Typography>
 				</CardContent>
 			</Card>
