@@ -6,6 +6,7 @@ import {
 } from 'react-social-login-buttons';
 import React, { Component } from 'react';
 
+import axios from 'axios';
 import { withFirebase } from '../../Atoms/Firebase';
 import { withRouter } from 'react-router-dom';
 
@@ -39,7 +40,9 @@ class SignIn extends Component {
 		firebase
 			.doSignInWithEmailAndPassword(email, password)
 			.then(() => {
+				let authUser = firebase.auth.currentUser;
 				this.setState({ ...INITIAL_STATE });
+				this.updateUser(authUser);
 				history.push('/');
 			})
 			.catch(error => {
@@ -54,13 +57,22 @@ class SignIn extends Component {
 		firebase
 			.doSignInWithGoogle()
 			.then(() => {
+				let authUser = firebase.auth.currentUser;
 				this.setState({ ...INITIAL_STATE });
+				this.updateUser(authUser);
 				history.push('/');
 			})
 			.catch(error => {
 				console.log(error);
 				this.setState({ error });
 			});
+	}
+
+	updateUser(authUser) {
+		axios.post('https://joel-cookbook-server.herokuapp.com/user', {
+			uid: authUser.uid,
+			name: authUser.displayName
+		});
 	}
 
 	handleInputChange(e) {
