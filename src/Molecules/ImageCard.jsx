@@ -28,7 +28,7 @@ class ImageCard extends Component {
 					<Typography gutterBottom variant='h5' component='h2'>
 						{title}
 					</Typography>
-					<Typography variant='body2' color='textSecondary' component='p'>
+					<Typography variant='body2' color='textSecondary' component='span'>
 						<TextTruncate line={3} truncateText='…' text={description}></TextTruncate>
 					</Typography>
 				</CardContent>
