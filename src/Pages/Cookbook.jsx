@@ -36,6 +36,21 @@ class Cookbook extends Component {
 			.catch(error => {
 				this.setState({ error: error });
 			});
+		axios
+			.get('http://localhost:8080/user')
+			.then(response => {
+				console.log('here');
+				let users = {};
+				let photos = {};
+				response.data.forEach(user => {
+					users[user.uid] = user.name;
+					photos[user.uid] = user.photo;
+				});
+				this.setState({ users: users, photos: photos });
+			})
+			.catch(error => {
+				this.setState({ error: error });
+			});
 	}
 
 	renderAddRecipe() {
@@ -54,7 +69,7 @@ class Cookbook extends Component {
 
 	renderCards() {
 		const { classes } = this.props;
-		const { recipes } = this.state;
+		const { recipes, users, photos } = this.state;
 
 		return recipes.map(recipe => (
 			<Grid item key={recipe._id} className={classes.card}>
@@ -67,6 +82,8 @@ class Cookbook extends Component {
 						}
 						title={recipe.title}
 						description={recipe.description}
+						name={users[recipe.uid]}
+						profilePic={photos[recipe.uid]}
 					/>
 				</Link>
 			</Grid>
