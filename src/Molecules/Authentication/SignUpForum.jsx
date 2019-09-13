@@ -70,7 +70,8 @@ class SignUpForm extends Component {
 	updateUser(authUser) {
 		axios.post('https://joel-cookbook-server.herokuapp.com/user', {
 			uid: authUser.uid,
-			name: authUser.displayName
+			name: authUser.displayName,
+			photo: authUser.photoURL
 		});
 	}
 
@@ -118,6 +119,7 @@ class SignUpForm extends Component {
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
+								autoComplete='email'
 								fullWidth
 								variant='outlined'
 								name='email'
@@ -127,6 +129,7 @@ class SignUpForm extends Component {
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
+								autoComplete='new-password'
 								fullWidth
 								variant='outlined'
 								type='password'
@@ -137,6 +140,7 @@ class SignUpForm extends Component {
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
+								autoComplete='new-password'
 								fullWidth
 								variant='outlined'
 								type='password'

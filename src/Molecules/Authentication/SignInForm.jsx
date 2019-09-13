@@ -71,7 +71,8 @@ class SignIn extends Component {
 	updateUser(authUser) {
 		axios.post('https://joel-cookbook-server.herokuapp.com/user', {
 			uid: authUser.uid,
-			name: authUser.displayName
+			name: authUser.displayName,
+			photo: authUser.photoURL
 		});
 	}
 
@@ -107,7 +108,7 @@ class SignIn extends Component {
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
 							<TextField
-								autoComplete
+								autoComplete='email'
 								autoFocus
 								fullWidth
 								variant='outlined'
@@ -118,7 +119,7 @@ class SignIn extends Component {
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
-								autoComplete
+								autoComplete='current-password'
 								fullWidth
 								variant='outlined'
 								type='password'
