@@ -37,7 +37,7 @@ class Cookbook extends Component {
 				this.setState({ error: error });
 			});
 		axios
-			.get('http://localhost:8080/user')
+			.get('https://joel-cookbook-server.herokuapp.com/user')
 			.then(response => {
 				console.log('here');
 				let users = {};
