@@ -82,8 +82,8 @@ class Cookbook extends Component {
 						}
 						title={recipe.title}
 						description={recipe.description}
-						name={users[recipe.uid]}
-						profilePic={photos[recipe.uid]}
+						name={users ? users[recipe.uid] : undefined}
+						profilePic={photos ? photos[recipe.uid] : undefined}
 					/>
 				</Link>
 			</Grid>
