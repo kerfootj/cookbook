@@ -1,8 +1,8 @@
 {
-	"name": "cookbook-frontend",
-	"version": "0.1.0",
+	"name": "my-cookbook",
+	"version": "0.2.0",
 	"private": false,
-	"homepage": "http://www.mycookbook.xyz",
+	"homepage": "https://www.mycookbook.xyz/",
 	"dependencies": {
 		"@material-ui/core": "^4.1.0",
 		"@material-ui/icons": "^4.1.0",
