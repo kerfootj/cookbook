@@ -5,6 +5,7 @@ import Auth from '../Organisms/Auth';
 import Card from '../Molecules/ImageCard';
 import { Link } from 'react-router-dom';
 import NewRecipe from './NewRecipe';
+import ReactGA from 'react-ga';
 import axios from 'axios';
 import { withFirebase } from '../Atoms/Firebase';
 import { withStyles } from '@material-ui/styles';
@@ -28,6 +29,7 @@ class Cookbook extends Component {
 	// https://joel-cookbook-server.herokuapp.com
 
 	componentDidMount() {
+		this.initializeGA();
 		axios
 			.get('https://joel-cookbook-server.herokuapp.com/recipe')
 			.then(response => {
@@ -39,7 +41,6 @@ class Cookbook extends Component {
 		axios
 			.get('https://joel-cookbook-server.herokuapp.com/user')
 			.then(response => {
-				console.log('here');
 				let users = {};
 				let photos = {};
 				response.data.forEach(user => {
@@ -51,6 +52,11 @@ class Cookbook extends Component {
 			.catch(error => {
 				this.setState({ error: error });
 			});
+	}
+
+	initializeGA() {
+		ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS);
+		ReactGA.pageview(window.location.pathname + window.location.search);
 	}
 
 	renderAddRecipe() {
