@@ -11,7 +11,8 @@ import { withFirebase } from '../../Atoms/Firebase/';
 import { withRouter } from 'react-router-dom';
 
 const INITIAL_STATE = {
-	username: '',
+	firstName: '',
+	lastName: '',
 	email: '',
 	passwordOne: '',
 	passwordTwo: '',
@@ -25,12 +26,15 @@ class SignUpForm extends Component {
 	}
 
 	isInvalid() {
-		const { username, email, passwordOne, passwordTwo } = this.state;
-		return passwordOne !== passwordTwo || passwordOne === '' || email === '' || username === '';
+		const { firstName, lastName, email, passwordOne, passwordTwo } = this.state;
+		return (
+			passwordOne !== passwordTwo || passwordOne === '' || email === '' || firstName === '',
+			lastName === ''
+		);
 	}
 
 	onSubmitEmail(e) {
-		const { email, passwordOne, username } = this.state;
+		const { email, passwordOne, firstName, lastName } = this.state;
 		const { firebase, history } = this.props;
 
 		firebase
@@ -38,7 +42,7 @@ class SignUpForm extends Component {
 			.then(() => {
 				let authUser = firebase.auth.currentUser;
 				authUser.updateProfile({
-					displayName: username
+					displayName: `${firstName} ${lastName}`
 				});
 				this.setState({ ...INITIAL_STATE });
 				this.updateUser(authUser);
@@ -108,12 +112,21 @@ class SignUpForm extends Component {
 
 				<form onSubmit={e => this.onSubmit(e)}>
 					<Grid container spacing={2}>
-						<Grid item xs={12}>
+						<Grid item xs={12} sm={6}>
 							<TextField
 								fullWidth
 								variant='outlined'
-								name='username'
-								placeholder='Username'
+								name='firstName'
+								placeholder='First Name'
+								onChange={e => this.handleInputChange(e)}
+							/>
+						</Grid>
+						<Grid item xs={12} sm={6}>
+							<TextField
+								fullWidth
+								variant='outlined'
+								name='lastName'
+								placeholder='Last Name'
 								onChange={e => this.handleInputChange(e)}
 							/>
 						</Grid>
