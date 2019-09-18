@@ -14,12 +14,13 @@ const styles = {
 		padding: 10
 	},
 	imageContainer: {
-		textAlign: 'right'
+		width: 550,
+		height: 360
 	},
 	image: {
-		maxWidth: '100%',
-		maxHeight: 400,
-		height: 'auto'
+		width: '100%',
+		height: '100%',
+		objectFit: 'cover'
 	}
 };
 
@@ -83,16 +84,18 @@ class Recipe extends Component {
 						<Typography variant='h5'>{title}</Typography>
 						<Typography variant='body1'>{description}</Typography>
 					</Grid>
-					<Grid item className={classes.imageContainer} xs={12} lg={7}>
-						<img
-							src={
-								image.id
-									? `https://i.imgur.com/${image.id}.jpg`
-									: 'https://i.imgur.com/6MEHGTJ.jpg'
-							}
-							alt={title}
-							className={classes.image}
-						/>
+					<Grid item xs={12} lg={7}>
+						<div className={classes.imageContainer}>
+							<img
+								className={classes.image}
+								alt={title}
+								src={
+									image.id
+										? `https://i.imgur.com/${image.id}.jpg`
+										: 'https://i.imgur.com/6MEHGTJ.jpg'
+								}
+							/>
+						</div>
 					</Grid>
 					<hr />
 					<Grid container item xs={12}>
