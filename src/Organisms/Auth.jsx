@@ -5,22 +5,37 @@ import SignInForm from '../Molecules/Authentication/SignInForm';
 import SignUpForum from '../Molecules/Authentication/SignUpForum';
 
 const styles = theme => ({
-	modal: {
+	paper: {
 		[theme.breakpoints.up('xs')]: {
-			top: `${10}%`,
-			left: `${10}%`,
-			transform: `translate(-${5}%, -${5}%)`
+			top: '5%',
+			left: '5%',
+			right: '5%',
+			padding: '1em',
+			marginBottom: '5%'
 		},
-		[theme.breakpoints.up('sm')]: {
+		[theme.breakpoints.up('md')]: {
 			top: `${50}%`,
 			left: `${50}%`,
-			transform: `translate(-${50}%, -${50}%)`
+			transform: `translate(-${50}%, -${50}%)`,
+			padding: '2em'
 		},
 		position: 'absolute',
-		padding: '2em',
-		maxWidth: 350,
+
 		border: '1px solid #000',
 		outline: 'none'
+	},
+	modal: {
+		overflow: 'scroll'
+	},
+	signIn: {
+		[theme.breakpoints.up('md')]: {
+			maxWidth: 350
+		}
+	},
+	signUp: {
+		[theme.breakpoints.up('md')]: {
+			maxWidth: 450
+		}
 	}
 });
 
@@ -52,7 +67,7 @@ class Auth extends Component {
 
 	render() {
 		const { buttonText, classes } = this.props;
-		const { open } = this.state;
+		const { create, open } = this.state;
 		return (
 			<>
 				<Button
@@ -65,12 +80,17 @@ class Auth extends Component {
 					{buttonText}
 				</Button>
 				<Modal
+					className={classes.modal}
 					open={open}
 					onClose={() => {
 						this.setState({ open: false });
 					}}
 				>
-					<Paper className={classes.modal}>{this.renderForm()}</Paper>
+					<Paper
+						className={`${classes.paper} ${create ? classes.signUp : classes.signIn}`}
+					>
+						{this.renderForm()}
+					</Paper>
 				</Modal>
 			</>
 		);
