@@ -1,6 +1,7 @@
 import { Grid, Paper, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 
+import Carousel from '../Organisms/Carousel';
 import Clock from '@material-ui/icons/Schedule';
 import PieChart from '@material-ui/icons/PieChartOutlined';
 import axios from 'axios';
@@ -13,9 +14,16 @@ const styles = {
 		paddingTop: 17,
 		padding: 10
 	},
+	wrapper: {
+		display: 'flex'
+	},
+	textContainer: {
+		flex: '0 0 42%'
+	},
 	imageContainer: {
-		width: 550,
-		height: 360
+		flex: 1,
+		maxWidth: 550,
+		maxHeight: 360
 	},
 	image: {
 		width: '100%',
@@ -80,50 +88,25 @@ class Recipe extends Component {
 		return (
 			<Paper square className={classes.paper}>
 				<Grid container spacing={2}>
-					<Grid item xs={12} lg={5}>
-						<Typography variant='h5'>{title}</Typography>
-						<Typography variant='body1'>{description}</Typography>
-					</Grid>
-					<Grid item xs={12} lg={7}>
-						<div className={classes.imageContainer}>
-							<img
-								className={classes.image}
-								alt={title}
-								src={
-									image.id
-										? `https://i.imgur.com/${image.id}.jpg`
-										: 'https://i.imgur.com/6MEHGTJ.jpg'
-								}
-							/>
+					<Grid item xs={12} style={{ paddingBottom: 70 }}>
+						<div className={classes.wrapper}>
+							<div className={classes.textContainer}>
+								<Typography variant='h5'>{title}</Typography>
+								<Typography variant='body1'>{description}</Typography>
+							</div>
+							<div className={classes.imageContainer}>
+								<Carousel
+									alt={title}
+									images={[
+										image.id
+											? `https://i.imgur.com/${image.id}.jpg`
+											: 'https://i.imgur.com/6MEHGTJ.jpg'
+									]}
+								/>
+							</div>
 						</div>
 					</Grid>
 					<hr />
-					<Grid container item xs={12}>
-						<Grid
-							item
-							xs={3}
-							style={{
-								backgroundColor: '#4185f2',
-								textAlign: 'center',
-								paddingTop: 20,
-								paddingBottom: 20
-							}}
-						>
-							Save
-						</Grid>
-						<Grid
-							item
-							xs={3}
-							style={{
-								backgroundColor: '#F1F1F1',
-								textAlign: 'center',
-								paddingTop: 20,
-								paddingBottom: 20
-							}}
-						>
-							Made It
-						</Grid>
-					</Grid>
 					<br />
 					<Grid item xs={12}>
 						<Grid container justify='space-between'>
