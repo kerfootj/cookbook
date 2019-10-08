@@ -15,12 +15,20 @@ const styles = {
 	},
 	boarderSolid: {
 		border: '1px solid #021a40'
+	},
+	contatiner: { 
+		position: 'relative' 
+	},
+	loading: {
+		position: 'absolute', 
+		left: '37%', 
+		top: '43%'
 	}
 };
 
 const ImageUpload = ({ classes, image, uploading }) => {
 	return (
-		<div style={{ position: 'relative' }}>
+		<div className={classes.contatiner}>
 			<img
 				src={
 					image
@@ -37,7 +45,7 @@ const ImageUpload = ({ classes, image, uploading }) => {
 			{uploading && (
 				<CircularProgress
 					color='primary'
-					style={{ position: 'absolute', left: '37%', top: '43%' }}
+					className={classes.loading}
 				/>
 			)}
 		</div>

@@ -15,6 +15,9 @@ import { withStyles } from '@material-ui/styles';
 const styles = {
 	rightIcon: {
 		marginLeft: 4
+	},
+	upload: {
+		display: 'none'
 	}
 };
 const RecipeOptions = ({
@@ -29,7 +32,7 @@ const RecipeOptions = ({
 		<>
 			<Grid item xs={12}>
 				<input
-					style={{ display: 'none' }}
+					className={classes.upload}
 					accept='image/*'
 					id='raised-button-file'
 					type='file'

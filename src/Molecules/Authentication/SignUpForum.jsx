@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Typography } from '@material-ui/core';
+import { Button, Grid, TextField, Typography, withStyles } from '@material-ui/core';
 import {
 	FacebookLoginButton,
 	GoogleLoginButton,
@@ -9,6 +9,13 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withFirebase } from '../../Atoms/Firebase/';
 import { withRouter } from 'react-router-dom';
+
+const styles = {
+	socialContainer: {
+		flexGrow: 1, 
+		textAlign: 'center'
+	},
+};
 
 const INITIAL_STATE = {
 	firstName: '',
@@ -84,11 +91,11 @@ class SignUpForm extends Component {
 	}
 
 	render() {
-		const { changeForm } = this.props;
+		const { classes, changeForm } = this.props;
 		const { error } = this.state;
 		return (
 			<>
-				<div style={{ flexGrow: 1, textAlign: 'center' }}>
+				<div className={classes.socialContainer}>
 					<FacebookLoginButton
 						align='center'
 						onClick={() => alert("Sorry Facebook isn't supported yet")}
@@ -192,4 +199,4 @@ class SignUpForm extends Component {
 	}
 }
 
-export default withRouter(withFirebase(SignUpForm));
+export default withStyles(styles)(withRouter(withFirebase(SignUpForm)));

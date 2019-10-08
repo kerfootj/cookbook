@@ -20,6 +20,10 @@ const styles = {
 		maxWidth: '100%',
 		maxHeight: 400,
 		height: 'auto'
+	},
+	timing: {
+		borderRight: '0.05em solid black',
+		paddingRight: '0.8em'
 	}
 };
 
@@ -95,32 +99,6 @@ class Recipe extends Component {
 						/>
 					</Grid>
 					<hr />
-					<Grid container item xs={12}>
-						<Grid
-							item
-							xs={3}
-							style={{
-								backgroundColor: '#4185f2',
-								textAlign: 'center',
-								paddingTop: 20,
-								paddingBottom: 20
-							}}
-						>
-							Save
-						</Grid>
-						<Grid
-							item
-							xs={3}
-							style={{
-								backgroundColor: '#F1F1F1',
-								textAlign: 'center',
-								paddingTop: 20,
-								paddingBottom: 20
-							}}
-						>
-							Made It
-						</Grid>
-					</Grid>
 					<br />
 					<Grid item xs={12}>
 						<Grid container justify='space-between'>
@@ -147,10 +125,7 @@ class Recipe extends Component {
 							<Grid item>
 								<Typography
 									variant='body1'
-									style={{
-										borderRight: '0.05em solid black',
-										paddingRight: '0.8em'
-									}}
+									className={classes.timing}
 								>
 									Prep <br />
 									<Typography variant='caption'>{prep}</Typography>
@@ -159,10 +134,7 @@ class Recipe extends Component {
 							<Grid item>
 								<Typography
 									variant='body1'
-									style={{
-										borderRight: '0.05em solid black',
-										paddingRight: '0.8em'
-									}}
+									className={classes.timing}
 								>
 									Cook <br />
 									<Typography variant='caption'>{cook}</Typography>
