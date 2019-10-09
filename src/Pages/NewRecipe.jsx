@@ -14,13 +14,23 @@ const styles = {
 	container: {
 		backgroundColor: '#FFFFFF'
 	},
+	sublit: {
+		paddingLeft: 80,
+		 paddingRight: 80
+	},
 	cancel: {
 		color: '#fff',
 		backgroundColor: '#b71c1c',
 		'&:hover': {
 			backgroundColor: '#d50000'
-		}
-	}
+		},
+		paddingLeft: 38, 
+		paddingRight: 38
+	},
+	grid: {
+		padding: 30
+	},
+
 };
 
 class NewRecipe extends Component {
@@ -263,7 +273,7 @@ class NewRecipe extends Component {
 						<Grid item lg={1} xl={2} />
 						<Grid container item xs={12} lg={10} xl={8} className={classes.container}>
 							<Grid item xs={12} md={4}>
-								<Grid container spacing={2} style={{ padding: 30 }}>
+								<Grid container spacing={2} className={classes.grid}>
 									<Grid item xs={12}>
 										<ImageUpload image={image} uploading={status.uploading} />
 									</Grid>
@@ -283,21 +293,20 @@ class NewRecipe extends Component {
 								/>
 							</Grid>
 							<Grid item xs={12} />
-							<Grid item style={{ padding: 30 }}>
+							<Grid item className={classes.grid}>
 								<Button
 									type='submit'
 									variant='contained'
 									color='primary'
-									style={{ paddingLeft: 80, paddingRight: 80 }}
+									className={classes.sublit}
 								>
 									Save
 								</Button>
 							</Grid>
-							<Grid item style={{ paddingTop: 30 }}>
+							<Grid item className={classes.grid}>
 								<Button
 									variant='contained'
 									className={classes.cancel}
-									style={{ paddingLeft: 38, paddingRight: 38 }}
 									onClick={this.cancelRecipe}
 								>
 									Cancel

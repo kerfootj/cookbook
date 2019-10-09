@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import Auth from '../Organisms/Auth';
 import Card from '../Molecules/ImageCard';
 import { Link } from 'react-router-dom';
+import Loading from '../Molecules/Loading';
 import NewRecipe from './NewRecipe';
 import ReactGA from 'react-ga';
 import axios from 'axios';
@@ -100,7 +101,7 @@ class Cookbook extends Component {
 		const { loading } = this.state;
 
 		if (loading) {
-			return <div>loading...</div>;
+			return <Loading />;
 		}
 		return (
 			<>

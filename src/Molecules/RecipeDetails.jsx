@@ -1,10 +1,16 @@
-import { Grid, TextField, Typography } from '@material-ui/core';
+import { Grid, TextField, Typography, withStyles } from '@material-ui/core';
 
 import React from 'react';
 
-const RecipeDetails = ({ handleInputChange, handleMultiLineInputChange }) => {
+const styles = {
+	container: {
+		padding: 30,
+	}
+}
+
+const RecipeDetails = ({ classes, handleInputChange, handleMultiLineInputChange }) => {
 	return (
-		<Grid container spacing={2} style={{ padding: 30 }}>
+		<Grid container spacing={2} className={classes.container}>
 			<Grid item xs={12}>
 				<Typography variant='body2'>Recipe Title</Typography>
 				<TextField
@@ -56,4 +62,4 @@ const RecipeDetails = ({ handleInputChange, handleMultiLineInputChange }) => {
 	);
 };
 
-export default RecipeDetails;
+export default withStyles(styles)(RecipeDetails);

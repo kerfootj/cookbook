@@ -26,9 +26,16 @@ const styles = {
 		maxHeight: 360
 	},
 	image: {
-		width: '100%',
-		height: '100%',
-		objectFit: 'cover'
+		// width: '100%',
+		// height: '100%',
+		// objectFit: 'cover'
+		maxWidth: '100%',
+		maxHeight: 400,
+		height: 'auto'
+	},
+	timing: {
+		borderRight: '0.05em solid black',
+		paddingRight: '0.8em'
 	}
 };
 
@@ -131,25 +138,13 @@ class Recipe extends Component {
 								<Clock />
 							</Grid>
 							<Grid item>
-								<Typography
-									variant='body1'
-									style={{
-										borderRight: '0.05em solid black',
-										paddingRight: '0.8em'
-									}}
-								>
+								<Typography variant='body1' className={classes.timing}>
 									Prep <br />
 									<Typography variant='caption'>{prep}</Typography>
 								</Typography>
 							</Grid>
 							<Grid item>
-								<Typography
-									variant='body1'
-									style={{
-										borderRight: '0.05em solid black',
-										paddingRight: '0.8em'
-									}}
-								>
+								<Typography variant='body1' className={classes.timing}>
 									Cook <br />
 									<Typography variant='caption'>{cook}</Typography>
 								</Typography>

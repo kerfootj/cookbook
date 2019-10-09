@@ -13,7 +13,11 @@ import { withRouter } from 'react-router-dom';
 const styles = {
 	signUp: {
 		paddingTop: '1em'
-	}
+	},
+	socialContainer: {
+		flexGrow: 1, 
+		textAlign: 'center'
+	},
 };
 
 const INITIAL_STATE = {
@@ -85,7 +89,7 @@ class SignIn extends Component {
 		const { error } = this.state;
 		return (
 			<>
-				<div style={{ flexGrow: 1, textAlign: 'center' }}>
+				<div className={classes.socialContainer}>
 					<FacebookLoginButton
 						align='center'
 						onClick={() => alert("Sorry Facebook isn't supported yet")}

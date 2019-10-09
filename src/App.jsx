@@ -1,4 +1,4 @@
-import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Link, Route, HashRouter as Router, Switch } from 'react-router-dom';
 import React, { Component } from 'react';
 
 import Cookbook from './Pages/Cookbook';
@@ -53,7 +53,7 @@ class App extends Component {
 		return (
 			<ThemeProvider theme={theme}>
 				<Helmet bodyAttributes={{ style: 'background-color : #f0f0f0' }} />
-				<Router>
+				<Router basename='/'>
 					<NavBar authUser={authUser} />
 					<div>
 						<nav>
