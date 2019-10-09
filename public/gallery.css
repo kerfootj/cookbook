@@ -1,0 +1,17 @@
+@import "~react-image-gallery/styles/css/image-gallery.css";
+
+.image-gallery-slide img {
+  object-fit: cover;
+  max-width: 550px;
+  max-height: 360px;
+  width: 100%;
+  height: auto;
+}
+
+.image-gallery-thumbnail-inner img {
+  object-fit: cover;
+  max-width: 100px;
+  max-height: 70px;
+  width: 100%;
+  height: auto;
+}

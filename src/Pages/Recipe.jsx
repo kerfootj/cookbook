@@ -1,8 +1,8 @@
 import { Grid, Paper, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 
-import Carousel from '../Organisms/Carousel';
 import Clock from '@material-ui/icons/Schedule';
+import Gallery from '../Organisms/Gallery';
 import PieChart from '@material-ui/icons/PieChartOutlined';
 import axios from 'axios';
 import { withStyles } from '@material-ui/styles';
@@ -70,27 +70,40 @@ class Recipe extends Component {
 			});
 	}
 
-	renderIngredients() {
+	renderGallery = () => {
+		const { images } = this.state;
+		if (images) {
+			const items = images.map(image => ({
+				original: `https://i.imgur.com/${image.id}h.jpeg`,
+				thumbnail: `https://i.imgur.com/${image.id}b.jpeg`,
+				imageSet: []
+			}));
+			return <Gallery items={items} />;
+		}
+		return undefined;
+	};
+
+	renderIngredients = () => {
 		const { ingredients } = this.state;
 		return ingredients.map(ingredient => (
 			<li>
 				<Typography variant='body1'>{ingredient}</Typography>
 			</li>
 		));
-	}
+	};
 
-	renderInstructions() {
+	renderInstructions = () => {
 		const { instructions } = this.state;
 		return instructions.map(instruction => (
 			<li>
 				<Typography variant='body1'>{instruction}</Typography>
 			</li>
 		));
-	}
+	};
 
 	renderSummary() {
 		const { classes } = this.props;
-		const { title, description, image, prep, cook, ready, servings } = this.state;
+		const { title, description, prep, cook, ready, servings } = this.state;
 
 		return (
 			<Paper square className={classes.paper}>
@@ -101,16 +114,7 @@ class Recipe extends Component {
 								<Typography variant='h5'>{title}</Typography>
 								<Typography variant='body1'>{description}</Typography>
 							</div>
-							<div className={classes.imageContainer}>
-								<Carousel
-									alt={title}
-									images={[
-										image.id
-											? `https://i.imgur.com/${image.id}.jpg`
-											: 'https://i.imgur.com/6MEHGTJ.jpg'
-									]}
-								/>
-							</div>
+							<div className={classes.imageContainer}>{this.renderGallery()}</div>
 						</div>
 					</Grid>
 					<hr />
