@@ -85,8 +85,8 @@ class Recipe extends Component {
 
 	renderIngredients = () => {
 		const { ingredients } = this.state;
-		return ingredients.map(ingredient => (
-			<li>
+		return ingredients.map((ingredient, i) => (
+			<li key={`ingredient-${i}`}>
 				<Typography variant='body1'>{ingredient}</Typography>
 			</li>
 		));
@@ -94,8 +94,8 @@ class Recipe extends Component {
 
 	renderInstructions = () => {
 		const { instructions } = this.state;
-		return instructions.map(instruction => (
-			<li>
+		return instructions.map((instruction, i) => (
+			<li key={`instruction-${i}`}>
 				<Typography variant='body1'>{instruction}</Typography>
 			</li>
 		));
