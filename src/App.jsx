@@ -1,5 +1,5 @@
-import { Link, Route, HashRouter as Router, Switch } from 'react-router-dom';
 import React, { Component } from 'react';
+import { Route, HashRouter as Router, Switch } from 'react-router-dom';
 
 import Cookbook from './Pages/Cookbook';
 import Helmet from 'react-helmet';
@@ -52,35 +52,23 @@ class App extends Component {
 		const { authUser } = this.state;
 		return (
 			<ThemeProvider theme={theme}>
-				<Helmet bodyAttributes={{ style: 'background-color : #f0f0f0' }} />
+				<Helmet bodyAttributes={{ style: 'background-color : #f0f0f0; margin : 0px' }} />
 				<Router basename='/'>
 					<NavBar authUser={authUser} />
-					<div>
-						<nav>
-							<ul>
-								<li>
-									<Link to='/' component={Cookbook}>
-										Home
-									</Link>
-								</li>
-								<li>
-									<Link to='/login'>Log In</Link>
-								</li>
-							</ul>
-						</nav>
-						<Switch>
-							<Route exact path={process.env.PUBLIC_URL + '/'} component={Cookbook} />
-							<Route
-								path={process.env.PUBLIC_URL + '/recipe/:recipeId'}
-								component={Recipe}
-							/>
-							<PrivateRoute
-								authUser={authUser}
-								path={process.env.PUBLIC_URL + '/new'}
-								component={NewRecipe}
-							/>
-						</Switch>
-					</div>
+					<Switch>
+						<Route exact path={process.env.PUBLIC_URL + '/'} component={Cookbook} />
+						<Route
+							exact
+							path={process.env.PUBLIC_URL + '/recipe/:recipeId'}
+							component={Recipe}
+						/>
+						<PrivateRoute
+							exact
+							authUser={authUser}
+							path={process.env.PUBLIC_URL + '/new'}
+							component={NewRecipe}
+						/>
+					</Switch>
 				</Router>
 			</ThemeProvider>
 		);

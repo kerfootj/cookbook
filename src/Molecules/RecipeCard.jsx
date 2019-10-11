@@ -48,7 +48,7 @@ class ImageCard extends Component {
 		const { classes, imageUrl, title, description, name, profilePic } = this.props;
 		return (
 			<Card className={classes.card}>
-				<CardMedia className={classes.media} image={imageUrl} title={title} />
+				<CardMedia className={classes.media} image={imageUrl} />
 				<CardContent>
 					<Typography className={classes.title} gutterBottom variant='h5' component='h2'>
 						{title}

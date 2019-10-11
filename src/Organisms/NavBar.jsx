@@ -2,14 +2,11 @@ import { AppBar, Button, Grid, Toolbar, withStyles } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import Auth from './Auth';
-import Cookbook from '../Pages/Cookbook';
 import { Link } from 'react-router-dom';
 import SignOut from '../Molecules/Authentication/SignOut';
+import logo from '../Pictures/logo.png';
 
 const styles = {
-	nav: {
-		flexGrow: 1
-	},
 	title: {
 		flexGrow: 1
 	},
@@ -54,19 +51,15 @@ class NavBar extends Component {
 	render() {
 		const { classes } = this.props;
 		return (
-			<AppBar color='default' className={classes.nav}>
+			<AppBar color='default' position='sticky'>
 				<Toolbar>
 					<div className={classes.title}>
-						<Button color='secondary'>
-							<Link to='/' component={Cookbook} className={classes.link}>
-								<img
-									src={`${process.env.PUBLIC_URL}/favicon.ico`}
-									alt='logo'
-									className={classes.logo}
-								/>
+						<Link to={`${process.env.PUBLIC_URL}/`} className={classes.link}>
+							<Button color='secondary'>
+								<img src={logo} alt='logo' className={classes.logo} />
 								<b>My Cookbook</b>
-							</Link>
-						</Button>
+							</Button>
+						</Link>
 					</div>
 					{this.renderButtons()}
 				</Toolbar>

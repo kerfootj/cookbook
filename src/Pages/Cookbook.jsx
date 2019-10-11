@@ -5,7 +5,6 @@ import Auth from '../Organisms/Auth';
 import Card from '../Molecules/RecipeCard';
 import { Link } from 'react-router-dom';
 import Loading from '../Molecules/Loading';
-import NewRecipe from './NewRecipe';
 import ReactGA from 'react-ga';
 import axios from 'axios';
 import { withFirebase } from '../Atoms/Firebase';
@@ -65,7 +64,7 @@ class Cookbook extends Component {
 		if (firebase.auth.currentUser) {
 			return (
 				<Button variant='contained' color='secondary'>
-					<Link to='/new' component={NewRecipe} className={classes.link}>
+					<Link to='/new' className={classes.link}>
 						Add Recipe
 					</Link>
 				</Button>
