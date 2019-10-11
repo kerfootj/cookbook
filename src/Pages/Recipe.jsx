@@ -2,6 +2,7 @@ import { Grid, Paper, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import Clock from '@material-ui/icons/Schedule';
+import Gallery from '../Organisms/Gallery';
 import PieChart from '@material-ui/icons/PieChartOutlined';
 import axios from 'axios';
 import { withStyles } from '@material-ui/styles';
@@ -13,10 +14,21 @@ const styles = {
 		paddingTop: 17,
 		padding: 10
 	},
+	wrapper: {
+		display: 'flex'
+	},
+	textContainer: {
+		flex: '0 0 42%'
+	},
 	imageContainer: {
-		textAlign: 'right'
+		flex: 1,
+		maxWidth: 550,
+		maxHeight: 360
 	},
 	image: {
+		// width: '100%',
+		// height: '100%',
+		// objectFit: 'cover'
 		maxWidth: '100%',
 		maxHeight: 400,
 		height: 'auto'
@@ -58,45 +70,52 @@ class Recipe extends Component {
 			});
 	}
 
-	renderIngredients() {
+	renderGallery = () => {
+		const { images } = this.state;
+		if (images) {
+			const items = images.map(image => ({
+				original: `https://i.imgur.com/${image.id}h.jpeg`,
+				thumbnail: `https://i.imgur.com/${image.id}b.jpeg`,
+				imageSet: []
+			}));
+			return <Gallery items={items} />;
+		}
+		return undefined;
+	};
+
+	renderIngredients = () => {
 		const { ingredients } = this.state;
-		return ingredients.map(ingredient => (
-			<li>
+		return ingredients.map((ingredient, i) => (
+			<li key={`ingredient-${i}`}>
 				<Typography variant='body1'>{ingredient}</Typography>
 			</li>
 		));
-	}
+	};
 
-	renderInstructions() {
+	renderInstructions = () => {
 		const { instructions } = this.state;
-		return instructions.map(instruction => (
-			<li>
+		return instructions.map((instruction, i) => (
+			<li key={`instruction-${i}`}>
 				<Typography variant='body1'>{instruction}</Typography>
 			</li>
 		));
-	}
+	};
 
 	renderSummary() {
 		const { classes } = this.props;
-		const { title, description, image, prep, cook, ready, servings } = this.state;
+		const { title, description, prep, cook, ready, servings } = this.state;
 
 		return (
 			<Paper square className={classes.paper}>
 				<Grid container spacing={2}>
-					<Grid item xs={12} lg={5}>
-						<Typography variant='h5'>{title}</Typography>
-						<Typography variant='body1'>{description}</Typography>
-					</Grid>
-					<Grid item className={classes.imageContainer} xs={12} lg={7}>
-						<img
-							src={
-								image.id
-									? `https://i.imgur.com/${image.id}.jpg`
-									: 'https://i.imgur.com/6MEHGTJ.jpg'
-							}
-							alt={title}
-							className={classes.image}
-						/>
+					<Grid item xs={12} style={{ paddingBottom: 70 }}>
+						<div className={classes.wrapper}>
+							<div className={classes.textContainer}>
+								<Typography variant='h5'>{title}</Typography>
+								<Typography variant='body1'>{description}</Typography>
+							</div>
+							<div className={classes.imageContainer}>{this.renderGallery()}</div>
+						</div>
 					</Grid>
 					<hr />
 					<br />
@@ -123,19 +142,13 @@ class Recipe extends Component {
 								<Clock />
 							</Grid>
 							<Grid item>
-								<Typography
-									variant='body1'
-									className={classes.timing}
-								>
+								<Typography variant='body1' className={classes.timing}>
 									Prep <br />
 									<Typography variant='caption'>{prep}</Typography>
 								</Typography>
 							</Grid>
 							<Grid item>
-								<Typography
-									variant='body1'
-									className={classes.timing}
-								>
+								<Typography variant='body1' className={classes.timing}>
 									Cook <br />
 									<Typography variant='caption'>{cook}</Typography>
 								</Typography>

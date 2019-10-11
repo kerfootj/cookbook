@@ -2,7 +2,7 @@ import { Button, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import Auth from '../Organisms/Auth';
-import Card from '../Molecules/ImageCard';
+import Card from '../Molecules/RecipeCard';
 import { Link } from 'react-router-dom';
 import Loading from '../Molecules/Loading';
 import ReactGA from 'react-ga';
