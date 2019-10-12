@@ -26,9 +26,6 @@ const styles = {
 		maxHeight: 360
 	},
 	image: {
-		// width: '100%',
-		// height: '100%',
-		// objectFit: 'cover'
 		maxWidth: '100%',
 		maxHeight: 400,
 		height: 'auto'
@@ -45,9 +42,7 @@ class Recipe extends Component {
 		this.state = {
 			title: '',
 			description: '',
-			image: {
-				id: undefined
-			},
+			images: [],
 			ingredients: [],
 			instructions: []
 		};

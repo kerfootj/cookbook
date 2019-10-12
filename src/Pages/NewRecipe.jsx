@@ -16,7 +16,7 @@ const styles = {
 	},
 	sublit: {
 		paddingLeft: 80,
-		 paddingRight: 80
+		paddingRight: 80
 	},
 	cancel: {
 		color: '#fff',
@@ -24,13 +24,12 @@ const styles = {
 		'&:hover': {
 			backgroundColor: '#d50000'
 		},
-		paddingLeft: 38, 
+		paddingLeft: 38,
 		paddingRight: 38
 	},
 	grid: {
 		padding: 30
-	},
-
+	}
 };
 
 class NewRecipe extends Component {
@@ -41,7 +40,7 @@ class NewRecipe extends Component {
 			description: '',
 			ingredients: [],
 			instructions: [],
-			image: undefined,
+			images: [],
 			prep: undefined,
 			cook: undefined,
 			ready: undefined,
@@ -111,7 +110,7 @@ class NewRecipe extends Component {
 	 * Takes an image file from an input field. The image is then compressed
 	 * to be smaller than 10mb and uploaded to imgur.
 	 */
-	imageUploadHandler = event => {
+	handleImageUpload = event => {
 		this.setState({
 			status: { uploading: true }
 		});
@@ -124,54 +123,60 @@ class NewRecipe extends Component {
 				quality: 0.8
 			})
 			.then(compressedFiles => {
-				const data = new FormData();
-				data.append('image', compressedFiles[0].data);
+				compressedFiles.forEach(file => {
+					this.uploadToImgur(file.data);
+				});
+			});
+	};
 
-				const key = process.env.REACT_APP_IMGUR_CLIENT_ID;
+	uploadToImgur = image => {
+		const data = new FormData();
+		data.append('image', image);
 
-				fetch('https://api.imgur.com/3/image', {
-					method: 'POST',
-					headers: new Headers({
-						Authorization: `Client-ID ${key}`
-					}),
-					body: data
-				})
-					.then(response => response.json())
-					.then(response => {
-						if (response.status === 200) {
-							this.setState({
-								image: {
-									id: response.data.id,
-									deleteHash: response.data.deletehash
-								},
-								status: {
-									uploading: false,
-									waiting: false
-								}
-							});
-						} else {
-							this.setState({
-								errors: {
-									upload: true
-								},
-								status: {
-									uploading: false,
-									waiting: false
-								}
-							});
+		const key = process.env.REACT_APP_IMGUR_CLIENT_ID;
+
+		fetch('https://api.imgur.com/3/image', {
+			method: 'POST',
+			headers: new Headers({
+				Authorization: `Client-ID ${key}`
+			}),
+			body: data
+		})
+			.then(response => response.json())
+			.then(response => {
+				if (response.status === 200) {
+					this.setState(prev => ({
+						images: [
+							...prev.images,
+							{ id: response.data.id, deleteHash: response.data.deletehash }
+						],
+						status: {
+							uploading: false,
+							waiting: false
 						}
-					})
-					.catch(error => {
-						this.setState({
-							errors: {
-								upload: true
-							},
-							status: {
-								uploading: false,
-								waiting: false
-							}
-						});
+					}));
+				} else {
+					this.setState({
+						errors: {
+							upload: true
+						},
+						status: {
+							uploading: false,
+							waiting: false
+						}
 					});
+				}
+			})
+			.catch(error => {
+				this.setState({
+					errors: {
+						upload: true
+					},
+					status: {
+						uploading: false,
+						waiting: false
+					}
+				});
 			});
 	};
 
@@ -225,20 +230,22 @@ class NewRecipe extends Component {
 	};
 
 	cancelRecipe = () => {
-		const { image } = this.state;
+		const { images } = this.state;
 
-		if (image && image.deleteHash) {
+		if (images.length) {
 			const key = process.env.REACT_APP_IMGUR_CLIENT_ID;
-			axios
-				.delete(`https://api.imgur.com/3/image/${image.deleteHash}`, {
-					headers: { Authorization: `Client-ID ${key}` }
-				})
-				.then(response => {
-					console.log(response);
-				})
-				.catch(error => {
-					console.log(error);
-				});
+			images.forEach(image => {
+				axios
+					.delete(`https://api.imgur.com/3/image/${image.deleteHash}`, {
+						headers: { Authorization: `Client-ID ${key}` }
+					})
+					.then(response => {
+						console.log(response);
+					})
+					.catch(error => {
+						console.log(error);
+					});
+			});
 		}
 		this.setState({ status: { cancel: true } });
 	};
@@ -264,7 +271,7 @@ class NewRecipe extends Component {
 
 	render() {
 		const { classes } = this.props;
-		const { image, status, valid } = this.state;
+		const { images, status, valid } = this.state;
 
 		return (
 			<>
@@ -275,13 +282,16 @@ class NewRecipe extends Component {
 							<Grid item xs={12} md={4}>
 								<Grid container spacing={2} className={classes.grid}>
 									<Grid item xs={12}>
-										<ImageUpload image={image} uploading={status.uploading} />
+										<ImageUpload
+											image={images.length ? images[0] : undefined}
+											uploading={status.uploading}
+										/>
 									</Grid>
 									<RecipeOptions
 										valid={valid}
 										handleButtonChange={this.handleButtonChange}
 										handleInputChange={this.handleInputChange}
-										imageUploadHandler={this.imageUploadHandler}
+										onImageUpload={this.handleImageUpload}
 										validate={this.validateField}
 									/>
 								</Grid>

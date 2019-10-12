@@ -24,7 +24,7 @@ const RecipeOptions = ({
 	classes,
 	handleButtonChange,
 	handleInputChange,
-	imageUploadHandler,
+	onImageUpload,
 	validate,
 	valid
 }) => {
@@ -36,7 +36,8 @@ const RecipeOptions = ({
 					accept='image/*'
 					id='raised-button-file'
 					type='file'
-					onChange={imageUploadHandler}
+					onChange={onImageUpload}
+					multiple
 				/>
 				<label htmlFor='raised-button-file'>
 					<Button component='span' variant='contained'>
