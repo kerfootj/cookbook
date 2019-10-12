@@ -82,8 +82,8 @@ class Cookbook extends Component {
 				<Link to={`/recipe/${recipe._id}`} className={classes.link}>
 					<Card
 						imageUrl={
-							recipe.image
-								? `https://i.imgur.com/${recipe.image.id}.jpg`
+							recipe.images && recipe.images.length
+								? `https://i.imgur.com/${recipe.images[0].id}.jpg`
 								: 'https://i.imgur.com/6MEHGTJ.jpg'
 						}
 						title={recipe.title}
