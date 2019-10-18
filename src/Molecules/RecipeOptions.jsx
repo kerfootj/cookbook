@@ -1,12 +1,5 @@
-import {
-	Button,
-	FormControlLabel,
-	Grid,
-	Radio,
-	RadioGroup,
-	TextField,
-	Typography
-} from '@material-ui/core';
+import { Button, FormControlLabel, Grid, Radio, RadioGroup } from '@material-ui/core';
+import { NumberTextField, TimeTextField } from '../Molecules/TextFields';
 
 import CloudUpload from '@material-ui/icons/CloudUploadOutlined';
 import React from 'react';
@@ -28,6 +21,7 @@ const RecipeOptions = ({
 	validate,
 	valid
 }) => {
+	console.log(valid);
 	return (
 		<>
 			<Grid item xs={12}>
@@ -47,67 +41,34 @@ const RecipeOptions = ({
 				</label>
 			</Grid>
 			<Grid item xs={4}>
-				<Typography
-					variant='body2'
-					color={valid && valid.prep !== undefined && !valid.prep ? 'error' : 'inherit'}
-				>
-					Prep Time
-				</Typography>
-				<TextField
-					required
-					fullWidth
-					variant='outlined'
+				<TimeTextField
+					title='Prep Time'
 					placeholder='15m'
-					name='prep'
+					valid={valid.prep}
 					onChange={handleInputChange}
 					onBlur={validate}
 				/>
 			</Grid>
 			<Grid item xs={4}>
-				<Typography
-					variant='body2'
-					color={valid && valid.cook !== undefined && !valid.cook ? 'error' : 'inherit'}
-				>
-					Cook Time
-				</Typography>
-				<TextField
-					required
-					fullWidth
-					variant='outlined'
+				<TimeTextField
+					title='Cook Time'
 					placeholder='1h 45m'
-					name='cook'
+					valid={valid.cook}
 					onChange={handleInputChange}
 					onBlur={validate}
 				/>
 			</Grid>
 			<Grid item xs={4}>
-				<Typography
-					variant='body2'
-					color={valid && valid.ready !== undefined && !valid.ready ? 'error' : 'inherit'}
-				>
-					Ready In
-				</Typography>
-				<TextField
-					required
-					fullWidth
-					variant='outlined'
+				<TimeTextField
+					title='Ready In'
 					placeholder='2h'
-					name='ready'
+					valid={valid.ready}
 					onChange={handleInputChange}
 					onBlur={validate}
 				/>
 			</Grid>
 			<Grid item xs={4}>
-				<Typography variant='body2'>Servings</Typography>
-				<TextField
-					required
-					fullWidth
-					inputProps={{ min: '1' }}
-					type='number'
-					variant='outlined'
-					name='servings'
-					onChange={handleInputChange}
-				/>
+				<NumberTextField title='Servings' min='1' onChange={handleInputChange} />
 			</Grid>
 			<Grid item xs={8} />
 			<Grid item xs={12}>

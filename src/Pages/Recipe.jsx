@@ -1,10 +1,13 @@
-import { Grid, Paper, Typography } from '@material-ui/core';
+import { Grid, IconButton, Paper, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import Clock from '@material-ui/icons/Schedule';
+import Edit from '@material-ui/icons/Edit';
 import Gallery from '../Organisms/Gallery';
 import PieChart from '@material-ui/icons/PieChartOutlined';
+import RecipeForm from '../Organisms/RecipeForm';
 import axios from 'axios';
+import { withFirebase } from '../Atoms/Firebase';
 import { withStyles } from '@material-ui/styles';
 
 const styles = {
@@ -40,11 +43,14 @@ class Recipe extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			title: '',
-			description: '',
-			images: [],
-			ingredients: [],
-			instructions: []
+			recipe: {
+				title: '',
+				description: '',
+				images: [],
+				ingredients: [],
+				instructions: []
+			},
+			edit: false
 		};
 	}
 	componentDidMount() {
@@ -57,7 +63,9 @@ class Recipe extends Component {
 			.get(`https://joel-cookbook-server.herokuapp.com/recipe/${params.recipeId}`)
 			.then(response => {
 				this.setState({
-					...response.data
+					recipe: {
+						...response.data
+					}
 				});
 			})
 			.catch(error => {
@@ -65,8 +73,26 @@ class Recipe extends Component {
 			});
 	}
 
+	renderEditButton = () => {
+		const { firebase } = this.props;
+		const {
+			recipe: { uid }
+		} = this.state;
+
+		if ((((firebase || {}).auth || {}).currentUser || {}).uid === uid) {
+			return (
+				<IconButton onClick={() => this.setState({ edit: true })}>
+					<Edit />
+				</IconButton>
+			);
+		}
+		return undefined;
+	};
+
 	renderGallery = () => {
-		const { images } = this.state;
+		const {
+			recipe: { images }
+		} = this.state;
 		if (images) {
 			const items = images.map(image => ({
 				original: `https://i.imgur.com/${image.id}h.jpeg`,
@@ -79,7 +105,9 @@ class Recipe extends Component {
 	};
 
 	renderIngredients = () => {
-		const { ingredients } = this.state;
+		const {
+			recipe: { ingredients }
+		} = this.state;
 		return ingredients.map((ingredient, i) => (
 			<li key={`ingredient-${i}`}>
 				<Typography variant='body1'>{ingredient}</Typography>
@@ -88,7 +116,9 @@ class Recipe extends Component {
 	};
 
 	renderInstructions = () => {
-		const { instructions } = this.state;
+		const {
+			recipe: { instructions }
+		} = this.state;
 		return instructions.map((instruction, i) => (
 			<li key={`instruction-${i}`}>
 				<Typography variant='body1'>{instruction}</Typography>
@@ -98,7 +128,9 @@ class Recipe extends Component {
 
 	renderSummary() {
 		const { classes } = this.props;
-		const { title, description, prep, cook, ready, servings } = this.state;
+		const {
+			recipe: { title, description, prep, cook, ready, servings }
+		} = this.state;
 
 		return (
 			<Paper square className={classes.paper}>
@@ -111,6 +143,7 @@ class Recipe extends Component {
 							</div>
 							<div className={classes.imageContainer}>{this.renderGallery()}</div>
 						</div>
+						{this.renderEditButton()}
 					</Grid>
 					<hr />
 					<br />
@@ -164,6 +197,12 @@ class Recipe extends Component {
 	}
 
 	render() {
+		const { edit, recipe } = this.state;
+
+		if (edit) {
+			return <RecipeForm recipe={recipe} />;
+		}
+
 		return (
 			<>
 				<Grid container>
@@ -178,4 +217,4 @@ class Recipe extends Component {
 	}
 }
 
-export default withStyles(styles)(Recipe);
+export default withStyles(styles)(withFirebase(Recipe));
