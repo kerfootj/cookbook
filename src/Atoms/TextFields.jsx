@@ -11,7 +11,7 @@ const renderTitle = (title, valid) =>
 		undefined
 	);
 
-const RecipeTextField = ({ title, placeholder, name, rows, onChange }) => (
+const RecipeTextField = ({ title, placeholder, name, rows, onChange, defaultValue }) => (
 	<>
 		{renderTitle(title, true)}
 		<TextField
@@ -23,11 +23,12 @@ const RecipeTextField = ({ title, placeholder, name, rows, onChange }) => (
 			name={name ? name : title.toLowerCase()}
 			placeholder={placeholder}
 			onChange={onChange}
+			defaultValue={defaultValue}
 		/>
 	</>
 );
 
-const TimeTextField = ({ title, placeholder, name, valid, onChange, onBlur }) => (
+const TimeTextField = ({ title, placeholder, name, valid, onChange, onBlur, defaultValue }) => (
 	<>
 		{renderTitle(title, valid)}
 		<TextField
@@ -38,11 +39,12 @@ const TimeTextField = ({ title, placeholder, name, valid, onChange, onBlur }) =>
 			name={name ? name : title.split(' ')[0].toLowerCase()}
 			onChange={onChange}
 			onBlur={onBlur}
+			defaultValue={defaultValue}
 		/>
 	</>
 );
 
-const NumberTextField = ({ title, name, min, max, onChange }) => (
+const NumberTextField = ({ title, name, min, max, onChange, defaultValue }) => (
 	<>
 		{renderTitle(title, true)}
 		<TextField
@@ -53,6 +55,7 @@ const NumberTextField = ({ title, name, min, max, onChange }) => (
 			inputProps={{ min: min, max: max }}
 			name={name ? name : title.toLowerCase()}
 			onChange={onChange}
+			defaultValue={defaultValue}
 		/>
 	</>
 );
