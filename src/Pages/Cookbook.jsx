@@ -64,7 +64,7 @@ class Cookbook extends Component {
 		if (firebase.auth.currentUser) {
 			return (
 				<Button variant='contained' color='secondary'>
-					<Link to='/new' className={classes.link}>
+					<Link to='/recipe/new' className={classes.link}>
 						Add Recipe
 					</Link>
 				</Button>
