@@ -4,9 +4,9 @@ import { Route, HashRouter as Router, Switch } from 'react-router-dom';
 import Cookbook from './Pages/Cookbook';
 import Helmet from 'react-helmet';
 import NavBar from './Organisms/NavBar';
-import NewRecipe from './Pages/NewRecipe';
 import PrivateRoute from './Atoms/PrivateRoute';
 import Recipe from './Pages/Recipe';
+import RecipeForm from './Organisms/RecipeForm';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { withFirebase } from './Atoms/Firebase/index';
@@ -57,16 +57,21 @@ class App extends Component {
 					<NavBar authUser={authUser} />
 					<Switch>
 						<Route exact path={process.env.PUBLIC_URL + '/'} component={Cookbook} />
+						<PrivateRoute
+							exact
+							authUser={authUser}
+							path={process.env.PUBLIC_URL + '/recipe/new'}
+							component={RecipeForm}
+						/>
+						<Route
+							exact
+							path={process.env.PUBLIC_URL + '/recipe/:recipeId/edit'}
+							component={RecipeForm}
+						/>
 						<Route
 							exact
 							path={process.env.PUBLIC_URL + '/recipe/:recipeId'}
 							component={Recipe}
-						/>
-						<PrivateRoute
-							exact
-							authUser={authUser}
-							path={process.env.PUBLIC_URL + '/new'}
-							component={NewRecipe}
 						/>
 					</Switch>
 				</Router>
