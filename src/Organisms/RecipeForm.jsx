@@ -1,12 +1,13 @@
-import { Button, Grid } from '@material-ui/core';
+import { Button, FormControlLabel, Grid, Radio, RadioGroup } from '@material-ui/core';
+import { NumberTextField, RecipeTextField } from '../Atoms/TextFields';
 import React, { Component } from 'react';
 
+import CloudUpload from '@material-ui/icons/CloudUploadOutlined';
 import Compress from 'compress.js';
 import ImageUpload from '../Molecules/ImageUpload';
 import PropTypes from 'prop-types';
-import RecipeDetails from '../Molecules/RecipeDetails';
-import RecipeOptions from '../Molecules/RecipeOptions';
 import { Redirect } from 'react-router-dom';
+import TimeInput from '../Molecules/TimeInput';
 import axios from 'axios';
 import { withFirebase } from '../Atoms/Firebase';
 import { withStyles } from '@material-ui/styles';
@@ -42,6 +43,15 @@ const styles = {
 	},
 	grid: {
 		padding: 30
+	},
+	cloudIcon: {
+		marginLeft: 4
+	},
+	upload: {
+		display: 'none'
+	},
+	details: {
+		padding: 30
 	}
 };
 
@@ -49,36 +59,19 @@ class RecipeForm extends Component {
 	static propTypes = {
 		classes: PropTypes.shape({}).isRequired,
 		firebase: PropTypes.shape({}).isRequired,
-		recipe: PropTypes.shape({
-			_id: PropTypes.number,
-			cook: PropTypes.string,
-			description: PropTypes.string,
-			images: PropTypes.arrayOf(
-				PropTypes.shape({
-					deleteHash: PropTypes.string,
-					id: PropTypes.string
-				})
-			),
-			ingredients: PropTypes.arrayOf(PropTypes.string),
-			instructions: PropTypes.arrayOf(PropTypes.string),
-			prep: PropTypes.string,
-			private: PropTypes.bool,
-			ready: PropTypes.string,
-			servings: PropTypes.string,
-			title: PropTypes.string,
-			uid: PropTypes.string
-		})
+		location: PropTypes.shape({ state: PropTypes.shape({ recipe: PropTypes.shape({}) }) })
 	};
 
 	static defaultProps = {
-		recipe: undefined
+		location: {}
 	};
 
 	constructor(props) {
 		super(props);
-		const { recipe } = this.props;
+		const { location } = this.props;
+		const recipe = ((location || {}).state || {}).recipe || {};
 		this.state = {
-			recipe: recipe ? { ...recipe } : { ...EMPTY_RECIPE },
+			recipe: Object.keys(recipe).length ? { ...recipe } : { ...EMPTY_RECIPE },
 			status: {
 				uploading: false,
 				waiting: false,
@@ -94,7 +87,7 @@ class RecipeForm extends Component {
 				cook: true,
 				ready: true
 			},
-			create: !recipe
+			create: !Object.keys(recipe).length
 		};
 	}
 
@@ -304,15 +297,15 @@ class RecipeForm extends Component {
 		this.setState({ status: { cancel: true } });
 	};
 
-	renderWaiting() {
+	renderWaiting = () => {
 		const { status } = this.state;
 		if (status.waiting) {
 			return <p>Please wait for your image to finish uploading</p>;
 		}
 		return null;
-	}
+	};
 
-	renderError() {
+	renderError = () => {
 		const { errors } = this.state;
 		if (errors.upload) {
 			return <p>{errors.upload}</p>;
@@ -321,14 +314,122 @@ class RecipeForm extends Component {
 			return <p>Error saving your recipe</p>;
 		}
 		return null;
-	}
+	};
+
+	renderOptions = () => {
+		const { classes, location } = this.props;
+		const { valid } = this.state;
+		const recipe = ((location || {}).state || {}).recipe || {};
+		return (
+			<>
+				<Grid item xs={12}>
+					<input
+						className={classes.upload}
+						accept='image/*'
+						id='raised-button-file'
+						type='file'
+						onChange={this.handleImageUpload}
+						multiple
+					/>
+					<label htmlFor='raised-button-file'>
+						<Button component='span' variant='contained'>
+							Add Image
+							<CloudUpload className={classes.cloudIcon} />
+						</Button>
+					</label>
+				</Grid>
+				<TimeInput
+					valid={valid}
+					validate={this.validate}
+					onChange={this.handleInputChange}
+					defaultValues={recipe}
+				/>
+				<Grid item xs={4}>
+					<NumberTextField
+						title='Servings'
+						min='1'
+						onChange={this.handleInputChange}
+						defaultValue={recipe ? recipe.servings : undefined}
+					/>
+				</Grid>
+				<Grid item xs={8} />
+				<Grid item xs={12}>
+					<RadioGroup
+						name='shared'
+						defaultValue='public'
+						onChange={this.handleInputChange}
+					>
+						<FormControlLabel
+							value='private'
+							control={<Radio />}
+							label='Private - Only I can see this'
+						/>
+						<FormControlLabel
+							value='public'
+							control={<Radio />}
+							label='Public - Anyone can see this'
+						/>
+					</RadioGroup>
+				</Grid>
+			</>
+		);
+	};
+
+	renderDetails = () => {
+		const { classes, location } = this.props;
+		const recipe = ((location || {}).state || {}).recipe || {};
+		return (
+			<Grid container spacing={2} className={classes.details}>
+				<Grid item xs={12}>
+					<RecipeTextField
+						title='Recipe Title'
+						name='title'
+						onChange={this.handleInputChange}
+						defaultValue={recipe ? recipe.title : undefined}
+					/>
+				</Grid>
+				<Grid item xs={12}>
+					<RecipeTextField
+						rows={3}
+						title='Description'
+						onChange={this.handleInputChange}
+						defaultValue={recipe ? recipe.description : undefined}
+					/>
+				</Grid>
+				<Grid item xs={12}>
+					<RecipeTextField
+						rows={8}
+						title='Ingredients'
+						placeholder='Put each ingredient on its own line'
+						onChange={this.handleMultiLineInputChange}
+						defaultValue={
+							recipe && recipe.ingredients ? recipe.ingredients.join('\n') : undefined
+						}
+					/>
+				</Grid>
+				<Grid item xs={12}>
+					<RecipeTextField
+						rows={8}
+						title='Instructions'
+						placeholder='Put each step on its own line'
+						onChange={this.handleMultiLineInputChange}
+						defaultValue={
+							recipe && recipe.instructions
+								? recipe.instructions.join('\n')
+								: undefined
+						}
+					/>
+				</Grid>
+			</Grid>
+		);
+	};
 
 	render() {
-		const { classes } = this.props;
+		const { classes, location } = this.props;
 		const {
 			recipe: { images },
 			status,
-			valid
+			create
 		} = this.state;
 
 		return (
@@ -345,20 +446,11 @@ class RecipeForm extends Component {
 											uploading={status.uploading}
 										/>
 									</Grid>
-									<RecipeOptions
-										valid={valid}
-										handleButtonChange={this.handleButtonChange}
-										handleInputChange={this.handleInputChange}
-										onImageUpload={this.handleImageUpload}
-										validate={this.validateField}
-									/>
+									{this.renderOptions()}
 								</Grid>
 							</Grid>
 							<Grid item xs={12} md={8}>
-								<RecipeDetails
-									handleInputChange={this.handleInputChange}
-									handleMultiLineInputChange={this.handleMultiLineInputChange}
-								/>
+								{this.renderDetails()}
 							</Grid>
 							<Grid item xs={12} />
 							<Grid item className={classes.grid}>
@@ -387,6 +479,7 @@ class RecipeForm extends Component {
 				{this.renderWaiting()}
 				{this.renderError()}
 				{(status.added || status.cancel) && <Redirect to='/' />}
+				{create && location.pathname.includes('edit') && <Redirect to='/' />}
 			</>
 		);
 	}

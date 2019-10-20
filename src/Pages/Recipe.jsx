@@ -1,11 +1,11 @@
-import { Grid, IconButton, Paper, Typography } from '@material-ui/core';
+import { Button, Grid, Paper, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import Clock from '@material-ui/icons/Schedule';
 import Edit from '@material-ui/icons/Edit';
 import Gallery from '../Organisms/Gallery';
 import PieChart from '@material-ui/icons/PieChartOutlined';
-import RecipeForm from '../Organisms/RecipeForm';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { withFirebase } from '../Atoms/Firebase';
 import { withStyles } from '@material-ui/styles';
@@ -36,6 +36,9 @@ const styles = {
 	timing: {
 		borderRight: '0.05em solid black',
 		paddingRight: '0.8em'
+	},
+	edit: {
+		marginRight: 8
 	}
 };
 
@@ -74,16 +77,21 @@ class Recipe extends Component {
 	}
 
 	renderEditButton = () => {
-		const { firebase } = this.props;
+		const { classes, firebase } = this.props;
 		const {
 			recipe: { uid }
 		} = this.state;
 
 		if ((((firebase || {}).auth || {}).currentUser || {}).uid === uid) {
 			return (
-				<IconButton onClick={() => this.setState({ edit: true })}>
-					<Edit />
-				</IconButton>
+				<Button
+					onClick={() => this.setState({ edit: true })}
+					variant='contained'
+					color='primary'
+				>
+					<Edit className={classes.edit} fontSize='small' />
+					Edit
+				</Button>
 			);
 		}
 		return undefined;
@@ -143,9 +151,10 @@ class Recipe extends Component {
 							</div>
 							<div className={classes.imageContainer}>{this.renderGallery()}</div>
 						</div>
+					</Grid>
+					<Grid item xs={12}>
 						{this.renderEditButton()}
 					</Grid>
-					<hr />
 					<br />
 					<Grid item xs={12}>
 						<Grid container justify='space-between'>
@@ -188,7 +197,6 @@ class Recipe extends Component {
 								</Typography>
 							</Grid>
 						</Grid>
-
 						<ol>{this.renderInstructions()}</ol>
 					</Grid>
 				</Grid>
@@ -198,11 +206,6 @@ class Recipe extends Component {
 
 	render() {
 		const { edit, recipe } = this.state;
-
-		if (edit) {
-			return <RecipeForm recipe={recipe} />;
-		}
-
 		return (
 			<>
 				<Grid container>
@@ -212,6 +215,15 @@ class Recipe extends Component {
 					</Grid>
 					<Grid md={1} item lg={4} />
 				</Grid>
+				{edit && (
+					<Redirect
+						to={{
+							pathname: `${process.env.PUBLIC_URL}/recipe/${recipe._id}/edit`,
+							state: { recipe: recipe }
+						}}
+						push
+					/>
+				)}
 			</>
 		);
 	}
