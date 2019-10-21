@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import TimeInput from '../Molecules/TimeInput';
 import axios from 'axios';
+import { post } from '../Utils/Request';
 import { withFirebase } from '../Atoms/Firebase';
 import { withStyles } from '@material-ui/styles';
 
@@ -21,7 +22,7 @@ const EMPTY_RECIPE = {
 	prep: undefined,
 	cook: undefined,
 	ready: undefined,
-	shared: false
+	shared: 'public'
 };
 
 const styles = {
@@ -114,16 +115,6 @@ class RecipeForm extends Component {
 					.replace(/\s\s+/g, ' ')
 					.trim()
 					.split(/\r?\n/)
-			}
-		}));
-	};
-
-	handleButtonChange = event => {
-		const value = event.target.value === 'private';
-		this.setState(prev => ({
-			recipe: {
-				...prev.recipe,
-				shared: value
 			}
 		}));
 	};
@@ -230,40 +221,13 @@ class RecipeForm extends Component {
 				}
 			}
 		} = this.props;
-		const {
-			recipe: {
-				title,
-				description,
-				ingredients,
-				instructions,
-				image,
-				status,
-				prep,
-				cook,
-				ready,
-				servings,
-				shared
-			}
-		} = this.state;
+		const { recipe, status } = this.state;
 
 		if (status.uploading) {
 			this.setState({ status: { waiting: true } });
 		}
 
-		axios
-			.post('https://joel-cookbook-server.herokuapp.com/recipe', {
-				title: title,
-				image: image,
-				description: description,
-				ingredients: ingredients,
-				instructions: instructions,
-				prep: prep,
-				cook: cook,
-				ready: ready,
-				servings: servings,
-				private: shared,
-				uid: uid
-			})
+		post('recipe', { ...recipe, private: recipe.shared !== 'public', uid: uid })
 			.then(() => {
 				this.setState({ status: { added: true } });
 			})
