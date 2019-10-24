@@ -10,7 +10,12 @@ export default function PrivateRoute({ component: Component, authUser, ...rest }
 				authUser !== null ? (
 					<Component {...props} />
 				) : (
-					<Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+					<Redirect
+						to={{
+							pathname: `${process.env.PUBLIC_URL}/`,
+							state: { from: props.location, openAuth: true }
+						}}
+					/>
 				)
 			}
 		/>

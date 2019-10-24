@@ -42,7 +42,7 @@ const styles = theme => ({
 class Auth extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { open: false, create: props.create };
+		this.state = { open: props.open, create: props.create };
 	}
 
 	renderForm() {

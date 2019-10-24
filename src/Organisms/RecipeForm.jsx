@@ -69,8 +69,7 @@ class RecipeForm extends Component {
 
 	constructor(props) {
 		super(props);
-		const { location } = this.props;
-		const recipe = ((location || {}).state || {}).recipe || {};
+		const recipe = ((props.location || {}).state || {}).recipe || {};
 		this.state = {
 			recipe: Object.keys(recipe).length ? { ...recipe } : { ...EMPTY_RECIPE },
 			status: {

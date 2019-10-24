@@ -60,7 +60,7 @@ class Cookbook extends Component {
 	}
 
 	renderAddRecipe() {
-		const { firebase, classes } = this.props;
+		const { classes, firebase, location } = this.props;
 		if (firebase.auth.currentUser) {
 			return (
 				<Button variant='contained' color='secondary'>
@@ -70,7 +70,13 @@ class Cookbook extends Component {
 				</Button>
 			);
 		}
-		return <Auth buttonText='Add Recipe' create={false} />;
+		return (
+			<Auth
+				buttonText='Add Recipe'
+				create={false}
+				open={((location || {}).state || {}).openAuth}
+			/>
+		);
 	}
 
 	renderCards() {
@@ -102,6 +108,7 @@ class Cookbook extends Component {
 		if (loading) {
 			return <Loading />;
 		}
+
 		return (
 			<>
 				<Grid container>
