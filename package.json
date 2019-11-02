@@ -29,7 +29,8 @@
 		"test": "react-scripts test",
 		"predeploy": "npm run build",
 		"deploy": "gh-pages -d build",
-		"eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"lint": "eslint src/**/*.js src/**/*.jsx"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
@@ -50,6 +51,17 @@
 		"chai": "^4.2.0",
 		"enzyme": "^3.10.0",
 		"enzyme-adapter-react-16": "^1.14.0",
-		"gh-pages": "^2.0.1"
+		"eslint": "^6.1.0",
+		"eslint-config-airbnb": "^18.0.1",
+		"eslint-config-airbnb-base": "^14.0.0",
+		"eslint-config-prettier": "^6.4.0",
+		"eslint-plugin-import": "^2.18.2",
+		"eslint-plugin-jsx-a11y": "^6.2.3",
+		"eslint-plugin-prettier": "^3.1.1",
+		"eslint-plugin-react": "^7.16.0",
+		"eslint-plugin-react-hooks": "^1.7.0",
+		"gh-pages": "^2.0.1",
+		"prettier": "^1.18.2",
+		"prettier-eslint": "^9.0.0"
 	}
 }
