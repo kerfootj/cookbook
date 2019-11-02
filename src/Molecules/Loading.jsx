@@ -1,7 +1,7 @@
 import React from 'react';
-import loadingGif from '../Pictures/burger.gif';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
+import loadingGif from '../Pictures/burger.gif';
 
 const styles = {
   container: {

@@ -1,11 +1,11 @@
 import { AppBar, Button, Grid, Toolbar, withStyles } from '@material-ui/core';
 import React, { Component } from 'react';
 
-import Auth from './Auth';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Auth from './Auth';
 import SignOut from '../Molecules/Authentication/SignOut';
 import logo from '../Pictures/logo.png';
-import PropTypes from 'prop-types';
 
 const styles = {
   title: {
@@ -46,7 +46,7 @@ class NavBar extends Component {
         <div className={classes.user}>
           <Grid container spacing={1}>
             <Grid item>
-              <Auth buttonText="Sign Up" create={true} />
+              <Auth buttonText="Sign Up" create />
             </Grid>
             <Grid item>
               <Auth buttonText="Log In" create={false} />

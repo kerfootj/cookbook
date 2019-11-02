@@ -55,6 +55,7 @@ class RecipeCard extends PureComponent {
   };
 
   static defaultProps = {
+    classes: {},
     name: undefined,
     profilePic: undefined,
   };
@@ -87,16 +88,12 @@ class RecipeCard extends PureComponent {
               color="inherit"
               component="span"
             >
-              <TextTruncate
-                line={2}
-                truncateText=" …"
-                text={description}
-              ></TextTruncate>
+              <TextTruncate line={2} truncateText=" …" text={description} />
             </Typography>
           </div>
           <div className={classes.footer}>
             <Avatar
-              src={profilePic ? profilePic : 'https://i.imgur.com/oTPg6oz.jpg'}
+              src={profilePic || 'https://i.imgur.com/oTPg6oz.jpg'}
               className={classes.avatar}
             />
             <Typography

@@ -59,6 +59,7 @@ ImageUpload.propTypes = {
 ImageUpload.defaultProps = {
   classes: {},
   image: {},
+  uploading: false,
 };
 
 export default withStyles(styles)(ImageUpload);

@@ -1,15 +1,15 @@
 import { Button, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { withStyles } from '@material-ui/styles';
+import ReactGA from 'react-ga';
 import Auth from '../Organisms/Auth';
 import Card from '../Molecules/RecipeCard';
-import { Link } from 'react-router-dom';
 import Loading from '../Molecules/Loading';
-import ReactGA from 'react-ga';
 import { get } from '../Utils/Request';
 import { withFirebase } from '../Atoms/Firebase';
-import { withStyles } from '@material-ui/styles';
-import PropTypes from 'prop-types';
 
 const styles = {
   link: {
@@ -23,7 +23,9 @@ const styles = {
 
 class Cookbook extends Component {
   static propTypes = {
-    firebase: PropTypes.object.isRequired,
+    firebase: PropTypes.shape({
+      auth: PropTypes.shape({ currentUser: PropTypes.shape({}) }),
+    }).isRequired,
     location: PropTypes.shape({
       state: PropTypes.shape({ openAuth: PropTypes.bool }),
     }).isRequired,
@@ -46,29 +48,29 @@ class Cookbook extends Component {
         this.setState({ recipes: response.data, loading: false });
       })
       .catch(error => {
-        this.setState({ error: error });
+        this.setState({ error });
       });
     get('user')
       .then(response => {
-        let users = {};
-        let photos = {};
+        const users = {};
+        const photos = {};
         response.data.forEach(user => {
           users[user.uid] = user.name;
           photos[user.uid] = user.photo;
         });
-        this.setState({ users: users, photos: photos });
+        this.setState({ users, photos });
       })
       .catch(error => {
-        this.setState({ error: error });
+        this.setState({ error });
       });
   }
 
-  initializeGA() {
+  initializeGA = () => {
     ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS);
     ReactGA.pageview(window.location.pathname + window.location.search);
-  }
+  };
 
-  renderAddRecipe() {
+  renderAddRecipe = () => {
     const { classes, firebase, location } = this.props;
     if (firebase.auth.currentUser) {
       return (
@@ -86,7 +88,7 @@ class Cookbook extends Component {
         open={((location || {}).state || {}).openAuth}
       />
     );
-  }
+  };
 
   renderCards() {
     const { classes } = this.props;

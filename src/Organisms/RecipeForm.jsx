@@ -5,19 +5,19 @@ import {
   Radio,
   RadioGroup,
 } from '@material-ui/core';
-import { NumberTextField, RecipeTextField } from '../Atoms/TextFields';
 import React, { Component } from 'react';
 
 import CloudUpload from '@material-ui/icons/CloudUploadOutlined';
 import Compress from 'compress.js';
-import ImageUpload from '../Molecules/ImageUpload';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import TimeInput from '../Molecules/TimeInput';
 import axios from 'axios';
+import { withStyles } from '@material-ui/styles';
+import ImageUpload from '../Molecules/ImageUpload';
+import TimeInput from '../Molecules/TimeInput';
 import { post } from '../Utils/Request';
 import { withFirebase } from '../Atoms/Firebase';
-import { withStyles } from '@material-ui/styles';
+import { NumberTextField, RecipeTextField } from '../Atoms/TextFields';
 
 const EMPTY_RECIPE = {
   title: '',
@@ -136,7 +136,7 @@ class RecipeForm extends Component {
     const {
       recipe: { cook, prep, ready },
     } = this.state;
-    let valid = {};
+    const valid = {};
 
     const timeRe = /(^\d+h( +[0-5]?\dm)?$|^[0-5]?\dm$)/;
 
@@ -145,7 +145,7 @@ class RecipeForm extends Component {
     valid.ready = !(ready && !timeRe.test(ready));
 
     this.setState({
-      valid: valid,
+      valid,
     });
   };
 
@@ -213,7 +213,7 @@ class RecipeForm extends Component {
           });
         }
       })
-      .catch(error => {
+      .catch(() => {
         this.setState({
           errors: {
             upload: true,
@@ -240,7 +240,7 @@ class RecipeForm extends Component {
       this.setState({ status: { waiting: true } });
     }
 
-    post('recipe', { ...recipe, private: recipe.shared !== 'public', uid: uid })
+    post('recipe', { ...recipe, private: recipe.shared !== 'public', uid })
       .then(() => {
         this.setState({ status: { added: true } });
       })
@@ -263,10 +263,10 @@ class RecipeForm extends Component {
           .delete(`https://api.imgur.com/3/image/${image.deleteHash}`, {
             headers: { Authorization: `Client-ID ${key}` },
           })
-          .then(response => {
+          .then(() => {
             // TODO
           })
-          .catch(error => {
+          .catch(() => {
             // TODO
           });
       });

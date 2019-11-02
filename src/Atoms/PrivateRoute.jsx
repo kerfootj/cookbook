@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-curly-newline */
 import { Redirect, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -26,7 +27,7 @@ const PrivateRoute = ({ component: Component, authUser, ...rest }) => {
 PrivateRoute.propTypes = {
   authUser: PropTypes.shape({}).isRequired,
   component: PropTypes.node.isRequired,
-  location: PropTypes.shape({}),
+  location: PropTypes.shape({}).isRequired,
 };
 
 export default PrivateRoute;

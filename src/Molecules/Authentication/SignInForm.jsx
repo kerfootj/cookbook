@@ -13,9 +13,9 @@ import {
 import React, { Component } from 'react';
 
 import axios from 'axios';
-import { withFirebase } from '../../Atoms/Firebase';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { withFirebase } from '../../Atoms/Firebase';
 
 const styles = {
   signUp: {
@@ -42,7 +42,7 @@ class SignIn extends Component {
       doSignInWithEmailAndPassword: PropTypes.func.isRequired,
       doSignInWithGoogle: PropTypes.func.isRequired,
     }).isRequired,
-    history: PropTypes.shape({ push: PropTypes.func.isRequired }),
+    history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
     changeForm: PropTypes.func.isRequired,
     classes: PropTypes.objectOf(PropTypes.string),
   };
@@ -56,19 +56,19 @@ class SignIn extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
-  isInvalid() {
+  isInvalid = () => {
     const { email, password } = this.state;
     return password === '' || email === '';
-  }
+  };
 
-  onSubmitEmail(e) {
+  onSubmitEmail = e => {
     const { email, password } = this.state;
     const { firebase, history } = this.props;
 
     firebase
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
-        let authUser = firebase.auth.currentUser;
+        const authUser = firebase.auth.currentUser;
         this.setState({ ...INITIAL_STATE });
         this.updateUser(authUser);
         history.push('/');
@@ -77,14 +77,14 @@ class SignIn extends Component {
         this.setState({ error });
       });
     e.preventDefault();
-  }
+  };
 
-  onSubmitGoogle(e) {
+  onSubmitGoogle = () => {
     const { firebase, history } = this.props;
     firebase
       .doSignInWithGoogle()
       .then(() => {
-        let authUser = firebase.auth.currentUser;
+        const authUser = firebase.auth.currentUser;
         this.setState({ ...INITIAL_STATE });
         this.updateUser(authUser);
         history.push('/');
@@ -92,15 +92,15 @@ class SignIn extends Component {
       .catch(error => {
         this.setState({ error });
       });
-  }
+  };
 
-  updateUser(authUser) {
+  updateUser = authUser => {
     axios.post('https://joel-cookbook-server.herokuapp.com/user', {
       uid: authUser.uid,
       name: authUser.displayName,
       photo: authUser.photoURL,
     });
-  }
+  };
 
   handleInputChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -116,7 +116,7 @@ class SignIn extends Component {
             align="center"
             // eslint-disable-next-line no-alert
             onClick={() => alert("Sorry Facebook isn't supported yet")}
-          ></FacebookLoginButton>
+          />
           <TwitterLoginButton
             align="center"
             // eslint-disable-next-line no-alert
@@ -125,7 +125,7 @@ class SignIn extends Component {
           <GoogleLoginButton
             align="center"
             onClick={e => this.onSubmitGoogle(e)}
-          ></GoogleLoginButton>
+          />
         </div>
 
         <br />

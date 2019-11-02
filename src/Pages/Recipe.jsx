@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 
 import Clock from '@material-ui/icons/Schedule';
 import Edit from '@material-ui/icons/Edit';
-import Gallery from '../Organisms/Gallery';
 import PieChart from '@material-ui/icons/PieChartOutlined';
 import { Redirect } from 'react-router-dom';
-import { withFirebase } from '../Atoms/Firebase';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
+import { withFirebase } from '../Atoms/Firebase';
+import Gallery from '../Organisms/Gallery';
 import { get } from '../Utils/Request';
 
 const styles = {
@@ -40,6 +40,10 @@ const styles = {
   },
   edit: {
     marginRight: 8,
+  },
+  icons: {
+    marginRight: 8,
+    marginLeft: 4,
   },
 };
 
@@ -88,7 +92,7 @@ class Recipe extends Component {
         });
       })
       .catch(error => {
-        this.setState({ error: error });
+        this.setState({ error });
       });
   }
 
@@ -180,8 +184,11 @@ class Recipe extends Component {
                 Ingredients
               </Typography>
               <Typography variant="body1" display="inline" align="right">
-                {ready} <Clock /> {servings} servings
-                <PieChart />
+                <>{ready}</>
+                <Clock className={classes.icons} />
+                <>{servings}</>
+                <> servings</>
+                <PieChart className={classes.icons} />
               </Typography>
             </Grid>
             <hr />
@@ -198,19 +205,22 @@ class Recipe extends Component {
               </Grid>
               <Grid item>
                 <Typography variant="body1" className={classes.timing}>
-                  Prep <br />
+                  <>Prep</>
+                  <br />
                   <Typography variant="caption">{prep}</Typography>
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography variant="body1" className={classes.timing}>
-                  Cook <br />
+                  <>Cook</>
+                  <br />
                   <Typography variant="caption">{cook}</Typography>
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography variant="body1">
-                  Ready In <br />
+                  <>Ready In</>
+                  <br />
                   <Typography variant="caption">{ready}</Typography>
                 </Typography>
               </Grid>
@@ -237,7 +247,7 @@ class Recipe extends Component {
           <Redirect
             to={{
               pathname: `${process.env.PUBLIC_URL}/recipe/${recipe._id}/edit`,
-              state: { recipe: recipe },
+              state: { recipe },
             }}
             push
           />

@@ -13,9 +13,9 @@ import {
 import React, { Component } from 'react';
 
 import axios from 'axios';
-import { withFirebase } from '../../Atoms/Firebase/';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { withFirebase } from '../../Atoms/Firebase';
 
 const styles = {
   socialContainer: {
@@ -42,9 +42,13 @@ class SignUpForm extends Component {
       doCreateUserWithEmailAndPassword: PropTypes.func.isRequired,
       doSignInWithGoogle: PropTypes.func.isRequired,
     }).isRequired,
-    history: PropTypes.shape({ push: PropTypes.func.isRequired }),
+    history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
     changeForm: PropTypes.func.isRequired,
     classes: PropTypes.objectOf(PropTypes.string),
+  };
+
+  static defaultProps = {
+    classes: {},
   };
 
   constructor(props) {
@@ -52,7 +56,7 @@ class SignUpForm extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
-  isInvalid() {
+  isInvalid = () => {
     const { firstName, lastName, email, passwordOne, passwordTwo } = this.state;
     return (
       passwordOne !== passwordTwo ||
@@ -61,16 +65,16 @@ class SignUpForm extends Component {
         firstName === '',
       lastName === ''
     );
-  }
+  };
 
-  onSubmitEmail(e) {
+  onSubmitEmail = e => {
     const { email, passwordOne, firstName, lastName } = this.state;
     const { firebase, history } = this.props;
 
     firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(() => {
-        let authUser = firebase.auth.currentUser;
+        const authUser = firebase.auth.currentUser;
         authUser.updateProfile({
           displayName: `${firstName} ${lastName}`,
         });
@@ -82,14 +86,14 @@ class SignUpForm extends Component {
         this.setState({ error });
       });
     e.preventDefault();
-  }
+  };
 
-  onSubmitGoogle(e) {
+  onSubmitGoogle = () => {
     const { firebase, history } = this.props;
     firebase
       .doSignInWithGoogle()
       .then(() => {
-        let authUser = firebase.auth.currentUser;
+        const authUser = firebase.auth.currentUser;
         this.setState({ ...INITIAL_STATE });
         this.updateUser(authUser);
         history.push('/');
@@ -97,19 +101,19 @@ class SignUpForm extends Component {
       .catch(error => {
         this.setState({ error });
       });
-  }
+  };
 
-  updateUser(authUser) {
+  updateUser = authUser => {
     axios.post('https://joel-cookbook-server.herokuapp.com/user', {
       uid: authUser.uid,
       name: authUser.displayName,
       photo: authUser.photoURL,
     });
-  }
+  };
 
-  handleInputChange(e) {
+  handleInputChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-  }
+  };
 
   render() {
     const { classes, changeForm } = this.props;
@@ -143,7 +147,7 @@ class SignUpForm extends Component {
         <hr />
         <br />
 
-        <form onSubmit={e => this.onSubmit(e)}>
+        <form onSubmit={e => this.onSubmitEmail(e)}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -151,7 +155,7 @@ class SignUpForm extends Component {
                 variant="outlined"
                 name="firstName"
                 placeholder="First Name"
-                onChange={e => this.handleInputChange(e)}
+                onChange={this.handleInputChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -160,7 +164,7 @@ class SignUpForm extends Component {
                 variant="outlined"
                 name="lastName"
                 placeholder="Last Name"
-                onChange={e => this.handleInputChange(e)}
+                onChange={this.handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -170,7 +174,7 @@ class SignUpForm extends Component {
                 variant="outlined"
                 name="email"
                 placeholder="Email"
-                onChange={e => this.handleInputChange(e)}
+                onChange={this.handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -181,7 +185,7 @@ class SignUpForm extends Component {
                 type="password"
                 name="passwordOne"
                 placeholder="Password"
-                onChange={e => this.handleInputChange(e)}
+                onChange={this.handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -192,7 +196,7 @@ class SignUpForm extends Component {
                 type="password"
                 name="passwordTwo"
                 placeholder="Confirm Password"
-                onChange={e => this.handleInputChange(e)}
+                onChange={this.handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>

@@ -28,7 +28,7 @@ const RecipeTextField = ({
       multiline={!!rows}
       rows={rows}
       variant="outlined"
-      name={name ? name : title.toLowerCase()}
+      name={name || title.toLowerCase()}
       placeholder={placeholder}
       onChange={onChange}
       defaultValue={defaultValue}
@@ -68,7 +68,7 @@ const TimeTextField = ({
       fullWidth
       variant="outlined"
       placeholder={placeholder}
-      name={name ? name : title.split(' ')[0].toLowerCase()}
+      name={name || title.split(' ')[0].toLowerCase()}
       onChange={onChange}
       onBlur={onBlur}
       defaultValue={defaultValue}
@@ -101,8 +101,8 @@ const NumberTextField = ({ title, name, min, max, onChange, defaultValue }) => (
       fullWidth
       variant="outlined"
       type="number"
-      inputProps={{ min: min, max: max }}
-      name={name ? name : title.toLowerCase()}
+      inputProps={{ min, max }}
+      name={name || title.toLowerCase()}
       onChange={onChange}
       defaultValue={defaultValue}
     />
