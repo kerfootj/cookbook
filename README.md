@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/kerfootj/cookbook.svg?branch=master)](https://travis-ci.com/kerfootj/cookbook)
+
 ## My Cook Book Web App
 
 ### Avaliable:
