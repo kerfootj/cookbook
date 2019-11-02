@@ -1,166 +1,190 @@
-import { Button, Grid, TextField, Typography, withStyles } from '@material-ui/core';
 import {
-	FacebookLoginButton,
-	GoogleLoginButton,
-	TwitterLoginButton
+  Button,
+  Grid,
+  TextField,
+  Typography,
+  withStyles,
+} from '@material-ui/core';
+import {
+  FacebookLoginButton,
+  GoogleLoginButton,
+  TwitterLoginButton,
 } from 'react-social-login-buttons';
 import React, { Component } from 'react';
 
 import axios from 'axios';
 import { withFirebase } from '../../Atoms/Firebase';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const styles = {
-	signUp: {
-		paddingTop: '1em'
-	},
-	socialContainer: {
-		flexGrow: 1, 
-		textAlign: 'center'
-	},
+  signUp: {
+    paddingTop: '1em',
+  },
+  socialContainer: {
+    flexGrow: 1,
+    textAlign: 'center',
+  },
 };
 
 const INITIAL_STATE = {
-	email: '',
-	password: '',
-	error: null
+  email: '',
+  password: '',
+  error: null,
 };
 
 class SignIn extends Component {
-	constructor(props) {
-		super(props);
-		this.state = { ...INITIAL_STATE };
-	}
+  static propTypes = {
+    firebase: PropTypes.shape({
+      auth: PropTypes.shape({
+        currentUser: PropTypes.shape({ uid: PropTypes.string }),
+      }),
+      doSignInWithEmailAndPassword: PropTypes.func.isRequired,
+      doSignInWithGoogle: PropTypes.func.isRequired,
+    }).isRequired,
+    history: PropTypes.shape({ push: PropTypes.func.isRequired }),
+    changeForm: PropTypes.func.isRequired,
+    classes: PropTypes.objectOf(PropTypes.string),
+  };
 
-	isInvalid() {
-		const { email, password } = this.state;
-		return password === '' || email === '';
-	}
+  static defaultProps = {
+    classes: {},
+  };
 
-	onSubmitEmail(e) {
-		const { email, password } = this.state;
-		const { firebase, history } = this.props;
+  constructor(props) {
+    super(props);
+    this.state = { ...INITIAL_STATE };
+  }
 
-		firebase
-			.doSignInWithEmailAndPassword(email, password)
-			.then(() => {
-				let authUser = firebase.auth.currentUser;
-				this.setState({ ...INITIAL_STATE });
-				this.updateUser(authUser);
-				history.push('/');
-			})
-			.catch(error => {
-				console.log(error);
-				this.setState({ error });
-			});
-		e.preventDefault();
-	}
+  isInvalid() {
+    const { email, password } = this.state;
+    return password === '' || email === '';
+  }
 
-	onSubmitGoogle(e) {
-		const { firebase, history } = this.props;
-		firebase
-			.doSignInWithGoogle()
-			.then(() => {
-				let authUser = firebase.auth.currentUser;
-				this.setState({ ...INITIAL_STATE });
-				this.updateUser(authUser);
-				history.push('/');
-			})
-			.catch(error => {
-				console.log(error);
-				this.setState({ error });
-			});
-	}
+  onSubmitEmail(e) {
+    const { email, password } = this.state;
+    const { firebase, history } = this.props;
 
-	updateUser(authUser) {
-		axios.post('https://joel-cookbook-server.herokuapp.com/user', {
-			uid: authUser.uid,
-			name: authUser.displayName,
-			photo: authUser.photoURL
-		});
-	}
+    firebase
+      .doSignInWithEmailAndPassword(email, password)
+      .then(() => {
+        let authUser = firebase.auth.currentUser;
+        this.setState({ ...INITIAL_STATE });
+        this.updateUser(authUser);
+        history.push('/');
+      })
+      .catch(error => {
+        this.setState({ error });
+      });
+    e.preventDefault();
+  }
 
-	handleInputChange(e) {
-		this.setState({ [e.target.name]: e.target.value });
-	}
+  onSubmitGoogle(e) {
+    const { firebase, history } = this.props;
+    firebase
+      .doSignInWithGoogle()
+      .then(() => {
+        let authUser = firebase.auth.currentUser;
+        this.setState({ ...INITIAL_STATE });
+        this.updateUser(authUser);
+        history.push('/');
+      })
+      .catch(error => {
+        this.setState({ error });
+      });
+  }
 
-	render() {
-		const { classes, changeForm } = this.props;
-		const { error } = this.state;
-		return (
-			<>
-				<div className={classes.socialContainer}>
-					<FacebookLoginButton
-						align='center'
-						onClick={() => alert("Sorry Facebook isn't supported yet")}
-					></FacebookLoginButton>
-					<TwitterLoginButton
-						align='center'
-						onClick={() => alert("Sorry Twitter isn't supported yet")}
-					/>
-					<GoogleLoginButton
-						align='center'
-						onClick={e => this.onSubmitGoogle(e)}
-					></GoogleLoginButton>
-				</div>
+  updateUser(authUser) {
+    axios.post('https://joel-cookbook-server.herokuapp.com/user', {
+      uid: authUser.uid,
+      name: authUser.displayName,
+      photo: authUser.photoURL,
+    });
+  }
 
-				<br />
-				<hr />
-				<br />
+  handleInputChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
 
-				<form onSubmit={e => this.onSubmitEmail(e)}>
-					<Grid container spacing={2}>
-						<Grid item xs={12}>
-							<TextField
-								autoComplete='email'
-								autoFocus
-								fullWidth
-								variant='outlined'
-								name='email'
-								placeholder='Email'
-								onChange={e => this.handleInputChange(e)}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								autoComplete='current-password'
-								fullWidth
-								variant='outlined'
-								type='password'
-								name='password'
-								placeholder='Password'
-								onChange={e => this.handleInputChange(e)}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<Button
-								fullWidth
-								disabled={this.isInvalid()}
-								type='submit'
-								variant='contained'
-								color='primary'
-							>
-								Login
-							</Button>
-						</Grid>
-					</Grid>
-					{error && <p>{error.message}</p>}
-				</form>
-				<div className={classes.signUp}>
-					<Typography variant='body1'>New to mycookbook?</Typography>
-					<Button
-						fullWidth
-						type='submit'
-						variant='contained'
-						color='secondary'
-						onClick={changeForm}
-					>
-						Sign Up
-					</Button>
-				</div>
-			</>
-		);
-	}
+  render() {
+    const { classes, changeForm } = this.props;
+    const { error } = this.state;
+    return (
+      <>
+        <div className={classes.socialContainer}>
+          <FacebookLoginButton
+            align="center"
+            // eslint-disable-next-line no-alert
+            onClick={() => alert("Sorry Facebook isn't supported yet")}
+          ></FacebookLoginButton>
+          <TwitterLoginButton
+            align="center"
+            // eslint-disable-next-line no-alert
+            onClick={() => alert("Sorry Twitter isn't supported yet")}
+          />
+          <GoogleLoginButton
+            align="center"
+            onClick={e => this.onSubmitGoogle(e)}
+          ></GoogleLoginButton>
+        </div>
+
+        <br />
+        <hr />
+        <br />
+
+        <form onSubmit={e => this.onSubmitEmail(e)}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="email"
+                autoFocus
+                fullWidth
+                variant="outlined"
+                name="email"
+                placeholder="Email"
+                onChange={e => this.handleInputChange(e)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="current-password"
+                fullWidth
+                variant="outlined"
+                type="password"
+                name="password"
+                placeholder="Password"
+                onChange={e => this.handleInputChange(e)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                fullWidth
+                disabled={this.isInvalid()}
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
+                Login
+              </Button>
+            </Grid>
+          </Grid>
+          {error && <p>{error.message}</p>}
+        </form>
+        <div className={classes.signUp}>
+          <Typography variant="body1">New to mycookbook?</Typography>
+          <Button
+            fullWidth
+            type="submit"
+            variant="contained"
+            color="secondary"
+            onClick={changeForm}
+          >
+            Sign Up
+          </Button>
+        </div>
+      </>
+    );
+  }
 }
 
 export default withStyles(styles)(withRouter(withFirebase(SignIn)));
