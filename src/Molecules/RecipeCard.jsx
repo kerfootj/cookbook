@@ -1,4 +1,4 @@
-import React, { PureComponet } from 'react';
+import React, { PureComponent } from 'react';
 
 import { Avatar } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
@@ -44,7 +44,7 @@ const styles = {
   },
 };
 
-class ImageCard extends PureComponet {
+class RecipeCard extends PureComponent {
   static propTypes = {
     imageUrl: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -113,4 +113,4 @@ class ImageCard extends PureComponet {
   }
 }
 
-export default withStyles(styles)(ImageCard);
+export default withStyles(styles)(RecipeCard);

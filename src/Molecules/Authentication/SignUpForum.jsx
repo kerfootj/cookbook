@@ -15,6 +15,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withFirebase } from '../../Atoms/Firebase/';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const styles = {
   socialContainer: {
