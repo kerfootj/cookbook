@@ -1,10 +1,4 @@
-import {
-  Button,
-  Grid,
-  TextField,
-  Typography,
-  withStyles,
-} from '@material-ui/core';
+import { Button, Grid, TextField, withStyles } from '@material-ui/core';
 import {
   FacebookLoginButton,
   GoogleLoginButton,
@@ -12,15 +6,18 @@ import {
 } from 'react-social-login-buttons';
 import React, { Component } from 'react';
 
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { withFirebase } from '../../Atoms/Firebase';
 
 const styles = {
   socialContainer: {
     flexGrow: 1,
     textAlign: 'center',
+  },
+  divider: {
+    margin: '10px 0px 10px',
   },
 };
 
@@ -43,7 +40,6 @@ class SignUpForm extends Component {
       doSignInWithGoogle: PropTypes.func.isRequired,
     }).isRequired,
     history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
-    changeForm: PropTypes.func.isRequired,
     classes: PropTypes.objectOf(PropTypes.string),
   };
 
@@ -88,7 +84,7 @@ class SignUpForm extends Component {
     e.preventDefault();
   };
 
-  onSubmitGoogle = () => {
+  handleSubmitGoogle = () => {
     const { firebase, history } = this.props;
     firebase
       .doSignInWithGoogle()
@@ -116,10 +112,10 @@ class SignUpForm extends Component {
   };
 
   render() {
-    const { classes, changeForm } = this.props;
+    const { classes } = this.props;
     const { error } = this.state;
     return (
-      <>
+      <div className={classes.container}>
         <div className={classes.socialContainer}>
           <FacebookLoginButton
             align="center"
@@ -135,19 +131,12 @@ class SignUpForm extends Component {
           >
             <span>Sign up with Twitter</span>
           </TwitterLoginButton>
-          <GoogleLoginButton
-            align="center"
-            onClick={e => this.onSubmitGoogle(e)}
-          >
+          <GoogleLoginButton align="center" onClick={this.handleSubmitGoogle}>
             <span>Sign up with Google</span>
           </GoogleLoginButton>
         </div>
-
-        <br />
-        <hr />
-        <br />
-
-        <form onSubmit={e => this.onSubmitEmail(e)}>
+        <hr className={classes.divider} />
+        <form onSubmit={this.onSubmitEmail}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -210,21 +199,10 @@ class SignUpForm extends Component {
                 Create Account
               </Button>
             </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1">Already have an account?</Typography>
-              <Button
-                fullWidth
-                variant="contained"
-                color="secondary"
-                onClick={changeForm}
-              >
-                Sign In
-              </Button>
-            </Grid>
           </Grid>
           {error && <p>{error.message}</p>}
         </form>
-      </>
+      </div>
     );
   }
 }

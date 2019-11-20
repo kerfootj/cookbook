@@ -1,10 +1,4 @@
-import {
-  Button,
-  Grid,
-  TextField,
-  Typography,
-  withStyles,
-} from '@material-ui/core';
+import { Button, Grid, TextField, withStyles } from '@material-ui/core';
 import {
   FacebookLoginButton,
   GoogleLoginButton,
@@ -12,18 +6,18 @@ import {
 } from 'react-social-login-buttons';
 import React, { Component } from 'react';
 
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { withFirebase } from '../../Atoms/Firebase';
 
 const styles = {
-  signUp: {
-    paddingTop: '1em',
-  },
   socialContainer: {
     flexGrow: 1,
     textAlign: 'center',
+  },
+  divider: {
+    margin: '10px 0px 10px',
   },
 };
 
@@ -43,7 +37,6 @@ class SignIn extends Component {
       doSignInWithGoogle: PropTypes.func.isRequired,
     }).isRequired,
     history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
-    changeForm: PropTypes.func.isRequired,
     classes: PropTypes.objectOf(PropTypes.string),
   };
 
@@ -107,7 +100,7 @@ class SignIn extends Component {
   }
 
   render() {
-    const { classes, changeForm } = this.props;
+    const { classes } = this.props;
     const { error } = this.state;
     return (
       <>
@@ -127,11 +120,7 @@ class SignIn extends Component {
             onClick={e => this.onSubmitGoogle(e)}
           />
         </div>
-
-        <br />
-        <hr />
-        <br />
-
+        <hr className={classes.divider} />
         <form onSubmit={e => this.onSubmitEmail(e)}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -170,18 +159,6 @@ class SignIn extends Component {
           </Grid>
           {error && <p>{error.message}</p>}
         </form>
-        <div className={classes.signUp}>
-          <Typography variant="body1">New to mycookbook?</Typography>
-          <Button
-            fullWidth
-            type="submit"
-            variant="contained"
-            color="secondary"
-            onClick={changeForm}
-          >
-            Sign Up
-          </Button>
-        </div>
       </>
     );
   }

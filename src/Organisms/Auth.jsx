@@ -1,54 +1,24 @@
-import { Button, Modal, Paper, withStyles } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+} from '@material-ui/core';
 import React, { Component } from 'react';
+
 import PropTypes from 'prop-types';
 import SignInForm from '../Molecules/Authentication/SignInForm';
 import SignUpForum from '../Molecules/Authentication/SignUpForum';
 
-const styles = theme => ({
-  paper: {
-    [theme.breakpoints.up('xs')]: {
-      top: '5%',
-      left: '5%',
-      right: '5%',
-      padding: '1em',
-      marginBottom: '5%',
-    },
-    [theme.breakpoints.up('md')]: {
-      top: `${50}%`,
-      left: `${50}%`,
-      transform: `translate(-${50}%, -${50}%)`,
-      padding: '2em',
-    },
-    position: 'absolute',
-
-    border: '1px solid #000',
-    outline: 'none',
-  },
-  modal: {
-    overflow: 'scroll',
-  },
-  signIn: {
-    [theme.breakpoints.up('md')]: {
-      maxWidth: 350,
-    },
-  },
-  signUp: {
-    [theme.breakpoints.up('md')]: {
-      maxWidth: 450,
-    },
-  },
-});
-
 class Auth extends Component {
   static propTypes = {
-    buttonText: PropTypes.oneOf([PropTypes.string, PropTypes.node]).isRequired,
-    classes: PropTypes.objectOf(PropTypes.string),
+    buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+      .isRequired,
     create: PropTypes.bool,
     open: PropTypes.bool,
   };
 
   static defaultProps = {
-    classes: {},
     create: false,
     open: false,
   };
@@ -58,7 +28,7 @@ class Auth extends Component {
     this.state = { open: props.open, create: props.create };
   }
 
-  renderForm() {
+  renderForm = () => {
     const { create } = this.state;
     if (create) {
       return (
@@ -76,11 +46,25 @@ class Auth extends Component {
         }}
       />
     );
-  }
+  };
+
+  renderAltButton = () => {
+    const { create } = this.state;
+    return (
+      <Button
+        color="primary"
+        onClick={() => {
+          this.setState({ create: !create });
+        }}
+      >
+        {create ? 'Log in instead' : 'Create account'}
+      </Button>
+    );
+  };
 
   render() {
-    const { buttonText, classes } = this.props;
-    const { create, open } = this.state;
+    const { buttonText } = this.props;
+    const { open } = this.state;
     return (
       <>
         <Button
@@ -92,24 +76,33 @@ class Auth extends Component {
         >
           {buttonText}
         </Button>
-        <Modal
-          className={classes.modal}
+        <Dialog
+          maxWidth="xs"
           open={open}
           onClose={() => {
             this.setState({ open: false });
           }}
         >
-          <Paper
-            className={`${classes.paper} ${
-              create ? classes.signUp : classes.signIn
-            }`}
-          >
-            {this.renderForm()}
-          </Paper>
-        </Modal>
+          <DialogContent>{this.renderForm()}</DialogContent>
+          <DialogActions>
+            <div style={{ width: '100%' }}>
+              {this.renderAltButton()}
+              <Button
+                style={{ float: 'right' }}
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  this.setState({ open: false });
+                }}
+              >
+                Close
+              </Button>
+            </div>
+          </DialogActions>
+        </Dialog>
       </>
     );
   }
 }
 
-export default withStyles(styles)(Auth);
+export default Auth;
