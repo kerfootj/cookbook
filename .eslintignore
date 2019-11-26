@@ -1,6 +1,3 @@
 node_modules
 index.js
 serviceWorker.js
-
-// TODO: remove this
-src/Atoms/Firebase
