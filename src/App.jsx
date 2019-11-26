@@ -10,7 +10,7 @@ import NavBar from './Organisms/NavBar';
 import PrivateRoute from './Atoms/PrivateRoute';
 import Recipe from './Pages/Recipe';
 import RecipeForm from './Organisms/RecipeForm';
-import { withFirebase } from './Atoms/Firebase/index';
+import { withFirebase } from './Atoms/Firebase';
 
 const theme = createMuiTheme({
   palette: {

@@ -1,6 +1,6 @@
 import * as serviceWorker from './serviceWorker';
 
-import Firebase, { FirebaseContext } from './Atoms/Firebase/index';
+import Firebase, { FirebaseContext } from './Atoms/Firebase';
 
 import App from './App';
 import React from 'react';
