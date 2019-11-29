@@ -6,9 +6,7 @@ before_script:
   - npm i
 script:
   - npm run lint
-  on:
-    branch: master
-    - script: npm build
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then npm build
 deploy:
   provider: pages
   skip_cleanup: true
