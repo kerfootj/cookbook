@@ -17,7 +17,10 @@ import ImageUpload from '../Molecules/ImageUpload';
 import TimeInput from '../Molecules/TimeInput';
 import { post } from '../Utils/Request';
 import { withFirebase } from '../Atoms/Firebase';
-import { NumberTextField, RecipeTextField } from '../Atoms/TextFields';
+import {
+  NumberTextField,
+  RecipeTextField,
+} from '../Atoms/textfields/TextFields';
 
 const EMPTY_RECIPE = {
   title: '',

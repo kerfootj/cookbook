@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { TimeTextField } from '../Atoms/TextFields';
+import { TimeTextField } from '../Atoms/textfields/TextFields';
 
 const TimeInput = ({ onChange, validate, valid, defaultValues }) => (
   <>
