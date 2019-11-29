@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, withStyles } from '@material-ui/core';
+import { Button, Grid, withStyles, Typography } from '@material-ui/core';
 import {
   FacebookLoginButton,
   GoogleLoginButton,
@@ -8,8 +8,11 @@ import React, { Component } from 'react';
 
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../../Atoms/Firebase';
+import {
+  EmailTextField,
+  PasswordTextField,
+} from '../../Atoms/textfields/TextFields';
 
 const styles = {
   socialContainer: {
@@ -19,12 +22,9 @@ const styles = {
   divider: {
     margin: '10px 0px 10px',
   },
-};
-
-const INITIAL_STATE = {
-  email: '',
-  password: '',
-  error: null,
+  errorText: {
+    color: '#f44336',
+  },
 };
 
 class SignIn extends Component {
@@ -36,7 +36,6 @@ class SignIn extends Component {
       doSignInWithEmailAndPassword: PropTypes.func.isRequired,
       doSignInWithGoogle: PropTypes.func.isRequired,
     }).isRequired,
-    history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
     classes: PropTypes.objectOf(PropTypes.string),
   };
 
@@ -46,7 +45,14 @@ class SignIn extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { ...INITIAL_STATE };
+    this.state = {
+      email: '',
+      password: '',
+      error: {
+        submit: false,
+        google: false,
+      },
+    };
   }
 
   isInvalid = () => {
@@ -54,37 +60,30 @@ class SignIn extends Component {
     return password === '' || email === '';
   };
 
-  onSubmitEmail = e => {
+  handleSubmitEmail = async event => {
     const { email, password } = this.state;
-    const { firebase, history } = this.props;
+    const { firebase } = this.props;
 
-    firebase
-      .doSignInWithEmailAndPassword(email, password)
-      .then(() => {
-        const authUser = firebase.auth.currentUser;
-        this.setState({ ...INITIAL_STATE });
-        this.updateUser(authUser);
-        history.push('/');
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
-    e.preventDefault();
+    event.preventDefault();
+
+    try {
+      await firebase.doSignInWithEmailAndPassword(email, password);
+      const authUser = firebase.auth.currentUser;
+      this.updateUser(authUser);
+    } catch (error) {
+      this.setState(prev => ({ error: { ...prev.error, submit: true } }));
+    }
   };
 
-  onSubmitGoogle = () => {
-    const { firebase, history } = this.props;
-    firebase
-      .doSignInWithGoogle()
-      .then(() => {
-        const authUser = firebase.auth.currentUser;
-        this.setState({ ...INITIAL_STATE });
-        this.updateUser(authUser);
-        history.push('/');
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
+  handleSubmitGoogle = async () => {
+    const { firebase } = this.props;
+    try {
+      await firebase.doSignInWithGoogle();
+      const authUser = firebase.auth.currentUser;
+      this.updateUser(authUser);
+    } catch (error) {
+      this.setState(prev => ({ error: { ...prev.error, google: true } }));
+    }
   };
 
   updateUser = authUser => {
@@ -95,13 +94,40 @@ class SignIn extends Component {
     });
   };
 
-  handleInputChange(e) {
+  handleInputChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-  }
+  };
+
+  renderErrorMessage = () => {
+    const { classes } = this.props;
+    const {
+      error: { submit, google },
+    } = this.state;
+
+    if (!submit) return undefined;
+
+    let text;
+    if (submit) {
+      text = 'Incorrect Email or Password';
+    } else if (google) {
+      text = "Couldn't sign into Google";
+    }
+
+    return (
+      <Typography
+        className={classes.errorText}
+        variant="body2"
+        display="block"
+        gutterBottom
+      >
+        {text}
+      </Typography>
+    );
+  };
 
   render() {
     const { classes } = this.props;
-    const { error } = this.state;
+    const { email } = this.state;
     return (
       <>
         <div className={classes.socialContainer}>
@@ -115,35 +141,21 @@ class SignIn extends Component {
             // eslint-disable-next-line no-alert
             onClick={() => alert("Sorry Twitter isn't supported yet")}
           />
-          <GoogleLoginButton
-            align="center"
-            onClick={e => this.onSubmitGoogle(e)}
-          />
+          <GoogleLoginButton align="center" onClick={this.handleSubmitGoogle} />
         </div>
         <hr className={classes.divider} />
-        <form onSubmit={e => this.onSubmitEmail(e)}>
+        {this.renderErrorMessage()}
+        <form onSubmit={this.handleSubmitEmail}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
-                autoComplete="email"
+              <EmailTextField
                 autoFocus
-                fullWidth
-                variant="outlined"
-                name="email"
-                placeholder="Email"
-                onChange={e => this.handleInputChange(e)}
+                email={email}
+                onChange={this.handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                autoComplete="current-password"
-                fullWidth
-                variant="outlined"
-                type="password"
-                name="password"
-                placeholder="Password"
-                onChange={e => this.handleInputChange(e)}
-              />
+              <PasswordTextField onChange={this.handleInputChange} />
             </Grid>
             <Grid item xs={12}>
               <Button
@@ -157,11 +169,10 @@ class SignIn extends Component {
               </Button>
             </Grid>
           </Grid>
-          {error && <p>{error.message}</p>}
         </form>
       </>
     );
   }
 }
 
-export default withStyles(styles)(withRouter(withFirebase(SignIn)));
+export default withStyles(styles)(withFirebase(SignIn));
