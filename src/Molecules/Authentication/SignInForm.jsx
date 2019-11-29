@@ -1,6 +1,12 @@
 import * as yup from 'yup';
 
-import { Button, Grid, TextField, withStyles } from '@material-ui/core';
+import {
+  Button,
+  Grid,
+  TextField,
+  withStyles,
+  Typography,
+} from '@material-ui/core';
 import {
   FacebookLoginButton,
   GoogleLoginButton,
@@ -13,14 +19,6 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../../Atoms/Firebase';
 
-const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .required('an email is required'),
-  password: yup.string().required('a password is required'),
-});
-
 const styles = {
   socialContainer: {
     flexGrow: 1,
@@ -29,12 +27,19 @@ const styles = {
   divider: {
     margin: '10px 0px 10px',
   },
+  errorText: {
+    color: '#f44336',
+  },
 };
 
 const INITIAL_STATE = {
   email: '',
   password: '',
-  error: null,
+  error: {
+    email: false,
+    submit: false,
+    google: false,
+  },
 };
 
 class SignIn extends Component {
@@ -64,6 +69,20 @@ class SignIn extends Component {
     return password === '' || email === '';
   };
 
+  validateEmail = async () => {
+    const { email } = this.state;
+    try {
+      await yup
+        .string()
+        .email()
+        .required()
+        .validate(email);
+      this.setState(prev => ({ error: { ...prev.error, email: false } }));
+    } catch (error) {
+      this.setState(prev => ({ error: { ...prev.error, email: true } }));
+    }
+  };
+
   handleSubmitEmail = async event => {
     event.preventDefault();
 
@@ -71,46 +90,26 @@ class SignIn extends Component {
     const { firebase } = this.props;
 
     try {
-      await schema.validate({ email, password });
-
       await firebase.doSignInWithEmailAndPassword(email, password);
       const authUser = firebase.auth.currentUser;
 
       this.setState({ ...INITIAL_STATE });
       this.updateUser(authUser);
     } catch (error) {
-      console.log(error);
-      const type = error.path;
-      let message;
-
-      switch (type) {
-        case 'email':
-          message = 'Please enter a valid email address';
-          break;
-        default:
-          message = 'Oops something went wrong';
-      }
-      this.setState({
-        error: {
-          [type]: message,
-        },
-      });
+      this.setState(prev => ({ error: { ...prev.error, submit: true } }));
     }
   };
 
-  onSubmitGoogle = () => {
-    const { firebase, history } = this.props;
-    firebase
-      .doSignInWithGoogle()
-      .then(() => {
-        const authUser = firebase.auth.currentUser;
-        this.setState({ ...INITIAL_STATE });
-        this.updateUser(authUser);
-        history.push('/');
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
+  handleSubmitGoogle = async () => {
+    const { firebase } = this.props;
+    try {
+      await firebase.doSignInWithGoogle();
+      const authUser = firebase.auth.currentUser;
+      this.setState({ ...INITIAL_STATE });
+      this.updateUser(authUser);
+    } catch (error) {
+      this.setState(prev => ({ error: { ...prev.error, google: true } }));
+    }
   };
 
   updateUser = authUser => {
@@ -123,6 +122,33 @@ class SignIn extends Component {
 
   handleInputChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+  };
+
+  renderErrorMessage = () => {
+    const { classes } = this.props;
+    const {
+      error: { submit, google },
+    } = this.state;
+
+    if (!submit) return undefined;
+
+    let text;
+    if (submit) {
+      text = 'Incorrect Email or Password';
+    } else if (google) {
+      text = "Couldn't sign into Google";
+    }
+
+    return (
+      <Typography
+        className={classes.errorText}
+        variant="body2"
+        display="block"
+        gutterBottom
+      >
+        {text}
+      </Typography>
+    );
   };
 
   render() {
@@ -141,12 +167,10 @@ class SignIn extends Component {
             // eslint-disable-next-line no-alert
             onClick={() => alert("Sorry Twitter isn't supported yet")}
           />
-          <GoogleLoginButton
-            align="center"
-            onClick={e => this.onSubmitGoogle(e)}
-          />
+          <GoogleLoginButton align="center" onClick={this.handleSubmitGoogle} />
         </div>
         <hr className={classes.divider} />
+        {this.renderErrorMessage()}
         <form onSubmit={this.handleSubmitEmail}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -157,9 +181,12 @@ class SignIn extends Component {
                 variant="outlined"
                 name="email"
                 placeholder="Email"
-                error={!!(error && error.email)}
-                helperText={error ? error.email : undefined}
+                error={error.email}
+                helperText={
+                  error.email ? 'Please enter a valid email address' : undefined
+                }
                 onChange={this.handleInputChange}
+                onBlur={this.validateEmail}
               />
             </Grid>
             <Grid item xs={12}>
@@ -185,7 +212,6 @@ class SignIn extends Component {
               </Button>
             </Grid>
           </Grid>
-          {error && <p>{error.message}</p>}
         </form>
       </>
     );
