@@ -1,3 +1,5 @@
+import * as yup from 'yup';
+
 import { Button, Grid, TextField, withStyles } from '@material-ui/core';
 import {
   FacebookLoginButton,
@@ -10,6 +12,14 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../../Atoms/Firebase';
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email()
+    .required('an email is required'),
+  password: yup.string().required('a password is required'),
+});
 
 const styles = {
   socialContainer: {
@@ -54,22 +64,38 @@ class SignIn extends Component {
     return password === '' || email === '';
   };
 
-  onSubmitEmail = e => {
-    const { email, password } = this.state;
-    const { firebase, history } = this.props;
+  handleSubmitEmail = async event => {
+    event.preventDefault();
 
-    firebase
-      .doSignInWithEmailAndPassword(email, password)
-      .then(() => {
-        const authUser = firebase.auth.currentUser;
-        this.setState({ ...INITIAL_STATE });
-        this.updateUser(authUser);
-        history.push('/');
-      })
-      .catch(error => {
-        this.setState({ error });
+    const { email, password } = this.state;
+    const { firebase } = this.props;
+
+    try {
+      await schema.validate({ email, password });
+
+      await firebase.doSignInWithEmailAndPassword(email, password);
+      const authUser = firebase.auth.currentUser;
+
+      this.setState({ ...INITIAL_STATE });
+      this.updateUser(authUser);
+    } catch (error) {
+      console.log(error);
+      const type = error.path;
+      let message;
+
+      switch (type) {
+        case 'email':
+          message = 'Please enter a valid email address';
+          break;
+        default:
+          message = 'Oops something went wrong';
+      }
+      this.setState({
+        error: {
+          [type]: message,
+        },
       });
-    e.preventDefault();
+    }
   };
 
   onSubmitGoogle = () => {
@@ -95,9 +121,9 @@ class SignIn extends Component {
     });
   };
 
-  handleInputChange(e) {
+  handleInputChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-  }
+  };
 
   render() {
     const { classes } = this.props;
@@ -121,7 +147,7 @@ class SignIn extends Component {
           />
         </div>
         <hr className={classes.divider} />
-        <form onSubmit={e => this.onSubmitEmail(e)}>
+        <form onSubmit={this.handleSubmitEmail}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -131,7 +157,9 @@ class SignIn extends Component {
                 variant="outlined"
                 name="email"
                 placeholder="Email"
-                onChange={e => this.handleInputChange(e)}
+                error={!!(error && error.email)}
+                helperText={error ? error.email : undefined}
+                onChange={this.handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -142,7 +170,7 @@ class SignIn extends Component {
                 type="password"
                 name="password"
                 placeholder="Password"
-                onChange={e => this.handleInputChange(e)}
+                onChange={this.handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
