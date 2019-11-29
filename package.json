@@ -21,7 +21,8 @@
 		"react-scripts": "3.0.1",
 		"react-social-login-buttons": "^3.0.0",
 		"react-text-truncate": "^0.15.0",
-		"webpack": "^4.41.0"
+		"webpack": "^4.41.0",
+		"yup": "^0.27.0"
 	},
 	"scripts": {
 		"start": "react-scripts start",
