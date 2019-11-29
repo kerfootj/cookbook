@@ -2,24 +2,14 @@ env: SKIP_PREFLIGHT_CHECK=true
 language: node_js
 node_js:
   - '12'
-jobs:
-  include:
-    - stage: install
-      script: npm i
-    - stage: lint
-      script: npm run lint
-    - stage: build
-      script: npm run build
-    - stage: deploy
-      provider: pages
-      skip_cleanup: true
-      github_token: $github_token
-      local_dir: build
-
-stages:
-  - install
-  - lint
-  - name: build
-    if: branch = master
-  - name: deploy
-    if: branch = master
+before_script:
+  - npm i
+script:
+  - npm run lint
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $github_token
+  local_dir: build
+  on:
+    branch: master
