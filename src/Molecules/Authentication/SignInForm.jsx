@@ -1,12 +1,4 @@
-import * as yup from 'yup';
-
-import {
-  Button,
-  Grid,
-  TextField,
-  withStyles,
-  Typography,
-} from '@material-ui/core';
+import { Button, Grid, withStyles, Typography } from '@material-ui/core';
 import {
   FacebookLoginButton,
   GoogleLoginButton,
@@ -16,8 +8,11 @@ import React, { Component } from 'react';
 
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../../Atoms/Firebase';
+import {
+  EmailTextField,
+  PasswordTextField,
+} from '../../Atoms/textfields/TextFields';
 
 const styles = {
   socialContainer: {
@@ -32,16 +27,6 @@ const styles = {
   },
 };
 
-const INITIAL_STATE = {
-  email: '',
-  password: '',
-  error: {
-    email: false,
-    submit: false,
-    google: false,
-  },
-};
-
 class SignIn extends Component {
   static propTypes = {
     firebase: PropTypes.shape({
@@ -51,7 +36,6 @@ class SignIn extends Component {
       doSignInWithEmailAndPassword: PropTypes.func.isRequired,
       doSignInWithGoogle: PropTypes.func.isRequired,
     }).isRequired,
-    history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
     classes: PropTypes.objectOf(PropTypes.string),
   };
 
@@ -61,7 +45,14 @@ class SignIn extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { ...INITIAL_STATE };
+    this.state = {
+      email: '',
+      password: '',
+      error: {
+        submit: false,
+        google: false,
+      },
+    };
   }
 
   isInvalid = () => {
@@ -69,31 +60,15 @@ class SignIn extends Component {
     return password === '' || email === '';
   };
 
-  validateEmail = async () => {
-    const { email } = this.state;
-    try {
-      await yup
-        .string()
-        .email()
-        .required()
-        .validate(email);
-      this.setState(prev => ({ error: { ...prev.error, email: false } }));
-    } catch (error) {
-      this.setState(prev => ({ error: { ...prev.error, email: true } }));
-    }
-  };
-
   handleSubmitEmail = async event => {
-    event.preventDefault();
-
     const { email, password } = this.state;
     const { firebase } = this.props;
+
+    event.preventDefault();
 
     try {
       await firebase.doSignInWithEmailAndPassword(email, password);
       const authUser = firebase.auth.currentUser;
-
-      this.setState({ ...INITIAL_STATE });
       this.updateUser(authUser);
     } catch (error) {
       this.setState(prev => ({ error: { ...prev.error, submit: true } }));
@@ -105,7 +80,6 @@ class SignIn extends Component {
     try {
       await firebase.doSignInWithGoogle();
       const authUser = firebase.auth.currentUser;
-      this.setState({ ...INITIAL_STATE });
       this.updateUser(authUser);
     } catch (error) {
       this.setState(prev => ({ error: { ...prev.error, google: true } }));
@@ -153,7 +127,7 @@ class SignIn extends Component {
 
   render() {
     const { classes } = this.props;
-    const { error } = this.state;
+    const { email } = this.state;
     return (
       <>
         <div className={classes.socialContainer}>
@@ -174,31 +148,14 @@ class SignIn extends Component {
         <form onSubmit={this.handleSubmitEmail}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
-                autoComplete="email"
+              <EmailTextField
                 autoFocus
-                fullWidth
-                variant="outlined"
-                name="email"
-                placeholder="Email"
-                error={error.email}
-                helperText={
-                  error.email ? 'Please enter a valid email address' : undefined
-                }
+                email={email}
                 onChange={this.handleInputChange}
-                onBlur={this.validateEmail}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                autoComplete="current-password"
-                fullWidth
-                variant="outlined"
-                type="password"
-                name="password"
-                placeholder="Password"
-                onChange={this.handleInputChange}
-              />
+              <PasswordTextField onChange={this.handleInputChange} />
             </Grid>
             <Grid item xs={12}>
               <Button
@@ -218,4 +175,4 @@ class SignIn extends Component {
   }
 }
 
-export default withStyles(styles)(withRouter(withFirebase(SignIn)));
+export default withStyles(styles)(withFirebase(SignIn));

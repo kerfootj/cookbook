@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, withStyles } from '@material-ui/core';
+import { Button, Grid, withStyles } from '@material-ui/core';
 import {
   FacebookLoginButton,
   GoogleLoginButton,
@@ -8,8 +8,12 @@ import React, { Component } from 'react';
 
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
+import * as yup from 'yup';
 import { withFirebase } from '../../Atoms/Firebase';
+import TextField, {
+  EmailTextField,
+  PasswordTextField,
+} from '../../Atoms/textfields/TextFields';
 
 const styles = {
   socialContainer: {
@@ -21,15 +25,6 @@ const styles = {
   },
 };
 
-const INITIAL_STATE = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  passwordOne: '',
-  passwordTwo: '',
-  error: null,
-};
-
 class SignUpForm extends Component {
   static propTypes = {
     firebase: PropTypes.shape({
@@ -39,7 +34,6 @@ class SignUpForm extends Component {
       doCreateUserWithEmailAndPassword: PropTypes.func.isRequired,
       doSignInWithGoogle: PropTypes.func.isRequired,
     }).isRequired,
-    history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
     classes: PropTypes.objectOf(PropTypes.string),
   };
 
@@ -49,54 +43,102 @@ class SignUpForm extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { ...INITIAL_STATE };
+    this.state = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      passwordOne: '',
+      passwordTwo: '',
+      error: {},
+    };
   }
 
   isInvalid = () => {
-    const { firstName, lastName, email, passwordOne, passwordTwo } = this.state;
+    const {
+      firstName,
+      lastName,
+      email,
+      passwordOne,
+      passwordTwo,
+      valid,
+    } = this.state;
     return (
-      passwordOne !== passwordTwo ||
-        passwordOne === '' ||
-        email === '' ||
-        firstName === '',
+      !valid ||
+      passwordOne === '' ||
+      passwordTwo === '' ||
+      email === '' ||
+      firstName === '' ||
       lastName === ''
     );
   };
 
-  onSubmitEmail = e => {
-    const { email, passwordOne, firstName, lastName } = this.state;
-    const { firebase, history } = this.props;
+  validatePasswords = async () => {
+    const { passwordOne, passwordTwo } = this.state;
 
-    firebase
-      .doCreateUserWithEmailAndPassword(email, passwordOne)
-      .then(() => {
-        const authUser = firebase.auth.currentUser;
-        authUser.updateProfile({
-          displayName: `${firstName} ${lastName}`,
-        });
-        this.setState({ ...INITIAL_STATE });
-        this.updateUser(authUser);
-        history.push('/');
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
-    e.preventDefault();
+    // Validate password
+    if (!passwordOne) return;
+    try {
+      await yup
+        .string()
+        .min(8, 'Password must be at least 8 charaters long')
+        .required('A password is required')
+        .validate(passwordOne);
+      this.setState(prev => ({ error: { ...prev.error, pw1: false } }));
+    } catch (error) {
+      this.setState(prev => ({
+        valid: false,
+        error: { ...prev.error, pw1: error.message },
+      }));
+      return;
+    }
+
+    // Validate confirm password
+    if (!passwordTwo) return;
+    try {
+      await yup
+        .string()
+        .matches(new RegExp(passwordOne), "Passwords don't match")
+        .required('Please confirm your password')
+        .validate(passwordTwo);
+      this.setState(prev => ({
+        valid: true,
+        error: { ...prev.error, pw2: false },
+      }));
+    } catch (error) {
+      this.setState(prev => ({
+        valid: false,
+        error: { ...prev.error, pw2: error.message },
+      }));
+    }
   };
 
-  handleSubmitGoogle = () => {
-    const { firebase, history } = this.props;
-    firebase
-      .doSignInWithGoogle()
-      .then(() => {
-        const authUser = firebase.auth.currentUser;
-        this.setState({ ...INITIAL_STATE });
-        this.updateUser(authUser);
-        history.push('/');
-      })
-      .catch(error => {
-        this.setState({ error });
+  handleSubmitEmail = async event => {
+    const { email, passwordOne, firstName, lastName } = this.state;
+    const { firebase } = this.props;
+
+    event.preventDefault();
+
+    try {
+      await firebase.doCreateUserWithEmailAndPassword(email, passwordOne);
+      const authUser = firebase.auth.currentUser;
+      authUser.updateProfile({
+        displayName: `${firstName} ${lastName}`,
       });
+      this.updateUser(authUser);
+    } catch (error) {
+      this.setState(prev => ({ error: { ...prev.error, submit: true } }));
+    }
+  };
+
+  handleSubmitGoogle = async () => {
+    const { firebase } = this.props;
+    try {
+      await firebase.doSignInWithGoogle();
+      const authUser = firebase.auth.currentUser;
+      this.updateUser(authUser);
+    } catch (error) {
+      this.setState(prev => ({ error: { ...prev.error, google: true } }));
+    }
   };
 
   updateUser = authUser => {
@@ -107,13 +149,20 @@ class SignUpForm extends Component {
     });
   };
 
-  handleInputChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+  handleInputChange = event => {
+    const {
+      target: { name, value },
+    } = event;
+    this.setState({ [name]: value }, () => {
+      if (name === 'passwordTwo') {
+        this.validatePasswords();
+      }
+    });
   };
 
   render() {
     const { classes } = this.props;
-    const { error } = this.state;
+    const { email, error } = this.state;
     return (
       <div className={classes.container}>
         <div className={classes.socialContainer}>
@@ -136,12 +185,12 @@ class SignUpForm extends Component {
           </GoogleLoginButton>
         </div>
         <hr className={classes.divider} />
-        <form onSubmit={this.onSubmitEmail}>
+        <form onSubmit={this.handleSubmitEmail}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                autoFocus
                 fullWidth
-                variant="outlined"
                 name="firstName"
                 placeholder="First Name"
                 onChange={this.handleInputChange}
@@ -150,41 +199,31 @@ class SignUpForm extends Component {
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                variant="outlined"
                 name="lastName"
                 placeholder="Last Name"
                 onChange={this.handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                autoComplete="email"
-                fullWidth
-                variant="outlined"
-                name="email"
-                placeholder="Email"
-                onChange={this.handleInputChange}
-              />
+              <EmailTextField email={email} onChange={this.handleInputChange} />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <PasswordTextField
                 autoComplete="new-password"
-                fullWidth
-                variant="outlined"
-                type="password"
                 name="passwordOne"
-                placeholder="Password"
+                error={!!error.pw1}
+                helperText={error.pw1}
                 onChange={this.handleInputChange}
+                onBlur={this.validatePasswords}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <PasswordTextField
                 autoComplete="new-password"
-                fullWidth
-                variant="outlined"
-                type="password"
                 name="passwordTwo"
                 placeholder="Confirm Password"
+                error={!!error.pw2}
+                helperText={error.pw2}
                 onChange={this.handleInputChange}
               />
             </Grid>
@@ -207,4 +246,4 @@ class SignUpForm extends Component {
   }
 }
 
-export default withStyles(styles)(withRouter(withFirebase(SignUpForm)));
+export default withStyles(styles)(withFirebase(SignUpForm));
