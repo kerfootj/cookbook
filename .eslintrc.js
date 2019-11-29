@@ -1,8 +1,8 @@
 module.exports =  {
   parser:  'babel-eslint',  // Specifies the ESLint parser
   extends:  [
-    'plugin:react/recommended',  // Uses the recommended rules from @eslint-plugin-react
     'airbnb',
+    'plugin:react/recommended',  // Uses the recommended rules from @eslint-plugin-react
     'plugin:prettier/recommended',  // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
   ],
   parserOptions:  {
