@@ -1,68 +1,72 @@
 {
-	"name": "my-cookbook",
-	"version": "0.2.1",
-	"private": false,
-	"homepage": "https://www.mycookbook.xyz/",
-	"dependencies": {
-		"@material-ui/core": "^4.1.0",
-		"@material-ui/icons": "^4.1.0",
-		"@material-ui/styles": "^4.3.3",
-		"axios": "^0.19.0",
-		"compress.js": "^1.1.2",
-		"firebase": "^6.1.1",
-		"node-sass": "^4.12.0",
-		"prop-types": "^15.7.2",
-		"react": "^16.8.6",
-		"react-dom": "^16.8.6",
-		"react-ga": "^2.6.0",
-		"react-helmet": "^5.2.1",
-		"react-image-gallery": "^0.9.1",
-		"react-router-dom": "^5.0.1",
-		"react-scripts": "3.0.1",
-		"react-social-login-buttons": "^3.0.0",
-		"react-text-truncate": "^0.15.0",
-		"webpack": "^4.41.0",
-		"yup": "^0.27.0"
-	},
-	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"test": "react-scripts test",
-		"predeploy": "npm run build",
-		"deploy": "gh-pages -d build",
-		"eject": "react-scripts eject",
-		"lint": "eslint src/**/*.js src/**/*.jsx"
-	},
-	"eslintConfig": {
-		"extends": "react-app"
-	},
-	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		]
-	},
-	"devDependencies": {
-		"chai": "^4.2.0",
-		"enzyme": "^3.10.0",
-		"enzyme-adapter-react-16": "^1.14.0",
-		"eslint": "^6.1.0",
-		"eslint-config-airbnb": "^18.0.1",
-		"eslint-config-airbnb-base": "^14.0.0",
-		"eslint-config-prettier": "^6.4.0",
-		"eslint-plugin-import": "^2.18.2",
-		"eslint-plugin-jsx-a11y": "^6.2.3",
-		"eslint-plugin-prettier": "^3.1.1",
-		"eslint-plugin-react": "^7.16.0",
-		"eslint-plugin-react-hooks": "^1.7.0",
-		"gh-pages": "^2.0.1",
-		"prettier": "^1.18.2",
-		"prettier-eslint": "^9.0.0"
-	}
+  "name": "my-cookbook",
+  "version": "0.2.1",
+  "private": false,
+  "homepage": "https://www.mycookbook.xyz/",
+  "dependencies": {
+    "@material-ui/core": "^4.1.0",
+    "@material-ui/icons": "^4.1.0",
+    "@material-ui/styles": "^4.3.3",
+    "axios": "^0.19.0",
+    "compress.js": "^1.1.2",
+    "firebase": "^6.1.1",
+    "node-sass": "^4.12.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-ga": "^2.6.0",
+    "react-helmet": "^5.2.1",
+    "react-image-gallery": "^0.9.1",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.0.1",
+    "react-social-login-buttons": "^3.0.0",
+    "react-text-truncate": "^0.15.0",
+    "webpack": "^4.41.0",
+    "yup": "^0.27.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "test:noWatch": "react-scripts test --watchAll=false",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.js src/**/*.jsx"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "chai": "^4.2.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^23.1.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "gh-pages": "^2.0.1",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
+    "prettier-eslint": "^9.0.0"
+  }
 }
