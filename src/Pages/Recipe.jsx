@@ -55,7 +55,7 @@ class Recipe extends Component {
       }),
     }).isRequired,
     match: PropTypes.shape({
-      params: PropTypes.shape({ recipeId: PropTypes.number }),
+      params: PropTypes.shape({ recipeId: PropTypes.string }),
     }).isRequired,
     classes: PropTypes.objectOf(PropTypes.string),
   };
