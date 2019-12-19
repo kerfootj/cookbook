@@ -97,12 +97,12 @@ class Recipe extends Component {
   }
 
   renderEditButton = () => {
-    const { classes, firebase } = this.props;
+    const { classes } = this.props;
     const {
-      recipe: { uid },
+      recipe: { owner },
     } = this.state;
 
-    if ((((firebase || {}).auth || {}).currentUser || {}).uid === uid) {
+    if (owner) {
       return (
         <Button
           onClick={() => this.setState({ edit: true })}

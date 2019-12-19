@@ -88,7 +88,6 @@ class SignIn extends Component {
 
   updateUser = authUser => {
     axios.post('https://joel-cookbook-server.herokuapp.com/user', {
-      uid: authUser.uid,
       name: authUser.displayName,
       photo: authUser.photoURL,
     });
