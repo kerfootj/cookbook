@@ -50,15 +50,9 @@ class Cookbook extends Component {
       .catch(error => {
         this.setState({ error });
       });
-    get('user')
+    get('users')
       .then(response => {
-        const users = {};
-        const photos = {};
-        response.data.forEach(user => {
-          users[user.uid] = user.name;
-          photos[user.uid] = user.photo;
-        });
-        this.setState({ users, photos });
+        this.setState({ users: response.data });
       })
       .catch(error => {
         this.setState({ error });
@@ -92,25 +86,30 @@ class Cookbook extends Component {
 
   renderCards() {
     const { classes } = this.props;
-    const { recipes, users, photos } = this.state;
+    const { recipes, users } = this.state;
 
-    return recipes.map(recipe => (
-      <Grid item key={recipe._id} className={classes.card}>
-        <Link to={`/recipe/${recipe._id}`} className={classes.link}>
-          <Card
-            imageUrl={
-              recipe.images && recipe.images.length
-                ? `https://i.imgur.com/${recipe.images[0].id}.jpg`
-                : 'https://i.imgur.com/6MEHGTJ.jpg'
-            }
-            title={recipe.title}
-            description={recipe.description}
-            name={users ? users[recipe.uid] : undefined}
-            profilePic={photos ? photos[recipe.uid] : undefined}
-          />
-        </Link>
-      </Grid>
-    ));
+    return recipes.map(recipe => {
+      const user = users
+        ? users.find(u => u.recipes.includes(recipe._id))
+        : undefined;
+      return (
+        <Grid item key={recipe._id} className={classes.card}>
+          <Link to={`/recipe/${recipe._id}`} className={classes.link}>
+            <Card
+              imageUrl={
+                recipe.images && recipe.images.length
+                  ? `https://i.imgur.com/${recipe.images[0].id}.jpg`
+                  : 'https://i.imgur.com/6MEHGTJ.jpg'
+              }
+              title={recipe.title}
+              description={recipe.description}
+              name={user ? user.name : undefined}
+              profilePic={user ? user.photo : undefined}
+            />
+          </Link>
+        </Grid>
+      );
+    });
   }
 
   render() {

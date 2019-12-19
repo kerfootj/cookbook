@@ -19,6 +19,7 @@ module.exports =  {
     'no-console': 'error',
     'no-alert': 'error',
     'require-jsdoc': 'error',
+    'react/jsx-wrap-multilines': 'off',
     'react/no-unused-state': 'off', // TODO: remove this rule
     'react/no-array-index-key': 'off', // Curently using it with template strings
     'react/static-property-placement': 'off', // Allows PropTypes to be at the top of the file 

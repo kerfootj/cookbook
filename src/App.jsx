@@ -5,6 +5,7 @@ import Helmet from 'react-helmet';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import Cookbook from './Pages/Cookbook';
 import NavBar from './Organisms/NavBar';
 import PrivateRoute from './Atoms/PrivateRoute';
@@ -33,7 +34,10 @@ const theme = createMuiTheme({
 class App extends Component {
   static propTypes = {
     firebase: PropTypes.shape({
-      auth: PropTypes.shape({ onAuthStateChanged: PropTypes.func }),
+      auth: PropTypes.shape({
+        onAuthStateChanged: PropTypes.func,
+        currentUser: PropTypes.shape({ getIdToken: PropTypes.func }),
+      }),
     }).isRequired,
   };
 
@@ -48,6 +52,11 @@ class App extends Component {
     const { firebase } = this.props;
     this.listener = firebase.auth.onAuthStateChanged(authUser => {
       this.setState({ authUser: authUser || null });
+      if (authUser) {
+        firebase.auth.currentUser.getIdToken().then(token => {
+          axios.defaults.headers.common.Authorization = token;
+        });
+      }
     });
   }
 

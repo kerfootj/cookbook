@@ -1,10 +1,4 @@
-import {
-  Button,
-  FormControlLabel,
-  Grid,
-  Radio,
-  RadioGroup,
-} from '@material-ui/core';
+import { Button, FormControlLabel, Grid, Switch } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import CloudUpload from '@material-ui/icons/CloudUploadOutlined';
@@ -31,7 +25,7 @@ const EMPTY_RECIPE = {
   prep: undefined,
   cook: undefined,
   ready: undefined,
-  shared: 'public',
+  private: false,
 };
 
 const styles = {
@@ -107,6 +101,16 @@ class RecipeForm extends Component {
       create: !Object.keys(recipe).length,
     };
   }
+
+  handleSwitchChange = name => event => {
+    event.persist();
+    this.setState(prev => ({
+      recipe: {
+        ...prev.recipe,
+        [name]: event.target.checked,
+      },
+    }));
+  };
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -230,20 +234,13 @@ class RecipeForm extends Component {
   };
 
   addRecipe = event => {
-    const {
-      firebase: {
-        auth: {
-          currentUser: { uid },
-        },
-      },
-    } = this.props;
     const { recipe, status } = this.state;
 
     if (status.uploading) {
       this.setState({ status: { waiting: true } });
     }
 
-    post('recipe', { ...recipe, private: recipe.shared !== 'public', uid })
+    post('recipe', recipe)
       .then(() => {
         this.setState({ status: { added: true } });
       })
@@ -297,9 +294,8 @@ class RecipeForm extends Component {
   };
 
   renderOptions = () => {
-    const { classes, location } = this.props;
-    const { valid } = this.state;
-    const recipe = ((location || {}).state || {}).recipe || {};
+    const { classes } = this.props;
+    const { recipe, valid } = this.state;
     return (
       <>
         <Grid item xs={12}>
@@ -334,22 +330,17 @@ class RecipeForm extends Component {
         </Grid>
         <Grid item xs={8} />
         <Grid item xs={12}>
-          <RadioGroup
-            name="shared"
-            defaultValue="public"
-            onChange={this.handleInputChange}
-          >
-            <FormControlLabel
-              value="private"
-              control={<Radio />}
-              label="Private - Only I can see this"
-            />
-            <FormControlLabel
-              value="public"
-              control={<Radio />}
-              label="Public - Anyone can see this"
-            />
-          </RadioGroup>
+          <FormControlLabel
+            value="true"
+            label="Private"
+            control={
+              <Switch
+                checked={recipe ? recipe.private : false}
+                value="private"
+                onChange={this.handleSwitchChange('private')}
+              />
+            }
+          />
         </Grid>
       </>
     );
