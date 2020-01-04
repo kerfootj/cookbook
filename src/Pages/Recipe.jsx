@@ -1,6 +1,5 @@
 import { Button, Grid, Paper, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
-
 import Clock from '@material-ui/icons/Schedule';
 import Edit from '@material-ui/icons/Edit';
 import PieChart from '@material-ui/icons/PieChartOutlined';
@@ -10,16 +9,14 @@ import PropTypes from 'prop-types';
 import { withFirebase } from '../Atoms/Firebase';
 import Gallery from '../Organisms/Gallery';
 import { get } from '../Utils/Request';
+import DeleteRecipe from '../Organisms/DeleteRecipe';
 
-const styles = {
+const styles = theme => ({
   paper: {
     flexGrow: 1,
     minHeight: 100,
     paddingTop: 17,
     padding: 10,
-  },
-  wrapper: {
-    display: 'flex',
   },
   textContainer: {
     flex: '0 0 42%',
@@ -38,14 +35,17 @@ const styles = {
     borderRight: '0.05em solid black',
     paddingRight: '0.8em',
   },
+  buttons: {
+    marginRight: theme.spacing(1),
+  },
   edit: {
-    marginRight: 8,
+    marginRight: 4,
   },
   icons: {
     marginRight: 8,
     marginLeft: 4,
   },
-};
+});
 
 class Recipe extends Component {
   static propTypes = {
@@ -96,22 +96,30 @@ class Recipe extends Component {
       });
   }
 
-  renderEditButton = () => {
+  renderControls = () => {
     const { classes } = this.props;
     const {
-      recipe: { owner },
+      recipe: { owner, title, _id },
     } = this.state;
 
     if (owner) {
       return (
-        <Button
-          onClick={() => this.setState({ edit: true })}
-          variant="contained"
-          color="primary"
-        >
-          <Edit className={classes.edit} fontSize="small" />
-          Edit
-        </Button>
+        <>
+          <Button
+            className={classes.buttons}
+            onClick={() => this.setState({ edit: true })}
+            variant="contained"
+            color="primary"
+          >
+            <Edit className={classes.edit} fontSize="small" />
+            Edit
+          </Button>
+          <DeleteRecipe
+            className={classes.buttons}
+            recipeId={_id}
+            title={title}
+          />
+        </>
       );
     }
     return undefined;
@@ -164,7 +172,7 @@ class Recipe extends Component {
       <Paper square className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item xs={12} style={{ paddingBottom: 70 }}>
-            <div className={classes.wrapper}>
+            <div style={{ display: 'flex' }}>
               <div className={classes.textContainer}>
                 <Typography variant="h5">{title}</Typography>
                 <Typography variant="body1">{description}</Typography>
@@ -175,7 +183,7 @@ class Recipe extends Component {
             </div>
           </Grid>
           <Grid item xs={12}>
-            {this.renderEditButton()}
+            {this.renderControls()}
           </Grid>
           <br />
           <Grid item xs={12}>
