@@ -9,13 +9,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import SignInForm from '../Molecules/Authentication/SignInForm';
-import SignUpForum from '../Molecules/Authentication/SignUpForum';
 import SignOut from '../Molecules/Authentication/SignOut';
+import SignUpForum from '../Molecules/Authentication/SignUpForum';
 import { withFirebase } from '../Atoms/Firebase';
 
 const styles = theme => ({
   buttons: {
     marginLeft: theme.spacing(),
+    color: 'white',
+    borderColor: 'white',
+    '&:hover': {
+      color: 'hsla(0,0%,100%,.75)',
+      borderColor: 'hsla(0,0%,100%,.75)',
+    },
   },
 });
 
@@ -99,16 +105,14 @@ class Auth extends Component {
       <>
         <Button
           className={classes.buttons}
-          variant="contained"
-          color="primary"
+          variant="text"
           onClick={() => this.handleClick('signUp')}
         >
           Sign Up
         </Button>
         <Button
           className={classes.buttons}
-          variant="contained"
-          color="primary"
+          variant="outlined"
           onClick={() => this.handleClick('signIn')}
         >
           Sign In

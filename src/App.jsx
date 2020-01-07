@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Route, HashRouter as Router, Switch } from 'react-router-dom';
 
 import Helmet from 'react-helmet';
-import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { ThemeProvider } from '@material-ui/styles';
 import axios from 'axios';
+import { createMuiTheme } from '@material-ui/core/styles';
 import Cookbook from './Pages/Cookbook';
 import NavBar from './Organisms/NavBar';
 import PrivateRoute from './Atoms/PrivateRoute';
@@ -19,7 +19,7 @@ const theme = createMuiTheme({
       main: '#1565c0',
     },
     secondary: {
-      main: '#37474f',
+      main: '#24292e',
     },
   },
   overrides: {
@@ -77,6 +77,10 @@ class App extends Component {
             <Route
               exact
               path={`${process.env.PUBLIC_URL}/`}
+              component={Cookbook}
+            />
+            <Route
+              path={`${process.env.PUBLIC_URL}/recipes`}
               component={Cookbook}
             />
             <PrivateRoute

@@ -1,15 +1,15 @@
-import { Button, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
-
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Button, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import ReactGA from 'react-ga';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Auth from '../Organisms/Auth';
-import Card from '../Molecules/RecipeCard';
 import Loading from '../Molecules/Loading';
+import RecipeCard from '../Molecules/RecipeCard';
 import { get } from '../Utils/Request';
 import { withFirebase } from '../Atoms/Firebase';
+import NotFound from '../Molecules/NotFound';
 
 const styles = {
   link: {
@@ -28,6 +28,7 @@ class Cookbook extends Component {
     }).isRequired,
     location: PropTypes.shape({
       state: PropTypes.shape({ openAuth: PropTypes.bool }),
+      search: PropTypes.string.isRequired,
     }).isRequired,
     classes: PropTypes.objectOf(PropTypes.string),
   };
@@ -43,21 +44,43 @@ class Cookbook extends Component {
 
   componentDidMount() {
     this.initializeGA();
-    get('recipe')
-      .then(response => {
-        this.setState({ recipes: response.data, loading: false });
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
-    get('users')
-      .then(response => {
-        this.setState({ users: response.data });
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
+    this.getRecipes();
+    this.getUsers();
   }
+
+  componentDidUpdate(prevProps) {
+    const {
+      location: { search },
+    } = this.props;
+    const {
+      location: { search: prevSearch },
+    } = prevProps;
+
+    if (search !== prevSearch) {
+      this.getRecipes();
+    }
+  }
+
+  getRecipes = async () => {
+    try {
+      const {
+        location: { search },
+      } = this.props;
+      const response = await get(`recipe${search}`);
+      this.setState({ recipes: response.data, loading: false });
+    } catch (error) {
+      this.setState({ error });
+    }
+  };
+
+  getUsers = async () => {
+    try {
+      const response = await get('users');
+      this.setState({ users: response.data });
+    } catch (error) {
+      this.setState({ error });
+    }
+  };
 
   initializeGA = () => {
     ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS);
@@ -95,7 +118,7 @@ class Cookbook extends Component {
       return (
         <Grid item key={recipe._id} className={classes.card}>
           <Link to={`/recipe/${recipe._id}`} className={classes.link}>
-            <Card
+            <RecipeCard
               imageUrl={
                 recipe.images && recipe.images.length
                   ? `https://i.imgur.com/${recipe.images[0].id}.jpg`
@@ -113,10 +136,17 @@ class Cookbook extends Component {
   }
 
   render() {
-    const { loading } = this.state;
+    const {
+      location: { search },
+    } = this.props;
+    const { loading, recipes } = this.state;
 
     if (loading) {
       return <Loading />;
+    }
+
+    if (search && recipes.length < 1) {
+      return <NotFound search={search} />;
     }
 
     return (
