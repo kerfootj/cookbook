@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { InputBase, Paper, withStyles, IconButton } from '@material-ui/core';
+import { InputBase, Paper, IconButton } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -42,7 +43,6 @@ const styles = {
 class Search extends PureComponent {
   static propTypes = {
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
-    onSearch: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -70,12 +70,6 @@ class Search extends PureComponent {
 
   handleChange = event => {
     this.setState({ search: event.target.value });
-  };
-
-  handleSearch = () => {
-    const { onSearch } = this.props;
-    const { search } = this.state;
-    onSearch(search);
   };
 
   handleSubmit = () => {

@@ -146,7 +146,7 @@ class Cookbook extends Component {
     }
 
     if (search && recipes.length < 1) {
-      return <NotFound />;
+      return <NotFound search={search} />;
     }
 
     return (
