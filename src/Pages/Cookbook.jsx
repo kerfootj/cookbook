@@ -1,14 +1,15 @@
-import { Button, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Button, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import ReactGA from 'react-ga';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Auth from '../Organisms/Auth';
-import Card from '../Molecules/RecipeCard';
 import Loading from '../Molecules/Loading';
+import RecipeCard from '../Molecules/RecipeCard';
 import { get } from '../Utils/Request';
 import { withFirebase } from '../Atoms/Firebase';
+import NotFound from '../Molecules/NotFound';
 
 const styles = {
   link: {
@@ -117,7 +118,7 @@ class Cookbook extends Component {
       return (
         <Grid item key={recipe._id} className={classes.card}>
           <Link to={`/recipe/${recipe._id}`} className={classes.link}>
-            <Card
+            <RecipeCard
               imageUrl={
                 recipe.images && recipe.images.length
                   ? `https://i.imgur.com/${recipe.images[0].id}.jpg`
@@ -145,7 +146,7 @@ class Cookbook extends Component {
     }
 
     if (search && recipes.length < 1) {
-      return <p>No Recipes Found</p>;
+      return <NotFound />;
     }
 
     return (
