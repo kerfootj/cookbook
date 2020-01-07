@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { Route, HashRouter as Router, Switch } from 'react-router-dom';
 
 import Helmet from 'react-helmet';
-import Cookbook from './Pages/Cookbook';
-import NavBar from './Organisms/NavBar';
-import PrivateRoute from './Atoms/PrivateRoute';
 import PropTypes from 'prop-types';
-import Recipe from './Pages/Recipe';
-import RecipeForm from './Organisms/RecipeForm';
 import { ThemeProvider } from '@material-ui/styles';
 import axios from 'axios';
 import { createMuiTheme } from '@material-ui/core/styles';
+import Cookbook from './Pages/Cookbook';
+import NavBar from './Organisms/NavBar';
+import PrivateRoute from './Atoms/PrivateRoute';
+import Recipe from './Pages/Recipe';
+import RecipeForm from './Organisms/RecipeForm';
 import { withFirebase } from './Atoms/Firebase';
 
 const theme = createMuiTheme({
@@ -77,6 +77,10 @@ class App extends Component {
             <Route
               exact
               path={`${process.env.PUBLIC_URL}/`}
+              component={Cookbook}
+            />
+            <Route
+              path={`${process.env.PUBLIC_URL}/recipes`}
               component={Cookbook}
             />
             <PrivateRoute

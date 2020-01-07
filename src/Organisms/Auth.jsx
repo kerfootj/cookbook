@@ -16,6 +16,12 @@ import { withFirebase } from '../Atoms/Firebase';
 const styles = theme => ({
   buttons: {
     marginLeft: theme.spacing(),
+    color: 'white',
+    borderColor: 'white',
+    '&:hover': {
+      color: 'hsla(0,0%,100%,.75)',
+      borderColor: 'hsla(0,0%,100%,.75)',
+    },
   },
 });
 
@@ -100,7 +106,6 @@ class Auth extends Component {
         <Button
           className={classes.buttons}
           variant="text"
-          color="primary"
           onClick={() => this.handleClick('signUp')}
         >
           Sign Up
@@ -108,7 +113,6 @@ class Auth extends Component {
         <Button
           className={classes.buttons}
           variant="outlined"
-          color="primary"
           onClick={() => this.handleClick('signIn')}
         >
           Sign In
