@@ -9,8 +9,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import SignInForm from '../Molecules/Authentication/SignInForm';
-import SignUpForum from '../Molecules/Authentication/SignUpForum';
 import SignOut from '../Molecules/Authentication/SignOut';
+import SignUpForum from '../Molecules/Authentication/SignUpForum';
 import { withFirebase } from '../Atoms/Firebase';
 
 const styles = theme => ({
@@ -99,7 +99,7 @@ class Auth extends Component {
       <>
         <Button
           className={classes.buttons}
-          variant="contained"
+          variant="text"
           color="primary"
           onClick={() => this.handleClick('signUp')}
         >
@@ -107,7 +107,7 @@ class Auth extends Component {
         </Button>
         <Button
           className={classes.buttons}
-          variant="contained"
+          variant="outlined"
           color="primary"
           onClick={() => this.handleClick('signIn')}
         >

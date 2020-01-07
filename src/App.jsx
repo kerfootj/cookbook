@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { Route, HashRouter as Router, Switch } from 'react-router-dom';
 
 import Helmet from 'react-helmet';
-import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import axios from 'axios';
 import Cookbook from './Pages/Cookbook';
 import NavBar from './Organisms/NavBar';
 import PrivateRoute from './Atoms/PrivateRoute';
+import PropTypes from 'prop-types';
 import Recipe from './Pages/Recipe';
 import RecipeForm from './Organisms/RecipeForm';
+import { ThemeProvider } from '@material-ui/styles';
+import axios from 'axios';
+import { createMuiTheme } from '@material-ui/core/styles';
 import { withFirebase } from './Atoms/Firebase';
 
 const theme = createMuiTheme({
@@ -19,7 +19,7 @@ const theme = createMuiTheme({
       main: '#1565c0',
     },
     secondary: {
-      main: '#37474f',
+      main: '#24292e',
     },
   },
   overrides: {
