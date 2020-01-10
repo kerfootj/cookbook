@@ -13,6 +13,7 @@ import {
   RecipeTextField,
 } from '../Atoms/textfields/TextFields';
 import DropZone from '../Molecules/DropZone/DropZone';
+import ImageUpload from './ImageUpload';
 
 const EMPTY_RECIPE = {
   title: '',
@@ -296,7 +297,7 @@ class RecipeForm extends Component {
     return (
       <>
         <Grid item xs={12}>
-          <DropZone />
+          <ImageUpload />
         </Grid>
         <TimeInput
           valid={valid}
