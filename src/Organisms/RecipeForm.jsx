@@ -1,13 +1,10 @@
 import { Button, FormControlLabel, Grid, Switch } from '@material-ui/core';
 import React, { Component } from 'react';
-
-import CloudUpload from '@material-ui/icons/CloudUploadOutlined';
 import Compress from 'compress.js';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { withStyles } from '@material-ui/styles';
-import ImageUpload from '../Molecules/ImageUpload';
 import TimeInput from '../Molecules/TimeInput';
 import { post } from '../Utils/Request';
 import { withFirebase } from '../Atoms/Firebase';
@@ -15,6 +12,7 @@ import {
   NumberTextField,
   RecipeTextField,
 } from '../Atoms/textfields/TextFields';
+import DropZone from '../Molecules/DropZone/DropZone';
 
 const EMPTY_RECIPE = {
   title: '',
@@ -294,25 +292,11 @@ class RecipeForm extends Component {
   };
 
   renderOptions = () => {
-    const { classes } = this.props;
     const { recipe, valid } = this.state;
     return (
       <>
         <Grid item xs={12}>
-          <input
-            className={classes.upload}
-            accept="image/*"
-            id="raised-button-file"
-            type="file"
-            onChange={this.handleImageUpload}
-            multiple
-          />
-          <label htmlFor="raised-button-file">
-            <Button component="span" variant="contained">
-              Add Image
-              <CloudUpload className={classes.cloudIcon} />
-            </Button>
-          </label>
+          <DropZone />
         </Grid>
         <TimeInput
           valid={valid}
@@ -420,12 +404,6 @@ class RecipeForm extends Component {
             >
               <Grid item xs={12} md={4}>
                 <Grid container spacing={2} className={classes.grid}>
-                  <Grid item xs={12}>
-                    <ImageUpload
-                      image={images.length ? images[0] : undefined}
-                      uploading={status.uploading}
-                    />
-                  </Grid>
                   {this.renderOptions()}
                 </Grid>
               </Grid>

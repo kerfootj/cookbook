@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  font-family: sans-serif;
+}
+
+.container > p {
+  font-size: 1rem;
+}
+
+.container > em {
+  font-size: 0.8rem;
+}
+
+.dropzone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-width: 2px;
+  border-radius: 2px;
+  border-color: #b4b4b4;
+  border-style: dashed;
+  background-color: #f3f3f3;
+  color: #888787;
+  outline: none;
+  transition: border 0.24s ease-in-out;
+}
+
+.dropzone-active {
+  background-color: #f1e2ff;
+  border: 5px solid #2fd7b5;
+}
+
+.dropzone:focus {
+  border-color: #2196f3;
+}
+
+.dropzone.disabled {
+  opacity: 0.6;
+}
