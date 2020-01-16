@@ -12,8 +12,7 @@ import {
   NumberTextField,
   RecipeTextField,
 } from '../Atoms/textfields/TextFields';
-import DropZone from '../Molecules/DropZone/DropZone';
-import ImageUpload from './ImageUpload';
+import ImageUpload from './ImageUpload/ImageUpload';
 
 const EMPTY_RECIPE = {
   title: '',

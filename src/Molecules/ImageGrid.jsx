@@ -21,6 +21,7 @@ const Image = ({ image, index, moveImage }) => {
       // Move the content
       moveImage(dragIndex, hoverIndex);
       // Update the index for dragged item directly to avoid flickering when half dragged
+      // eslint-disable-next-line no-param-reassign
       item.index = hoverIndex;
     },
   });
@@ -36,12 +37,8 @@ const Image = ({ image, index, moveImage }) => {
   drag(drop(ref));
 
   return (
-    <div
-      ref={ref}
-      style={{ opacity: isDragging ? 0 : 1 }}
-      className="file-item"
-    >
-      <img alt={`img - ${image.id}`} src={image.src} className="file-img" />
+    <div ref={ref} className="file-item">
+      <img alt="" src={image} className="file-img" />
     </div>
   );
 };
