@@ -18,6 +18,7 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  margin-top: 20px;
   border-width: 2px;
   border-radius: 2px;
   border-color: #b4b4b4;
@@ -29,8 +30,8 @@
 }
 
 .dropzone-active {
-  background-color: #f1e2ff;
-  border: 5px solid #2fd7b5;
+  background-color: #d5eeff;
+  border: 3px solid #2196f3;
 }
 
 .dropzone:focus {

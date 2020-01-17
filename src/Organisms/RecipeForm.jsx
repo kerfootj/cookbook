@@ -1,6 +1,5 @@
 import { Button, FormControlLabel, Grid, Switch } from '@material-ui/core';
 import React, { Component } from 'react';
-import Compress from 'compress.js';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
@@ -12,7 +11,7 @@ import {
   NumberTextField,
   RecipeTextField,
 } from '../Atoms/textfields/TextFields';
-import ImageUpload from './ImageUpload/ImageUpload';
+import ImageUpload from './ImageUpload';
 
 const EMPTY_RECIPE = {
   title: '',
@@ -82,14 +81,11 @@ class RecipeForm extends Component {
     this.state = {
       recipe: Object.keys(recipe).length ? { ...recipe } : { ...EMPTY_RECIPE },
       status: {
-        uploading: false,
-        waiting: false,
         added: false,
         cancel: false,
       },
       errors: {
         save: false,
-        upload: false,
       },
       valid: {
         prep: true,
@@ -154,89 +150,33 @@ class RecipeForm extends Component {
     });
   };
 
-  /**
-   * Takes an image file from an input field. The image is then compressed
-   * to be smaller than 10mb and uploaded to imgur.
-   */
-  handleImageUpload = event => {
-    this.setState({
-      status: { uploading: true },
-    });
-
-    const files = [...event.target.files];
-    const compress = new Compress();
-    compress
-      .compress(files, {
-        size: 10,
-        quality: 0.8,
-      })
-      .then(compressedFiles => {
-        compressedFiles.forEach(file => {
-          this.uploadToImgur(file.data);
-        });
-      });
+  handleImageUpload = images => {
+    this.setState(prev => ({
+      recipe: {
+        ...prev.recipe,
+        images: [...prev.recipe.images, ...images],
+      },
+    }));
   };
 
-  uploadToImgur = image => {
-    const data = new FormData();
-    data.append('image', image);
-
-    const key = process.env.REACT_APP_IMGUR_CLIENT_ID;
-
-    fetch('https://api.imgur.com/3/image', {
-      method: 'POST',
-      headers: new Headers({
-        Authorization: `Client-ID ${key}`,
-      }),
-      body: data,
-    })
-      .then(response => response.json())
-      .then(response => {
-        if (response.status === 200) {
-          this.setState(prev => ({
-            recipe: {
-              ...prev.recipe,
-              images: [
-                ...prev.recipe.images,
-                { id: response.data.id, deleteHash: response.data.deletehash },
-              ],
-            },
-            status: {
-              uploading: false,
-              waiting: false,
-            },
-          }));
-        } else {
-          this.setState({
-            errors: {
-              upload: true,
-            },
-            status: {
-              uploading: false,
-              waiting: false,
-            },
-          });
-        }
-      })
-      .catch(() => {
-        this.setState({
-          errors: {
-            upload: true,
-          },
-          status: {
-            uploading: false,
-            waiting: false,
-          },
-        });
-      });
+  handleImageMove = (from, to) => {
+    const {
+      recipe: { images },
+    } = this.state;
+    const temp = [...images];
+    const element = temp[from];
+    temp.splice(from, 1);
+    temp.splice(to, 0, element);
+    this.setState(prev => ({
+      recipe: {
+        ...prev.recipe,
+        images: temp,
+      },
+    }));
   };
 
   addRecipe = event => {
-    const { recipe, status } = this.state;
-
-    if (status.uploading) {
-      this.setState({ status: { waiting: true } });
-    }
+    const { recipe } = this.state;
 
     post('recipe', recipe)
       .then(() => {
@@ -257,27 +197,12 @@ class RecipeForm extends Component {
     if (create && images.length) {
       const key = process.env.REACT_APP_IMGUR_CLIENT_ID;
       images.forEach(image => {
-        axios
-          .delete(`https://api.imgur.com/3/image/${image.deleteHash}`, {
-            headers: { Authorization: `Client-ID ${key}` },
-          })
-          .then(() => {
-            // TODO
-          })
-          .catch(() => {
-            // TODO
-          });
+        axios.delete(`https://api.imgur.com/3/image/${image.deleteHash}`, {
+          headers: { Authorization: `Client-ID ${key}` },
+        });
       });
     }
     this.setState({ status: { cancel: true } });
-  };
-
-  renderWaiting = () => {
-    const { status } = this.state;
-    if (status.waiting) {
-      return <p>Please wait for your image to finish uploading</p>;
-    }
-    return null;
   };
 
   renderError = () => {
@@ -296,7 +221,11 @@ class RecipeForm extends Component {
     return (
       <>
         <Grid item xs={12}>
-          <ImageUpload />
+          <ImageUpload
+            images={recipe.images}
+            onUpload={this.handleImageUpload}
+            onMove={this.handleImageMove}
+          />
         </Grid>
         <TimeInput
           valid={valid}
@@ -383,11 +312,7 @@ class RecipeForm extends Component {
 
   render() {
     const { classes, location } = this.props;
-    const {
-      recipe: { images },
-      status,
-      create,
-    } = this.state;
+    const { status, create } = this.state;
 
     return (
       <>
@@ -434,7 +359,6 @@ class RecipeForm extends Component {
             <Grid item lg={1} xl={2} />
           </Grid>
         </form>
-        {this.renderWaiting()}
         {this.renderError()}
         {(status.added || status.cancel) && <Redirect to="/" />}
         {create && location.pathname.includes('edit') && <Redirect to="/" />}
