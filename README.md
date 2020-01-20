@@ -3,7 +3,7 @@
 
 ## My Cook Book Web App
 
-### Avaliable:
+### Avaliable
 https://www.mycookbook.xyz/
 
 ### Back-End Code
