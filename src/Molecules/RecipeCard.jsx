@@ -1,13 +1,9 @@
 import React, { PureComponent } from 'react';
-
-import { Avatar } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import TextTruncate from 'react-text-truncate';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
+import { Card, CardContent, CardMedia, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import TextTruncate from 'react-text-truncate';
+import Avatar from '../Atoms/Avatar';
 
 const styles = {
   card: {
@@ -91,19 +87,7 @@ class RecipeCard extends PureComponent {
               <TextTruncate line={2} truncateText=" …" text={description} />
             </Typography>
           </div>
-          <div className={classes.footer}>
-            <Avatar
-              src={profilePic || 'https://i.imgur.com/oTPg6oz.jpg'}
-              className={classes.avatar}
-            />
-            <Typography
-              className={classes.name}
-              variant="caption"
-              component="span"
-            >
-              {name}
-            </Typography>
-          </div>
+          <Avatar src={profilePic} size="small" name={name} display="left" />
         </CardContent>
       </Card>
     );

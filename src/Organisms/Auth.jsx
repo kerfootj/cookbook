@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import SignInForm from '../Molecules/Authentication/SignInForm';
-import SignOut from '../Molecules/Authentication/SignOut';
+import Avatar from '../Atoms/Avatar';
 import SignUpForum from '../Molecules/Authentication/SignUpForum';
 import { withFirebase } from '../Atoms/Firebase';
 
@@ -98,7 +98,14 @@ class Auth extends Component {
       ((firebase || {}).auth || {}).currentUser || undefined;
 
     if (authenticated) {
-      return <SignOut />;
+      return (
+        <Avatar
+          src={authenticated.photoURL}
+          size="large"
+          name={authenticated.displayName}
+          display="left"
+        />
+      );
     }
 
     return (
