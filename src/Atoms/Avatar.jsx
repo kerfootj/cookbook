@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Avatar as MUIAvatar, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 
-const styles = theme => ({
+const styles = {
   container: {
     display: 'flex',
     flexDirection: 'row',
@@ -17,22 +17,14 @@ const styles = theme => ({
     height: 32,
     width: 32,
   },
-  name: {
-    color: 'white',
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-  },
-});
+};
 
-const Avatar = ({ src, size, name, display, classes }) => {
+const Avatar = ({ src, imgProps, name, nameProps, classes }) => {
   const renderName = position => {
+    const { display, className } = nameProps;
     if (name && position === display) {
       return (
-        <Typography
-          className={`${classes.name}`}
-          variant="body2"
-          component="span"
-        >
+        <Typography className={className} variant="body2" component="span">
           {name}
         </Typography>
       );
@@ -41,16 +33,19 @@ const Avatar = ({ src, size, name, display, classes }) => {
   };
 
   const getClassName = () => {
+    const { size } = imgProps;
     return size === 'large' ? classes.large : classes.small;
   };
 
   return (
     <div className={classes.container}>
       {renderName('left')}
-      <MUIAvatar
-        className={getClassName()}
-        src={src || 'https://i.imgur.com/oTPg6oz.jpg'}
-      />
+      <div onClick={imgProps.onClick} className={imgProps.className}>
+        <MUIAvatar
+          className={getClassName()}
+          src={src || 'https://i.imgur.com/oTPg6oz.jpg'}
+        />
+      </div>
       {renderName('right')}
     </div>
   );
@@ -61,14 +56,25 @@ export default withStyles(styles)(Avatar);
 Avatar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   src: PropTypes.string,
+  imgProps: PropTypes.shape({
+    size: PropTypes.oneOf([undefined, 'small', 'large']),
+    onClick: PropTypes.func,
+    className: PropTypes.string,
+  }),
   name: PropTypes.string,
-  size: PropTypes.oneOf(undefined, 'small', 'large'),
-  display: PropTypes.oneOf(undefined, 'left', 'right'),
+  nameProps: PropTypes.shape({
+    className: PropTypes.string,
+    display: PropTypes.oneOf([undefined, 'left', 'right']),
+  }),
 };
 
 Avatar.defaultProps = {
   src: undefined,
+  imgProps: {
+    size: undefined,
+  },
   name: undefined,
-  display: 'none',
-  size: undefined,
+  nameProps: {
+    display: 'none',
+  },
 };

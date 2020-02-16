@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Card, CardContent, CardMedia, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import TextTruncate from 'react-text-truncate';
-import Avatar from '../Atoms/Avatar';
+import Avatar from 'Atoms/Avatar';
 
-const styles = {
+const styles = theme => ({
   card: {
     maxWidth: 300,
     height: 430,
@@ -35,10 +35,10 @@ const styles = {
     width: 25,
   },
   name: {
-    paddingLeft: '0.5em',
+    paddingLeft: theme.spacing(1),
     color: '#333333',
   },
-};
+});
 
 class RecipeCard extends PureComponent {
   static propTypes = {
@@ -87,7 +87,12 @@ class RecipeCard extends PureComponent {
               <TextTruncate line={2} truncateText=" …" text={description} />
             </Typography>
           </div>
-          <Avatar src={profilePic} size="small" name={name} display="left" />
+          <Avatar
+            src={profilePic}
+            imgProps={{ size: 'small' }}
+            name={name}
+            nameProps={{ className: classes.name, display: 'right' }}
+          />
         </CardContent>
       </Card>
     );
