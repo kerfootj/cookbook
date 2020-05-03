@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import { Button, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import ReactGA from 'react-ga';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Auth from '../Organisms/Auth';
 import Loading from '../Molecules/Loading';
 import RecipeCard from '../Molecules/RecipeCard';
 import { get } from '../Utils/Request';
-import { withFirebase } from '../Atoms/Firebase';
 import NotFound from '../Molecules/NotFound';
 
 const styles = {
@@ -23,9 +21,6 @@ const styles = {
 
 class Cookbook extends Component {
   static propTypes = {
-    firebase: PropTypes.shape({
-      auth: PropTypes.shape({ currentUser: PropTypes.shape({}) }),
-    }).isRequired,
     location: PropTypes.shape({
       state: PropTypes.shape({ openAuth: PropTypes.bool }),
       search: PropTypes.string.isRequired,
@@ -87,26 +82,6 @@ class Cookbook extends Component {
     ReactGA.pageview(window.location.pathname + window.location.search);
   };
 
-  renderAddRecipe = () => {
-    const { classes, firebase, location } = this.props;
-    if (firebase.auth.currentUser) {
-      return (
-        <Button variant="contained" color="secondary">
-          <Link to="/recipe/new" className={classes.link}>
-            Add Recipe
-          </Link>
-        </Button>
-      );
-    }
-    return (
-      <Auth
-        buttonText="Add Recipe"
-        create={false}
-        open={((location || {}).state || {}).openAuth}
-      />
-    );
-  };
-
   renderCards() {
     const { classes } = this.props;
     const { recipes, users } = this.state;
@@ -165,10 +140,9 @@ class Cookbook extends Component {
           </Grid>
           <Grid item xl={1} />
         </Grid>
-        {this.renderAddRecipe()}
       </>
     );
   }
 }
 
-export default withStyles(styles)(withFirebase(Cookbook));
+export default withStyles(styles)(Cookbook);

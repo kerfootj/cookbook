@@ -2,7 +2,8 @@ import React from 'react';
 import { configure } from 'enzyme';
 import { createShallow } from '@material-ui/core/test-utils';
 import Adapter from 'enzyme-adapter-react-16';
-import { Typography, CardMedia, Avatar } from '@material-ui/core';
+import { Typography, CardMedia } from '@material-ui/core';
+import Avatar from 'Atoms/Avatar';
 import RecipeCard from '../RecipeCard';
 
 configure({ adapter: new Adapter() });
@@ -31,7 +32,7 @@ describe('<RecipeCard />', () => {
       />
     );
 
-  it('renders a recipe card with a custom avatar', () => {
+  it('renders a recipe card', () => {
     const wrapper = getWrapper();
 
     expect(wrapper.find(CardMedia).prop('image')).toEqual(IMAGE_URL);
@@ -42,19 +43,6 @@ describe('<RecipeCard />', () => {
         .text()
     ).toBe('Grilled Cheese');
     expect(wrapper.find(Avatar).prop('src')).toEqual(PROFILE_URL);
-    expect(
-      wrapper
-        .find(Typography)
-        .at(2)
-        .text()
-    ).toBe('Joel Kerfoot');
-  });
-
-  it('renders a recipe card without a custom avatar', () => {
-    const wrapper = getWrapper({ profilePic: null });
-
-    expect(wrapper.find(Avatar).prop('src')).toEqual(
-      'https://i.imgur.com/oTPg6oz.jpg'
-    );
+    expect(wrapper.find(Avatar).prop('name')).toBe('Joel Kerfoot');
   });
 });

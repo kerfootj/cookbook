@@ -1,17 +1,17 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
 } from '@material-ui/core';
-import React, { Component } from 'react';
-
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-import SignInForm from '../Molecules/Authentication/SignInForm';
-import SignOut from '../Molecules/Authentication/SignOut';
-import SignUpForum from '../Molecules/Authentication/SignUpForum';
-import { withFirebase } from '../Atoms/Firebase';
+import UserMenu from 'Organisms/UserMenu';
+import SignInForm from 'Molecules/Authentication/SignInForm';
+import SignUpForum from 'Molecules/Authentication/SignUpForum';
+import { withFirebase } from 'Atoms/Firebase';
+import Avatar from '../Atoms/Avatar';
 
 const styles = theme => ({
   buttons: {
@@ -22,6 +22,14 @@ const styles = theme => ({
       color: 'hsla(0,0%,100%,.75)',
       borderColor: 'hsla(0,0%,100%,.75)',
     },
+  },
+  name: {
+    paddingRight: theme.spacing(1),
+    color: 'white',
+    cursor: 'pointer',
+  },
+  avatar: {
+    cursor: 'pointer',
   },
 });
 
@@ -43,12 +51,16 @@ class Auth extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: { signUp: props.open, signIn: false },
+      open: { signUp: props.open, signIn: false, anchorEl: null },
     };
   }
 
   handleClick = name => {
     this.setState({ open: { [name]: true } });
+  };
+
+  handleToggleMenu = event => {
+    this.setState({ anchorEl: event ? event.currentTarget : null });
   };
 
   handleClose = () => {
@@ -92,13 +104,30 @@ class Auth extends Component {
 
   render() {
     const { firebase, classes } = this.props;
-    const { open } = this.state;
+    const { open, anchorEl } = this.state;
 
     const authenticated =
       ((firebase || {}).auth || {}).currentUser || undefined;
 
     if (authenticated) {
-      return <SignOut />;
+      return (
+        <>
+          <Avatar
+            onClick={this.handleToggleMenu}
+            src={authenticated.photoURL}
+            imgProps={{
+              className: classes.avatar,
+              size: 'large',
+            }}
+            name={authenticated.displayName}
+            nameProps={{ className: classes.name, display: 'left' }}
+          />
+          <UserMenu
+            anchorEl={anchorEl}
+            onClose={() => this.handleToggleMenu(null)}
+          />
+        </>
+      );
     }
 
     return (

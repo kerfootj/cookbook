@@ -1,15 +1,11 @@
 import React, { PureComponent } from 'react';
-
-import { Avatar } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import TextTruncate from 'react-text-truncate';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
+import { Card, CardContent, CardMedia, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import TextTruncate from 'react-text-truncate';
+import Avatar from 'Atoms/Avatar';
 
-const styles = {
+const styles = theme => ({
   card: {
     maxWidth: 300,
     height: 430,
@@ -39,10 +35,10 @@ const styles = {
     width: 25,
   },
   name: {
-    paddingLeft: '0.5em',
+    paddingLeft: theme.spacing(1),
     color: '#333333',
   },
-};
+});
 
 class RecipeCard extends PureComponent {
   static propTypes = {
@@ -91,19 +87,12 @@ class RecipeCard extends PureComponent {
               <TextTruncate line={2} truncateText=" …" text={description} />
             </Typography>
           </div>
-          <div className={classes.footer}>
-            <Avatar
-              src={profilePic || 'https://i.imgur.com/oTPg6oz.jpg'}
-              className={classes.avatar}
-            />
-            <Typography
-              className={classes.name}
-              variant="caption"
-              component="span"
-            >
-              {name}
-            </Typography>
-          </div>
+          <Avatar
+            src={profilePic}
+            imgProps={{ size: 'small' }}
+            name={name}
+            nameProps={{ className: classes.name, display: 'right' }}
+          />
         </CardContent>
       </Card>
     );
