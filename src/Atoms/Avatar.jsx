@@ -19,12 +19,17 @@ const styles = {
   },
 };
 
-const Avatar = ({ src, imgProps, name, nameProps, classes }) => {
+const Avatar = ({ onClick, src, imgProps, name, nameProps, classes }) => {
   const renderName = position => {
     const { display, className } = nameProps;
     if (name && position === display) {
       return (
-        <Typography className={className} variant="body2" component="span">
+        <Typography
+          onClick={onClick}
+          className={className}
+          variant="body2"
+          component="span"
+        >
           {name}
         </Typography>
       );
@@ -40,7 +45,7 @@ const Avatar = ({ src, imgProps, name, nameProps, classes }) => {
   return (
     <div className={classes.container}>
       {renderName('left')}
-      <div onClick={imgProps.onClick} className={imgProps.className}>
+      <div onClick={onClick} className={imgProps.className}>
         <MUIAvatar
           className={getClassName()}
           src={src || 'https://i.imgur.com/oTPg6oz.jpg'}
@@ -56,9 +61,9 @@ export default withStyles(styles)(Avatar);
 Avatar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   src: PropTypes.string,
+  onClick: PropTypes.func,
   imgProps: PropTypes.shape({
     size: PropTypes.oneOf([undefined, 'small', 'large']),
-    onClick: PropTypes.func,
     className: PropTypes.string,
   }),
   name: PropTypes.string,
@@ -69,6 +74,7 @@ Avatar.propTypes = {
 };
 
 Avatar.defaultProps = {
+  onClick: undefined,
   src: undefined,
   imgProps: {
     size: undefined,

@@ -10,8 +10,8 @@ import { withStyles } from '@material-ui/styles';
 import UserMenu from 'Organisms/UserMenu';
 import SignInForm from 'Molecules/Authentication/SignInForm';
 import SignUpForum from 'Molecules/Authentication/SignUpForum';
-import Avatar from 'Atoms/Avatar';
 import { withFirebase } from 'Atoms/Firebase';
+import Avatar from '../Atoms/Avatar';
 
 const styles = theme => ({
   buttons: {
@@ -26,6 +26,7 @@ const styles = theme => ({
   name: {
     paddingRight: theme.spacing(1),
     color: 'white',
+    cursor: 'pointer',
   },
   avatar: {
     cursor: 'pointer',
@@ -112,11 +113,11 @@ class Auth extends Component {
       return (
         <>
           <Avatar
+            onClick={this.handleToggleMenu}
             src={authenticated.photoURL}
             imgProps={{
               className: classes.avatar,
               size: 'large',
-              onClick: this.handleToggleMenu,
             }}
             name={authenticated.displayName}
             nameProps={{ className: classes.name, display: 'left' }}
