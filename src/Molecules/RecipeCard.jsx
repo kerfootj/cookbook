@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent, CardMedia, Typography } from '@material-ui/core';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import TextTruncate from 'react-text-truncate';
-import Avatar from '../Atoms/Avatar';
+import Avatar from 'Atoms/Avatar';
 
 const styles = theme => ({
   card: {
