@@ -62,7 +62,15 @@ class Cookbook extends Component {
         location: { search },
       } = this.props;
       const response = await get(`recipe${search}`);
-      this.setState({ recipes: response.data, loading: false });
+
+      // prefer recipes with images
+      const recipes = response.data.sort((a, b) => {
+        if (a.images.length > 0 && b.images.length === 0) return -1;
+        if (a.images.length === 0 && b.images.length > 0) return 1;
+        return 0;
+      });
+
+      this.setState({ recipes, loading: false });
     } catch (error) {
       this.setState({ error });
     }
