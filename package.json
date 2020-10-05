@@ -32,7 +32,7 @@
     "react-helmet": "^5.2.1",
     "react-image-gallery": "^0.9.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.4.1",
+    "react-scripts": "^3.4.3",
     "react-social-login-buttons": "^3.0.0",
     "react-text-truncate": "^0.15.0",
     "webpack": "^4.43.0",
