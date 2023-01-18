@@ -17,7 +17,7 @@
     "@material-ui/core": "^4.9.12",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/styles": "^4.9.10",
-    "axios": "^0.20.0",
+    "axios": "^1.2.3",
     "compress.js": "^1.1.2",
     "firebase": "^6.6.2",
     "node-sass": "^4.14.1",
